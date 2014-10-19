@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="af55a9bc-55e3-4709-832c-20a82187342f" name="Default" comment="Added association with userID (uploading datasets)">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/db/migrate/20141019192148_add_remember_digest_to_users.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="af55a9bc-55e3-4709-832c-20a82187342f" name="Default" comment="" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -524,7 +521,11 @@
       <created>1413746715223</created>
       <updated>1413746715223</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Added association with userID (uploading datasets)">
+      <created>1413749086811</created>
+      <updated>1413749086811</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
