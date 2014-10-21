@@ -1,13 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Blog</title>
+  <title>Skola</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
+<%= link_to image_tag('DataPoints-logo.png', :size => '100'), root_path %>
+<% flash.each do |message_type, message| %>
+    <div class="alert alert-<%= message_type %>"><%= message %></div>
+<% end %>
+
+<% if logged_in? %>
+    <p>Do you want to add new dataset? <%= link_to 'Add Dataset now!', datasets_new_path %></p>
+    <p>Your datasets <%= link_to 'Klick', datasets_show_path %></p>
+ <%= link_to 'Log out', logout_url, method: 'delete' %>
+<% else %>
+    <%= link_to 'SIGN UP', signup_path %>
+    <%= link_to 'Sign In', login_path %>
+    <% end %>
 <%= yield %>
 
 </body>
