@@ -15,6 +15,7 @@
 
 <% if logged_in? %>
     <p>Do you want to add new dataset? <%= link_to 'Add Dataset now!', datasets_new_path %></p>
+    <p>Your datasets <%= link_to 'Klick', datasets_show_path %></p>
  <%= link_to 'Log out', logout_url, method: 'delete' %>
 <% else %>
     <%= link_to 'SIGN UP', signup_path %>
