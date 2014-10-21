@@ -81,5 +81,3 @@ test:
 production:
   <<: *default
   database: Skola_production
-  username: Skola
-  password: <%= ENV['SKOLA_DATABASE_PASSWORD'] %>

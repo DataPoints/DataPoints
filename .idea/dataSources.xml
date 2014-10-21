@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="585523806">
-    <data-source source="LOCAL" name="PostgreSQL - postgres@localhost" uuid="9a386978-0961-44a2-a7e8-0eeb0e4ba784">
+  <component name="DataSourceManagerImpl" format="xml" hash="2791365075">
+    <data-source source="LOCAL" name="Rails Sprint-1: development" uuid="035b3696-05b6-4be4-97bd-fedad7e7ab56">
       <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/postgres</jdbc-url>
-      <user-name>martin</user-name>
-      <user-password>dff9dfdadfc3dfcedfcfdfd8df9ddf9d</user-password>
+      <jdbc-url>jdbc:postgresql:Skola_development</jdbc-url>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="Rails Sprint-1: test" uuid="20c62287-6e6e-407a-9185-533ce22687bb">
+      <driver-ref>postgresql</driver-ref>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql:Skola_test</jdbc-url>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="Rails Sprint-1: production" uuid="a811ec4b-9a7d-4969-be7f-89995bec61da">
+      <driver-ref>postgresql</driver-ref>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql:Skola_production</jdbc-url>
       <libraries />
     </data-source>
   </component>
