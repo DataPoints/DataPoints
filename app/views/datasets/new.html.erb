@@ -1,9 +1,10 @@
-<h1>Add new Dataset</h1>
+<h1>Upload your Dataset</h1>
 
 <div>
   <div>
     <%= form_for(@dataset) do |f| %>
         <%= render 'shared/error_messages', object: f.object %>
+
         <%= f.label :name %>
         <%= f.text_field :name %>
 
@@ -11,9 +12,9 @@
         <%= f.text_field :description %>
 
         <%= f.label :link %>
-        <%= f.text_field :link %>
+        <%= f.text_field :link, placeholder: 'http://' %>
 
-        <%= f.submit 'Upload my dataset', class: '' %>
+        <%= f.submit 'Upload', class: 'btn btn-primary' %>
     <% end %>
   </div>
 </div>
