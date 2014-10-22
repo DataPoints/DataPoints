@@ -105,7 +105,7 @@
       </p>
 
       <!-- BUTTON -->
-      <a href="#" class="btn white uppercase">Explore new horizons</a>
+      <%= link_to_unless_current 'Explore new horizons',     signup_path, :class => "btn white uppercase" %>
 
     </div>
   </section>
@@ -129,8 +129,8 @@
 
           <%= link_to_unless_current 'Log out',        logout_url, method: 'delete' %>
       <% else %>
-          <%= link_to_unless_current 'SIGN UP',        signup_path %>
-          <%= link_to_unless_current 'Log in',         login_path %>
+          <%= link_to_unless_current 'Register',     signup_path %>
+          <%= link_to_unless_current 'Log in',       login_path %>
       <% end %>
     </nav>
 
