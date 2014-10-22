@@ -31,7 +31,6 @@
             <%= link_to_unless_current 'Register',     signup_path %>
             <%= link_to_unless_current 'Log in',       login_path %>
         <% end %>
-        <%= yield %>
 
       </nav>
     </div>
@@ -43,6 +42,8 @@
   <div id="carousel">
     <%= image_tag 'carousel/carousel-1.jpg',:title => 'intro carousel'  %>
   </div>
+
+  <%= yield %>
 
   <!-- HOW DOES IT WORK -->
   <section id="how-does-it-work" class="gray">
@@ -131,7 +132,6 @@
           <%= link_to_unless_current 'SIGN UP',        signup_path %>
           <%= link_to_unless_current 'Log in',         login_path %>
       <% end %>
-      <%= yield %>
     </nav>
 
     <!-- COPYRIGHT -->

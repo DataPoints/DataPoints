@@ -1,0 +1,96 @@
+/*CSS FILE*/
+
+form{
+    position: relative;
+    text-align: center !important;
+}
+
+label{
+    padding: 4px 10px 4px 10px;
+
+    background: #f46430;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+
+    text-align: left;
+}
+
+form input, select, form textarea{
+    margin: 0 0 15px 0;
+
+    width: 350px;
+    font-family: 'Arial';
+
+    background: #f3f3f3;
+    border: 1px solid #d2d2d2;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-style: italic;
+    color: #8b8b8b;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 12px 8px 12px 8px;
+    position: relative;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+    border-radius: 0;
+
+    outline-width: 0;
+    resize: none;
+    border-radius: 3px;
+}
+
+form select option{
+    padding: 7px;
+}
+
+form input[type=submit]{
+    position: relative;
+    top: 0;
+
+    margin: -25px 0 0 0;
+
+    width: 350px;
+    height: auto;
+
+    background: #f46430;
+    color: #fff;
+    font-family: 'Roboto';
+    font-size: 15px;
+    font-weight: bold;
+    font-style: normal !important;
+    border: 0px solid #d2d2d2 !important;
+
+    cursor: pointer;
+
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+form input[type=submit]:hover{
+    background: #272727;
+    color: #fff;
+}
+
+form input[type=checkbox]{
+    display: block;
+    width: auto !important;
+    border: 10px solid #000;
+}
+
+.inline-small{
+    width: 102px;
+}
+
+.inline-big{
+    width: 243px;
+}
+
+#contact-form{
+    margin: 0 0 0 -354px;
+    width: 708px;
+}
