@@ -1,0 +1,2 @@
+module HaloHelper
+end
