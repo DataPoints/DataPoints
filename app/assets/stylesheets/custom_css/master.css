@@ -1,0 +1,439 @@
+*{
+    position: relative;
+}
+
+body, html{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    z-index: 0;
+}
+
+body{
+    background: #fff;
+    font-family: 'Droid Sans';
+}
+
+/*----------------------------HEADER---------------*/
+header{
+    position: fixed;
+
+    width: 100%;
+    height: 130px;
+
+    background: #f46430 url('header-bg-light.png') no-repeat center bottom;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+
+    z-index: 4;
+}
+
+header hr{
+    position: absolute;
+    left: 0;
+    bottom: 4px;
+
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+
+    width: 100%;
+    height: 1px;
+
+    background: rgba(255,255,255,0.5);
+    border: 0;
+
+    z-index: 5;
+}
+
+#header-logo{
+    position: absolute;
+    left: 0;
+
+    margin: 25px 0 0 0;
+}
+
+/*--------------------------HEADER NAV-------------*/
+header nav{
+    position: absolute;
+    top: 60px;
+    right: 0;
+}
+
+header nav a{
+    padding: 5px 11px 5px 11px;
+
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 3px;
+
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+header nav a:hover{
+    background: #fff;
+    color: #f46430;
+}
+
+/*---------------------WERE HERE TO HELP-----------*/
+#were-here-to-help{
+    padding: 120px 0 120px 0;
+}
+
+/*---------------------------FOOTER----------------*/
+footer{
+    width: 100%;
+    height: 100px;
+
+    background: #272727;
+}
+
+footer .fiit{
+    float: right;
+    margin: 7px 0 0 0;
+}
+
+/*COPYRIGHT*/
+footer .copyright{
+    position: absolute;
+    top: 65px;
+    left: 11px;
+
+    color: #525252;
+    font-size: 13px;
+}
+
+/*NAV*/
+footer nav{
+    top: 40px;
+}
+
+footer nav a{
+    padding: 5px 11px 5px 11px;
+
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 3px;
+
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+footer nav a:hover{
+    background: #fff;
+    color: #272727;
+}
+
+/*PUSH*/
+#push{
+    height: 100px;
+}
+/*------------------------------BOX----------------*/
+.boxes{
+    width: 100%;
+    height: auto;
+
+    text-align: center;
+}
+
+.box{
+    display: inline-block;
+
+    width: auto;
+    height: 130px;
+
+    margin: 0 5px 0 5px;
+
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.box:first-child{
+    margin: 0 5px 0 0;
+}
+
+.box:last-child{
+    margin: 0 0 0 5px;
+}
+
+.box .left{
+    width: 104px;
+    height: 100%;
+
+    padding: 25px 0 0 0;
+
+    margin: 0 0 0 0;
+    background: #f46430 url('box-bg-light.png') no-repeat center center;
+}
+
+.box .right{
+    width: 182px;
+    height: 100%;
+
+    padding: 15px;
+
+    background: #fff;
+    text-align: left;
+}
+
+.box .icon{
+    font-size: 60px;
+    color: #fff;
+
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.box:hover .icon{
+    font-size: 70px;
+}
+
+.box .title{
+    text-align: left;
+    font-size: 15px;
+    color: #6b6b6b;
+    font-weight: bold;
+}
+
+.box .text{
+    font-size: 13px;
+    color: #6b6b6b;
+}
+
+/*---------------------------BUTONS----------------*/
+.btn{
+    padding: 7px 20px 7px 20px;
+
+    text-decoration: none;
+    font-size: 17px;
+    font-family: 'Roboto';
+
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+/*WHITE*/
+.btn.white{
+    background: #fff;
+    color: #f46430;
+}
+.btn.white:hover{
+    background: #f46430;
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+.btn.transparent{
+    background: transparent;
+}
+
+.btn.transparent.white{
+    color: #fff;
+    border: 1px solid #fff;
+    box-shadow: none;
+}
+
+.btn.transparent.white:hover{
+    background: #fff;
+    color: #f46430;
+}
+
+/*----------------------------HOLDER---------------*/
+#holder{
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -100px;
+    background: #e9e9e9;
+}
+
+/*--------------------------SECTIONS----------------*/
+section{
+    width: 100%;
+    height: auto;
+
+    padding: 60px 0 60px 0;
+}
+
+section > .wrapper > h1.title{
+    width: 100%;
+
+    margin: 0 0 40px 0;
+
+    font-size: 34px;
+    font-weight: 300;
+
+    z-index: 1;
+}
+
+section > .wrapper > h1.title:after{
+    content: '';
+    display: block;
+    position: absolute;
+    top: 55px;
+    left: 50%;
+
+    margin: 0 0 0 -490px;
+
+    width: 980px;
+    height: 1px;
+}
+
+/*GRAY BG*/
+
+section.gray-bg{
+    background: #e9e9e9 url('bg-gray.jpg') no-repeat center center;
+    background-size: 100% 100%;
+}
+
+/*GRAY*/
+
+section.gray{
+    background: #e9e9e9;
+}
+
+section.gray > .wrapper > h1.title{
+    color: #383838;
+}
+
+section.gray > .wrapper > h1.title:after{
+    background: #383838;
+}
+
+/*ORANGE*/
+section.orange{
+    background: #f46430;
+}
+
+section.orange > .wrapper > h1.title{
+    color: #fff;
+}
+
+section.orange > .wrapper > h1.title:after{
+    background: #fff;
+}
+
+section.orange .text{
+    color: #fff;
+}
+
+/*---------------------------FORMS-----------------*/
+.form-center{
+    left: 50%;
+
+    margin: 0 0 0 -175px;
+
+    width: 350px;
+    height: auto;
+}
+
+/*--------------------------HELPERS----------------*/
+.wrapper{
+    top: 0;
+    left: 50%;
+
+    margin: 0 0 0 -490px;
+
+    width: 980px;
+}
+
+.radius{
+    border-radius: 5px;
+}
+
+.left{
+    float: left;
+}
+
+.right{
+    float: right;
+}
+
+.center{
+    text-align: center;
+}
+
+.clear{
+    clear: both;
+}
+.fifty{
+    width: 49%;
+}
+
+.title{
+    position: relative;
+    top: 0;
+    left: 0;
+
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+
+    width: 100%;
+    height: auto;
+
+    font-family: 'Roboto';
+    font-size: 32px;
+    font-weight: 300;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.uppercase{
+    text-transform: uppercase;
+}
+
+.subtitle{
+    position: relative;
+    top: 0;
+    left: 0;
+
+    margin: 10px 0 20px 0;
+    padding: 0 0 20px 0;
+
+    width: 100%;
+    height: auto;
+
+    font-family: 'Roboto Condensed';
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 10px;
+    text-transform: uppercase;
+    text-align: center;
+
+    border-bottom: 1px solid rgba(0,0,0,0.7);
+}
+
+.title.top-title{
+    padding: 60px 0 0 0 !important;
+}
+
+.title.top-title-low{
+    padding: 30px 0 0 0 !important;
+}
+
+.border-bottom{
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+.red{
+    color: #da0000;
+}
+
+hr{
+    margin: 20px 0 20px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.7);
+}
