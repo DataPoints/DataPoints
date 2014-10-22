@@ -1,4 +1,4 @@
-<h1>Change your profile</h1>
+<h1>Your profile</h1>
 <div>
   <div>
     <%= form_for(@user) do |f| %>
@@ -12,10 +12,10 @@
         <%= f.label :password %>
         <%= f.password_field :password %>
 
-        <%= f.label :password_confirmation, 'Confirmation' %>
+        <%= f.label :password_confirmation, 'Confirm password' %>
         <%= f.password_field :password_confirmation %>
 
-        <%= f.submit 'Save changes', class: '' %>
+        <%= f.submit 'Update', class: '' %>
     <% end %>
   </div>
 </div>
