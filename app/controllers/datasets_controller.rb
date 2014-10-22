@@ -1,4 +1,6 @@
 class DatasetsController < ApplicationController
+  before_action :logged_in_user, only: [:create, :destroy]
+
   def new
     @dataset = Dataset.new
   end
@@ -6,7 +8,7 @@ class DatasetsController < ApplicationController
   def create
     @dataset = current_user.datasets.build(dataset_params)
     if @dataset.save
-      flash[:success] = 'Uspesne uploadnuty dataset'
+      flash[:success] = 'Dataset successfully uploaded :)'
       redirect_to root_path
     else
       render 'new'
