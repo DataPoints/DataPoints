@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   root 'home#index'
   get 'datasets/new'
+  get 'datasets/show' =>'datasets#show'
   get 'home/index'
   get 'signup' => 'users#new'
   get 'login' => 'sessions#new'
