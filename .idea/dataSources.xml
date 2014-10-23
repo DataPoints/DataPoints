@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="2770583374">
+  <component name="DataSourceManagerImpl" format="xml" hash="1016420831">
     <data-source source="LOCAL" name="Rails Sprint-1: development" uuid="035b3696-05b6-4be4-97bd-fedad7e7ab56">
       <driver-ref>postgresql</driver-ref>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
@@ -17,6 +17,15 @@
       <driver-ref>postgresql</driver-ref>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql:Skola_production</jdbc-url>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="PostgreSQL - Skola_production@localhost" uuid="1557f088-400c-4477-8c21-f1e167f01b10">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/Skola_production</jdbc-url>
+      <schema-pattern>Skola_production.public</schema-pattern>
+      <default-schemas>Skola_production.*</default-schemas>
       <libraries />
     </data-source>
   </component>

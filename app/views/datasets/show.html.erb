@@ -1,6 +1,7 @@
 
 <div class="panel panel-default">
   <!-- Default panel contents -->
+
   <div class="panel-heading title">Your Datasets</div>
     <table border="0" class="table">
     <tr>
@@ -56,4 +57,35 @@
         <%end%>
         <% end %>
     </table>
-</div>     
+</div>
+
+
+
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+
+  <div class="panel-heading title">Your Analyzed Datasets</div>
+  <table border="0" class="table">
+    <tr>
+      <th scope="col">N</th>
+      <th scope="col">Name </th>
+      <th scope="col">Description </th>
+      <th scope="col">Analysys progress </th>
+    </tr>
+
+    <%i=0%>
+    <% @AnalyzedDatasets.each do |dataset| %>
+        <tr>
+          <%i=i+1%>
+          <td><%=i%></td>
+          <td type="edit"><%= dataset.name %></td>
+          <td type="edit"><%= dataset.description %></td>
+          <td>
+            <%= dataset.analyzed_progress%>
+            <%= raw "%" %>
+          </td>
+        </tr>
+    <% end %>
+  </table>
+</div>
