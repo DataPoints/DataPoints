@@ -16,6 +16,10 @@ label{
     text-align: left;
 }
 
+label.checkbox{
+    /*DISCUSS WITH TEAM*/
+}
+
 form input, select, form textarea{
     margin: 0 0 15px 0;
 

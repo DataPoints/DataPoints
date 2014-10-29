@@ -21,6 +21,7 @@ body{
 /*----------------------------HEADER---------------*/
 header{
     position: fixed;
+    top: 0;
 
     width: 100%;
     height: 130px;
@@ -79,6 +80,12 @@ header nav a{
 header nav a:hover{
     background: #fff;
     color: #f46430;
+}
+
+/*----------------------------MAIN-----------------*/
+main{
+    margin: 130px 0 0 0; /*VALUE OF HEADER HEIGHT*/
+    padding: 60px 0 0 0;
 }
 
 /*---------------------WERE HERE TO HELP-----------*/
@@ -429,11 +436,15 @@ section.orange .text{
     border-bottom-style: solid;
 }
 
-.red{
-    color: #da0000;
-}
+
 
 hr{
     margin: 20px 0 20px 0;
     border-bottom: 1px solid rgba(0,0,0,0.7);
+}
+
+/*COLORS*/
+
+.red{
+    color: #da0000;
 }

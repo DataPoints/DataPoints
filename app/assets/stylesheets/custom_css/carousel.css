@@ -1,6 +1,6 @@
 
 #carousel{
-
+    margin: -60px 0 0 0; /*NEGATIVE VALUE OF MAIN PADDING-TOP*/
 }
 
 #carousel img{

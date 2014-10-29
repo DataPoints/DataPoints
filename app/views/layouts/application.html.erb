@@ -2,10 +2,26 @@
 <html>
 <head>
   <title>DATA-POINTS</title>
+  <meta charset="utf-8" />
+
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <%= favicon_link_tag "fav-icon.png" %>
+
+  <!-- OG -->
+  <meta property="og:title" content="Sofistikované spracovanie dát" />
+  <meta property="og:site_name" content="datapoints.eu"/>
+  <meta property="og:description" content="STU FIIT - tímový projekt - Tím číslo 3. - Téma: Sofistikované spracovanie dát" />
+  <meta property="og:image" content="http://www.pro-media.sk/dataPoints/images/og-image.jpg" />
+  <link REL="SHORTCUT ICON" href="images/fav-icon.png" />
+
+  <!-- GOOGLE FONTS -->
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700,300' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700' rel='stylesheet' type='text/css'>
+
 </head>
 <body>
 
@@ -23,13 +39,13 @@
         <%= link_to "Home", root_path %>
 
         <% if logged_in? %>
-           <%= link_to_unless_current 'Add Dataset',   datasets_new_path %>
-           <%= link_to_unless_current 'Your datasets', datasets_show_path %>
-            <%= link_to_unless_current "Profile",      edit_user_path(current_user) %>
-            <%= link_to_unless_current 'Log out',      logout_url, method: 'delete' %>
+           <%= link_to'Add Dataset',   datasets_new_path %>
+           <%= link_to 'Your datasets', datasets_show_path %>
+            <%= link_to "Profile",      edit_user_path(current_user) %>
+            <%= link_to'Log out',      logout_url, method: 'delete' %>
         <% else %>
-            <%= link_to_unless_current 'Register',     signup_path %>
-            <%= link_to_unless_current 'Log in',       login_path %>
+            <%= link_to 'Register',     signup_path %>
+            <%= link_to 'Log in',       login_path %>
         <% end %>
 
       </nav>
@@ -38,77 +54,9 @@
     <hr />
   </header>
 
-  <!-- CAROUSEL -->
-  <div id="carousel">
-    <%= image_tag 'carousel/carousel-1.jpg',:title => 'intro carousel'  %>
-  </div>
-
-  <%= yield %>
-
-  <!-- HOW DOES IT WORK -->
-  <section id="how-does-it-work" class="gray">
-    <div class="wrapper">
-
-      <!-- TITLE -->
-      <h1 class="title">How does it work?</h1>
-
-      <!-- BOXES -->
-      <div class="boxes">
-        <!-- UPLOAD -->
-        <div class="box">
-          <div class="left icon i-upload"></div>
-          <div class="right content">
-            <h1 class="title">Upload your data set</h1>
-            <p class="text">
-              You need only 4 clicks to upload your known/unknown data via our quick and easy form
-            </p>
-          </div>
-        </div>
-
-        <!-- PROCESS -->
-        <div class="box">
-          <div class="left icon i-stats"></div>
-          <div class="right content">
-            <h1 class="title">We’ll process them</h1>
-            <p class="text">
-              Everything runs in background, so you can get back to your every day business
-            </p>
-          </div>
-        </div>
-
-        <!-- CONTACT -->
-        <div class="box">
-          <div class="left icon i-mail-send"></div>
-          <div class="right content">
-            <h1 class="title">And contact you</h1>
-            <p class="text">
-              Right after everything has been done, we’ll send you the e-mail or SMS
-            </p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- WE'RE HERE TO HELP -->
-  <section id="were-here-to-help" class="orange center">
-    <div class="wrapper">
-
-      <!-- TITLE -->
-      <h1 class="title">We're here to help</h1>
-
-      <!-- TEXT -->
-      <p class="text">
-        If you’re new to the idea of being data-driven, or you would like to search through new statistical information, our tool will give you planty of option to do so. Join us and enjoy extensive reports and analyses.
-        <br /><br />
-      </p>
-
-      <!-- BUTTON -->
-      <%= link_to_unless_current 'Explore new horizons',     signup_path, :class => "btn white uppercase" %>
-
-    </div>
-  </section>
+  <main>
+     <%= yield %>
+  </main>
 
 
   <!-- FOOTER PUSHER -->
@@ -125,13 +73,13 @@
       <%= link_to "Home", root_path %>
 
       <% if logged_in? %>
-          <%= link_to_unless_current 'Add Dataset',    datasets_new_path %>
-          <%= link_to_unless_current 'Your datasets',  datasets_show_path %>
+          <%= link_to 'Add Dataset',    datasets_new_path %>
+          <%= link_to 'Your datasets',  datasets_show_path %>
 
-          <%= link_to_unless_current 'Log out',        logout_url, method: 'delete' %>
+          <%= link_to 'Log out',        logout_url, method: 'delete' %>
       <% else %>
-          <%= link_to_unless_current 'Register',     signup_path %>
-          <%= link_to_unless_current 'Log in',       login_path %>
+          <%= link_to 'Register',     signup_path %>
+          <%= link_to 'Log in',       login_path %>
       <% end %>
     </nav>
 
