@@ -16,21 +16,6 @@ ActiveRecord::Schema.define(version: 20141113201042) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "1:1", force: true do |t|
-    t.string "Obchodn meno"
-    t.string "PS"
-    t.string "Ulica"
-    t.string "Mesto / Obec"
-    t.string "IO"
-    t.string "Vka pohadvky"
-    t.string "Typ platitea"
-  end
-
-  create_table "H1:1", force: true do |t|
-    t.string "name"
-    t.string "datatype"
-  end
-
   create_table "columns", force: true do |t|
     t.integer  "header_id"
     t.string   "label"
