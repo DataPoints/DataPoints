@@ -5,7 +5,6 @@ class CreateColumns < ActiveRecord::Migration
       t.string :label
       t.references :type, index: true
       t.string :datatyp
-
       t.timestamps
     end
   end
