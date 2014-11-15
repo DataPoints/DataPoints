@@ -33,13 +33,13 @@ ActiveRecord::Schema.define(version: 20141113201042) do
     t.string   "description"
     t.string   "link"
     t.integer  "user_id"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.string   "status"
-    t.boolean  "deleted",                       default: false
+    t.boolean  "deleted",           default: false
     t.string   "data_table"
-    t.decimal  "analyzed_progress",             default: 0.0
-    t.string   "header_table",      limit: 250
+    t.string   "header_table"
+    t.decimal  "analyzed_progress", default: 0.0
   end
 
   add_index "datasets", ["user_id", "created_at"], name: "index_datasets_on_user_id_and_created_at", using: :btree
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20141113201042) do
   create_table "headers", force: true do |t|
     t.boolean  "origin"
     t.integer  "dataset_id"
+    t.integer  "column_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
