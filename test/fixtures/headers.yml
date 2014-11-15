@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  origin: false
+  dataset: 
+  column_id: 
+
+two:
+  origin: false
+  dataset: 
+  column_id: 
