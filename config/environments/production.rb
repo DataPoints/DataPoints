@@ -19,13 +19,13 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
       address: 'smtp.gmail.com',
       port: 587,
-      domain: 'localhost',
+      domain: 'team03-14.ucebne.fiit.stuba.sk',
       user_name: 'tp3fiit@gmail.com',
       password: 'fiitkari2014',
       authentication: 'plain',
       enable_starttls_auto: true
   }
-  host = 'localhost:3000'
+  host = 'team03-14.ucebne.fiit.stuba.sk:8080'
   config.action_mailer.default_url_options = { host: host }
 
   # Print deprecation notices to the Rails logger.
