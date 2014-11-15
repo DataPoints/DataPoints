@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="Rails Sprint-1: development" uuid="035b3696-05b6-4be4-97bd-fedad7e7ab56">
+      <secret-storage>memory</secret-storage>
+    </data-source>
+    <data-source name="Rails Sprint-1: test" uuid="20c62287-6e6e-407a-9185-533ce22687bb">
+      <secret-storage>memory</secret-storage>
+    </data-source>
+    <data-source name="Rails Sprint-1: production" uuid="a811ec4b-9a7d-4969-be7f-89995bec61da">
+      <secret-storage>memory</secret-storage>
+    </data-source>
+  </component>
+</project>
