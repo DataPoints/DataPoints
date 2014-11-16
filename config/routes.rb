@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
   root 'home#index'
   get 'datasets/new'
+  get 'datasets/change_type' => 'datasets#change_type'
   get 'datasets/show' =>'datasets#show'
   get 'home/index'
   get 'signup' => 'users#new'
   get 'login' => 'sessions#new'
+  get 'datasets/detail' => 'datasets#detail'
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 

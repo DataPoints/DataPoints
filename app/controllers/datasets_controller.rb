@@ -23,11 +23,10 @@ class DatasetsController < ApplicationController
       render 'edit'
     end
   end
-  def show
+  def index
     # @dataset = Dataset.find(params[:id])
     @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
     @AnalyzedDatasets = Dataset.where(user_id: current_user.id, deleted: false, analyzed_progress: 0).first(10)
-
 
   end
 
@@ -35,18 +34,30 @@ class DatasetsController < ApplicationController
     @dataset = Dataset.find(params[:id])
   end
 
-  def index
-    @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
-  end
-
   def destroy
     @dataset = Dataset.find(params[:id])
     if @dataset.update(deleted: true)
-      redirect_to datasets_show_path
+      redirect_to datasets_path
     else
       render 'edit'
     end
   end
+
+  def show
+    @dataset = Dataset.find(params[:id])
+    @headers = @dataset.headers.all
+    @columns = @headers.first.columns.all.order(:label)
+  end
+
+  def change_type
+    @dataset = Dataset.find(params[:id])
+    t = @dataset.headers.first.columns.find(params[:column_id])
+    t.type_id = params[:type_id]
+    t.save
+    flash[:success] = 'Changes saved!'
+    redirect_to :back
+  end
+
   private
   def dataset_params
     params.require(:dataset).permit(:name, :description, :link)
