@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20141113201042) do
     t.string   "status" 
     t.boolean  "deleted",                       default: false
     t.string   "data_table_name"
+    t.string   "storage"
     t.decimal  "analyzed_progress",             default: 0.0
   end
 
