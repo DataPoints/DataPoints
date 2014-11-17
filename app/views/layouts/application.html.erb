@@ -36,16 +36,17 @@
 
       <!-- NAVIGATION -->
       <nav>
-        <%= link_to "Home", root_path %>
+        <%= link_to 'Home', root_path %>
 
         <% if logged_in? %>
-           <%= link_to'Add Dataset',   datasets_new_path %>
-           <%= link_to 'Your datasets', datasets_show_path %>
-            <%= link_to "Profile",      edit_user_path(current_user) %>
-            <%= link_to'Log out',      logout_url, method: 'delete' %>
+
+           <%= link_to_unless_current 'Add Dataset',   datasets_new_path %>
+           <%= link_to_unless_current 'Your datasets', datasets_show_path %>
+           <%= link_to_unless_current 'My profile',    user_edit_profile_path %>
+           <%= link_to_unless_current 'Log out',       logout_url, method: 'delete' %>
         <% else %>
-            <%= link_to 'Register',     signup_path, method: :get %>
-            <%= link_to 'Log in',       login_path %>
+           <%= link_to_unless_current 'Register',      signup_path %>
+           <%= link_to_unless_current 'Log in',        login_path %>
         <% end %>
 
       </nav>

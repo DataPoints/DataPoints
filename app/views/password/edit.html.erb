@@ -1,0 +1,26 @@
+<h1 class = "title">Update your password</h1>
+
+<div class="wrapper">
+  <%= link_to '< Back to profile', user_edit_profile_path, class: 'btn btn-default' %>
+</div>
+
+<div>
+  <%= form_for(@user) do |f| %>
+      <div class="wrapper">
+        <%= render 'shared/error_messages', object: f.object %>
+
+        <%= f.label :password, 'Current password' %><br />
+        <%= f.password_field :password, placeholder: 'Current password' %>
+        <br /><br /><br />
+
+        <%= f.label :password, 'New password' %><br />
+        <%= f.password_field :password, placeholder: 'New password' %><br />
+
+        <%= f.label :password_confirmation, 'Confirm password' %><br />
+        <%= f.password_field  :password_confirmation, placeholder: 'Confirm new password' %><br />
+
+        <%= f.submit 'Save changes', class: '' %>
+      </div>
+      <br />
+  <% end %>
+</div>
