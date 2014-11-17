@@ -1,6 +1,8 @@
 <%= link_to 'Back', datasets_path , style: 'left: 35px'%>
 <%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
-    <%= select_tag(:column_id, options_for_select(@columns.collect {|h| [ h.label, h.id ]})) %>
+    Meno stlpca
+    <%= select_tag(:column_id, options_for_select(@columns.collect {|column| [ column.label, column.id ]})) %>
+    Typ v stlpci
     <%= select_tag(:type_id, options_for_select([['Adresa', 1],['Meno', 2]])) %>
     <%= hidden_field_tag :id , @dataset.id %>
     <%= submit_tag 'Update', class: 'btn btn-primary' %>
