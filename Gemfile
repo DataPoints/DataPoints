@@ -44,6 +44,6 @@ gem 'bcrypt'
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
 
-gem "recaptcha", :require => "recaptcha/rails"
+gem 'recaptcha', :require => 'recaptcha/rails'
 gem 'jquery-turbolinks'
 gem 'table_for_collection'
