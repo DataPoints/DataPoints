@@ -16,6 +16,15 @@ ActiveRecord::Schema.define(version: 20141113201042) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "AAA:1", force: true do |t|
+    t.string  "adresa",   null: false
+    t.string  "meno",     null: false
+    t.integer "cislo",    null: false
+    t.integer "column_5", null: false
+  end
+
+  add_index "AAA:1", ["id"], name: "unique_id", unique: true, using: :btree
+
   create_table "columns", force: true do |t|
     t.integer  "header_id"
     t.string   "label"
@@ -33,12 +42,13 @@ ActiveRecord::Schema.define(version: 20141113201042) do
     t.string   "description"
     t.string   "link"
     t.integer  "user_id"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
-    t.string   "status" 
-    t.boolean  "deleted",                       default: false
-    t.string   "data_table_name"
-    t.decimal  "analyzed_progress",             default: 0.0
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.string   "status"
+    t.boolean  "deleted",           default: false
+    t.string   "data_table"
+    t.string   "header_table"
+    t.decimal  "analyzed_progress", default: 0.0
   end
 
   add_index "datasets", ["user_id", "created_at"], name: "index_datasets_on_user_id_and_created_at", using: :btree
@@ -51,7 +61,6 @@ ActiveRecord::Schema.define(version: 20141113201042) do
     t.datetime "updated_at"
   end
 
-  add_index "headers", ["column_id"], name: "index_headers_on_column_id", using: :btree
   add_index "headers", ["dataset_id"], name: "index_headers_on_dataset_id", using: :btree
 
   create_table "users", force: true do |t|
