@@ -51,9 +51,9 @@ class DatasetsController < ApplicationController
 
   def change_type
     @dataset = Dataset.find(params[:id])
-    t = @dataset.headers.first.columns.find(params[:column_id])
-    t.type_id = params[:type_id]
-    t.save
+    column_type_change = @dataset.headers.first.columns.find(params[:column_id])
+    column_type_change.type_id = params[:type_id]
+    column_type_change.save
     flash[:success] = 'Changes saved!'
     redirect_to :back
   end
