@@ -45,7 +45,7 @@ class DatasetsController < ApplicationController
 
   def show
     @dataset = Dataset.find(params[:id])
-    if @dataset.analyzed_progress == 1
+    if @dataset.analyzed_progress == 0
       flash[:danger] = 'Sorry :( Dataset not yet analyzed'
       redirect_to datasets_path
       return
@@ -55,30 +55,22 @@ class DatasetsController < ApplicationController
     @headers = @dataset.headers.all
     @columns = @headers.first.columns.all.order(:label)
 
+    name_of_dataset_data_table = @dataset.data_table
+    @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
 
-
-    #stano
-    name = @dataset.data_table
-    @data = Class.new(ActiveRecord::Base) { self.table_name = name }
-
-
-    #@lala = @data.find_by_sql('SELECT * FROM "AAA:1"')
-    @lala = @data.find(2)
-    @pocet = @data.count
-    if @pocet > 15
-      @pocet = 15
+    @number_of_data_rows = @data.count
+    if @number_of_data_rows > 15
+      @number_of_data_rows = 15
     end
-    @names = @data.column_names
 
-
-
+    @names_of_data_columns = @data.column_names
   end
 
   def change_type
     @dataset = Dataset.find(params[:id])
-    t = @dataset.headers.first.columns.find(params[:column_id])
-    t.type_id = params[:type_id]
-    t.save
+    column_to_change_type = @dataset.headers.first.columns.find(params[:column_id])
+    column_to_change_type.type_id = params[:type_id]
+    column_to_change_type.save
     flash[:success] = 'Changes saved!'
     redirect_to :back
   end
