@@ -5,9 +5,21 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    if @user.save
+    captcha_message = "The data you entered for the CAPTCHA wasn't correct.  Please try again"
+
+    if @user.save && verify_recaptcha(model: @user, message: captcha_message)
       @user.send_activation_email
       flash[:info] = 'Please check your email to activate your account.'
+
+      #recaptcha
+
+
+
+      #Docasne
+      #@user.activate
+      #log_in @user
+      #potialto
+
       redirect_to root_url
     else
       render 'new'
