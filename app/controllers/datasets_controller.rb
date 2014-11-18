@@ -45,15 +45,21 @@ class DatasetsController < ApplicationController
 
   def show
     @dataset = Dataset.find(params[:id])
+    if @dataset.analyzed_progress == 0
+      flash[:danger] = 'Sorry :( Dataset not yet analyzed'
+      redirect_to datasets_path
+      return
+    end
+
     @headers = @dataset.headers.all
     @columns = @headers.first.columns.all.order(:label)
   end
 
   def change_type
     @dataset = Dataset.find(params[:id])
-    column_type_change = @dataset.headers.first.columns.find(params[:column_id])
-    column_type_change.type_id = params[:type_id]
-    column_type_change.save
+    column_to_change_type = @dataset.headers.first.columns.find(params[:column_id])
+    column_to_change_type.type_id = params[:type_id]
+    column_to_change_type.save
     flash[:success] = 'Changes saved!'
     redirect_to :back
   end
