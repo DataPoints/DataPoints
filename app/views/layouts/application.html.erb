@@ -44,6 +44,7 @@
             <%= link_to "Profile",      edit_user_path(current_user) %>
             <%= link_to'Log out',      logout_url, method: 'delete' %>
         <% else %>
+            <!-- metoda :get je z dovodu, ze recaptcha nepouziva jquery a tak sa nenahraju turbolinky -->
             <%= link_to 'Register',     signup_path, method: :get %>
             <%= link_to 'Log in',       login_path %>
         <% end %>
