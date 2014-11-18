@@ -1,5 +1,6 @@
 require 'net/http'
 require 'digest/md5'
+require 'table_factory.rb'
 
 class DatasetsController < ApplicationController
   before_action :logged_in_user, only: [:create, :destroy]
@@ -54,12 +55,17 @@ class DatasetsController < ApplicationController
         @dataset.originuri = @dataset.link
 
         if @dataset.save
+
+          TableFactory.new.builder(@dataset)
+
           flash[:success] = 'Dataset successfully downloaded :) ' + @dataset.link + " " + dataset_already_exists.to_s
           redirect_to root_path
         else
           flash[:failure] = 'Dataset download failed :( ' + @dataset.link
           render 'new'
         end
+
+
 
       rescue TypeError => e
         flash[:fail] = 'URL: "' + @dataset.link + '" you provided seems to be invalid :( '
