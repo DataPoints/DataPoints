@@ -44,7 +44,7 @@
             <%= link_to "Profile",      edit_user_path(current_user) %>
             <%= link_to'Log out',      logout_url, method: 'delete' %>
         <% else %>
-            <%= link_to 'Register',     signup_path %>
+            <%= link_to 'Register',     signup_path, method: :get %>
             <%= link_to 'Log in',       login_path %>
         <% end %>
 
