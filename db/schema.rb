@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20141117223715) do
   create_table "headers", force: true do |t|
     t.boolean  "origin"
     t.integer  "dataset_id"
+    t.integer  "column_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
