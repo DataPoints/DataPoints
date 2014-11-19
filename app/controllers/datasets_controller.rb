@@ -116,7 +116,7 @@ class DatasetsController < ApplicationController
 
   def show
     @dataset = Dataset.find(params[:id])
-    if @dataset.analyzed_progress == 0
+    if @dataset.downloadstatus == '0'
       flash[:danger] = 'Sorry :( Dataset not yet analyzed'
       redirect_to datasets_path
       return
