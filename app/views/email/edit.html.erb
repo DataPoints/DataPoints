@@ -5,7 +5,7 @@
 </div>
 
 <div>
-  <%= form_for @user do |f| %>
+  <%= form_for(@user, url: user_edit_email_path) do |f| %>
       <div class="wrapper">
         <%= render 'shared/error_messages', object: f.object %>
 
@@ -13,8 +13,8 @@
         <%= f.label :email, 'New Email' %><br />
         <%= f.text_field :email %><br />
 
-        <%= f.label :password_confirmation, 'Confirm with password' %><br />
-        <%= f.password_field :password_confirmation, placeholder: 'Password...' %><br />
+        <%= f.label :password, 'Confirm with password' %><br />
+        <%= f.password_field :password, placeholder: 'Password...' %><br />
 
         <%= f.submit 'Save changes' %>
       </div>

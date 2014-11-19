@@ -5,11 +5,21 @@ class EmailController < ApplicationController
   end
 
   def update
+
     @user = current_user
-    if @user.update(user_params)
-      flash[:info] = "hahah"
+    user = User.find_by_email(@user.email)
+
+    if user.authenticate(params[:user][:password])
+
+      c = user
+      c.email = params[:user][:email]
+      c.save
+
+      flash[:success] = 'Your Email was changed successfuly.'
+
       redirect_to user_edit_email_path
     else
+      flash[:danger] = 'Incorrect password!'
       render 'edit'
     end
 

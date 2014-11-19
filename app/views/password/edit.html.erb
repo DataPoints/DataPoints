@@ -5,12 +5,12 @@
 </div>
 
 <div>
-  <%= form_for(@user) do |f| %>
+  <%= form_for(@user, url: user_edit_password_path) do |f| %>
       <div class="wrapper">
         <%= render 'shared/error_messages', object: f.object %>
 
-        <%= f.label :password, 'Current password' %><br />
-        <%= f.password_field :password, placeholder: 'Current password' %>
+        <%= f.label :password_curr, 'Current password' %><br />
+        <%= f.password_field :password_curr, placeholder: 'Current password' %>
         <br /><br /><br />
 
         <%= f.label :password, 'New password' %><br />

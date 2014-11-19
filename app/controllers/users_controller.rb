@@ -38,7 +38,7 @@ class UsersController < ApplicationController
   def update
     @user = current_user
     if @user.update(user_params)
-      flash[:success] = 'Meno uspesne zmenene.'
+      flash[:success] = 'Name successfuly changed.'
       redirect_to user_edit_profile_path
     else
      render 'edit'

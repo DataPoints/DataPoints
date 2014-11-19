@@ -1,10 +1,16 @@
 Rails.application.routes.draw do
+
   root 'home#index'
+
   get 'datasets/new'
-  get 'datasets/show' =>'datasets#show'
-  get 'user/edit/email' => 'email#edit'
-  get 'user/edit/password' => 'password#edit'
-  get 'user/edit/profile' => 'users#edit'
+  get 'datasets/show' => 'datasets#show'
+
+  get 'user/edit/profile'   => 'users#edit'
+  get 'user/edit/email'     => 'email#edit'
+  get 'user/edit/password'  => 'password#edit'
+  patch 'user/edit/email'     => 'email#update'
+  patch 'user/edit/password'  => 'password#update'
+
   get 'home/index'
   get 'signup' => 'users#new'
   get 'login' => 'sessions#new'
