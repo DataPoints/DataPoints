@@ -122,6 +122,7 @@ class DatasetsController < ApplicationController
       return
     end
 
+<<<<<<< HEAD
     @dataset = Dataset.find(params[:id])
     @headers = @dataset.headers.all
     @columns = @headers.first.columns.all.order(:label)
@@ -135,6 +136,10 @@ class DatasetsController < ApplicationController
     end
 
     @names_of_data_columns = @data.column_names
+=======
+    @headers = @dataset.headers.all
+    @columns = @headers.first.columns.all.order(:label)
+>>>>>>> remotes/origin/dev
   end
 
   def change_type

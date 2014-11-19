@@ -58,7 +58,11 @@
     <% flash.each do |message_type, message| %>
         <div class="alert alert-<%= message_type %>"><%= message %></div>
     <% end %>
+<<<<<<< HEAD
     <%= yield %>
+=======
+     <%= yield %>
+>>>>>>> remotes/origin/dev
   </main>
 
 
@@ -98,10 +102,5 @@
 </footer>
 
 </div>
-
-<% flash.each do |message_type, message| %>
-    <div class="alert alert-<%= message_type %>"><%= message %></div>
-<% end %>
-
 </body>
 </html>
