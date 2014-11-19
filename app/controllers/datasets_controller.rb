@@ -122,8 +122,24 @@ class DatasetsController < ApplicationController
       return
     end
 
+<<<<<<< HEAD
+    @dataset = Dataset.find(params[:id])
     @headers = @dataset.headers.all
     @columns = @headers.first.columns.all.order(:label)
+
+    name_of_dataset_data_table = @dataset.data_table_name
+    @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+
+    @number_of_data_rows = @data.count
+    if @number_of_data_rows > 15
+      @number_of_data_rows = 15
+    end
+
+    @names_of_data_columns = @data.column_names
+=======
+    @headers = @dataset.headers.all
+    @columns = @headers.first.columns.all.order(:label)
+>>>>>>> remotes/origin/dev
   end
 
   def change_type
