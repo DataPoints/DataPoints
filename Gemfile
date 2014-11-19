@@ -46,4 +46,5 @@ gem 'autoprefixer-rails'
 
 gem 'recaptcha', :require => 'recaptcha/rails'
 gem 'jquery-turbolinks'
-gem 'table_for_collection'
+
+gem "rails_config"

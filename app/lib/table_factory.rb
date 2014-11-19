@@ -1,14 +1,25 @@
+# Name of Author: Peter Uherek, Martin Losak
+# Created at: 17.11. 2014
+#
+# Description: Vytvorenie a naplnenie generickej tabulky na zaklade csv suboru.
+
 require 'csv'
 
 class TableFactory
  def builder(dataset)
     Thread.new do
       #Vytvorenie mena noveho datasetu
-      num1 = get_name_of_dataset(dataset.user_id)
-      num2 = dataset.user_id
+      num1 = dataset.user_id
+      num2 = dataset.id
       name_of_data_table = "#{num1}:#{num2}"
       #Nahratie dat z datasetu
-      data = parsing_csv()
+      path = dataset.storage
+      puts path
+      data = parsing_csv(path)
+      if data == 1
+        return 1
+      end
+
       flag = 0
       #Generice vytvorenie tabuliek
       if create_table(name_of_data_table,data[0]) == 0
@@ -40,30 +51,29 @@ class TableFactory
   end
 
   private
-  def get_name_of_dataset(user_id)
-    @dataset = Dataset.where(user_id: user_id).last()
-    num = @dataset.id
-  end
-
-  private
-  def parsing_csv
-    file = File.read('datasets/test.csv').force_encoding('Windows-1250').encode('UTF-8')
+  def parsing_csv(path)
+    begin
+    file = File.read(path).force_encoding('Windows-1250').encode('UTF-8')
     csv = CSV.parse(file, :col_sep => ';')
     header = csv[0]
     puts header
+    rescue
+      puts "Path to the dataset is wrong. Error: #{$!}"
+      return 1
+    end
     return csv
   end
 
   private
   def fill_storage(name_of_dataset,data)
     begin
-    c = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset } 
+    new_class = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset } 
     # 'o' is now a wrapper for the row of some_table where 'id = 1'
-    cols = c.columns.map(&:name)
+    cols = new_class.columns.map(&:name)
     data.shift
-
+    
     data.each do |row|
-      new_record = c.new()
+      new_record = new_class.new()
       for i in 1..cols.count()-1
         new_record[cols[i]] = row[i-1]
       end
@@ -73,7 +83,7 @@ class TableFactory
       puts "Process crashed during insert new records into #{name_of_dataset}. Error #{$!}"
       return 1
     end
-    return 0
+      return 0
   end
 
   private
