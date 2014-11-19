@@ -116,7 +116,7 @@ class DatasetsController < ApplicationController
 
   def show
     @dataset = Dataset.find(params[:id])
-    if @dataset.analyzed_progress == 0
+    if @dataset.downloadstatus == '0'
       flash[:danger] = 'Sorry :( Dataset not yet analyzed'
       redirect_to datasets_path
       return
@@ -126,7 +126,7 @@ class DatasetsController < ApplicationController
     @headers = @dataset.headers.all
     @columns = @headers.first.columns.all.order(:label)
 
-    name_of_dataset_data_table = @dataset.data_table
+    name_of_dataset_data_table = @dataset.data_table_name
     @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
 
     @number_of_data_rows = @data.count

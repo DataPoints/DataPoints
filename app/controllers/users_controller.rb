@@ -7,7 +7,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     captcha_message = "The data you entered for the CAPTCHA wasn't correct.  Please try again"
 
-    if @user.save && verify_recaptcha(model: @user, message: captcha_message)
+    if verify_recaptcha(model: @user, message: captcha_message)
+      @user.save
       @user.send_activation_email
       flash[:info] = 'Please check your email to activate your account.'
 
@@ -22,6 +23,7 @@ class UsersController < ApplicationController
 
       redirect_to root_url
     else
+      flash.delete(:recaptcha_error)
       render 'new'
     end
   end
