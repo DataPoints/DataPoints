@@ -1,5 +1,6 @@
-<<<<<<< HEAD
+
 <%= link_to 'Back', datasets_path , style: 'left: 35px'%><br>
+
 <table class="table table-striped" style="width: 400px; margin-left: 50px;">
   <tr>
     <td><b>Dataset name: </b></td>
@@ -45,9 +46,7 @@
 <% end %>
 </table>
 
-=======
-<%= link_to 'Back', datasets_path , style: 'left: 35px'%>
->>>>>>> remotes/origin/dev
+
 <%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
     Meno stlpca
     <%= select_tag(:column_id, options_for_select(@columns.collect {|column| [ column.label, column.id ]})) %>
@@ -55,8 +54,4 @@
     <%= select_tag(:type_id, options_for_select([['Adresa', 1],['Meno', 2]])) %>
     <%= hidden_field_tag :id , @dataset.id %>
     <%= submit_tag 'Update', class: 'btn btn-primary' %>
-<<<<<<< HEAD
 <% end %>
-=======
-<% end %>
->>>>>>> remotes/origin/dev
