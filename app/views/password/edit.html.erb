@@ -1,25 +1,42 @@
+<style>
+  .back_button {
+      margin-top: -13px; height: 45px; width: 150px; text-align: center; margin-right: 20px;
+      padding-top: 11px; background-color: #f46430; !important; color: #fff; font-weight: bold; font-family: Roboto;
+      font-size: 14px; font-style: normal !important; box-shadow: none;
+  }
+
+</style>
+
 <h1 class = "title">Update your password</h1>
 
-<div class="wrapper">
-  <%= link_to '< Back to profile', user_edit_profile_path, class: 'btn btn-default' %>
-</div>
 
 <div>
   <%= form_for(@user, url: user_edit_password_path) do |f| %>
       <div class="wrapper">
         <%= render 'shared/error_messages', object: f.object %>
 
-        <%= f.label :password_curr, 'Current password' %><br />
-        <%= f.password_field :password_curr, placeholder: 'Current password' %>
-        <br /><br /><br />
+        <table style="margin: auto;">
+          <tr>
+            <th><%= f.label :password_curr, 'Current password' %></th>
+            <td><%= f.password_field :password_curr, placeholder: 'Current password' %></td>
+          </tr>
 
-        <%= f.label :password, 'New password' %><br />
-        <%= f.password_field :password, placeholder: 'New password' %><br />
+          <tr>
+            <th><%= f.label :password, 'New password' %></th>
+            <td><%= f.password_field :password, placeholder: 'New password' %></td>
+          </tr>
 
-        <%= f.label :password_confirmation, 'Confirm password' %><br />
-        <%= f.password_field  :password_confirmation, placeholder: 'Confirm new password' %><br />
+          <tr>
+            <th><%= f.label :password_confirmation, 'Confirm password' %></th>
+            <td><%= f.password_field  :password_confirmation, placeholder: 'Confirm new password' %></td>
+          </tr>
 
-        <%= f.submit 'Save changes', class: '' %>
+          <tr>
+            <td><%= link_to '< BACK', user_edit_profile_path, class: 'btn back_button' %></td>
+            <td><%= f.submit 'Save changes', class: '' %></td>
+          </tr>
+        </table>
+
       </div>
       <br />
   <% end %>
