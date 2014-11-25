@@ -1,21 +1,11 @@
-<style>
-  .back_button {
-      margin-top: -13px; height: 45px; width: 150px; text-align: center; margin-right: 20px;
-      padding-top: 11px; background-color: #f46430; !important; color: #fff; font-weight: bold; font-family: Roboto;
-      font-size: 14px; font-style: normal !important; box-shadow: none;
-  }
-
-</style>
-
 <h1 class = "title">Update your password</h1>
-
 
 <div>
   <%= form_for(@user, url: user_edit_password_path) do |f| %>
       <div class="wrapper">
         <%= render 'shared/error_messages', object: f.object %>
 
-        <table id="password_table">
+        <table id="profile_table">
           <tr>
             <td>Current password</td>
             <td><%= f.password_field :password_curr, placeholder: 'Current password' %></td>
@@ -30,11 +20,8 @@
             <td>Confirm password</td>
             <td><%= f.password_field  :password_confirmation, placeholder: 'Confirm new password' %></td>
           </tr>
-
-
           <tr>
-
-            <td><br /><%= link_to '< BACK', user_edit_profile_path, class: 'btn orange', style: 'width: 130px' %></td>
+            <td><br /><%= link_to 'Back', user_edit_profile_path, class: 'btn gray', style: 'width: 130px' %></td>
             <td><br /><%= f.submit 'Save changes', class: '' %></td>
           </tr>
         </table>

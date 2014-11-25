@@ -256,7 +256,32 @@ footer nav a:hover{
     text-transform: uppercase;
 }
 
-.btn.orange:hover {
+.btn.gray {
+    position: relative;
+    top: 0;
+
+    margin: -13px 0 0 0;
+    padding: 12px 8px;
+    width: auto;
+    height: auto;
+
+    background: #777777;
+    color: #fff;
+    font-family: 'Roboto';
+    font-size: 15px;
+    font-weight: bold;
+    font-style: normal !important;
+    border: 0px solid #d2d2d2 !important;
+    box-shadow: none;
+    cursor: pointer;
+
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    text-transform: uppercase;
+}
+
+
+.btn.orange:hover, .btn.gray:hover {
     background: #272727;
     color: #fff;
 }
@@ -414,7 +439,7 @@ section.orange .text{
     top: 0;
     left: 0;
 
-    margin: 40px 0 40px 0;
+    margin: 0 0 40px 0; /* povodne 40px 0 40px 0 */
     padding: 0 0 0 0;
 
     width: 100%;
@@ -479,13 +504,14 @@ hr{
 }
 
 /* ---------- TABULKY ------- */
-#password_table {
+#profile_table {
     margin: auto;
 }
 
-#password_table tr td {
+#profile_table tr td {
 
     padding: 0 20px 0 0 !important;
-
     text-align: right;
+    text-transform: uppercase;
+    vertical-align: text-top;
 }

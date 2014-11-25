@@ -1,38 +1,37 @@
 <h1 class="title">Your profile</h1>
-<div>
 
-  <div class="wrapper row">
+<div class="wrapper">
+
+  <div class="row">
+
     <div class="col-md-4">
-
-
       <a href="http://gravatar.com/emails" target=_blank title="Change profile picture"><%= gravatar_for @user %></a>
-      <br/><b><%= @user.name %></b><br/><br/><br/>
+      <br/>
+      <b><%= @user.name %></b>
+      <br/><br/><br/>
 
-      <%= link_to 'Change email', user_edit_email_path, class: 'btn orange', style: 'width:170px' %>
+      <%= link_to 'Change E-mail', user_edit_email_path, class: 'btn gray', style: 'width:170px' %>
       <br/><br/>
-      <%= link_to 'Change password', user_edit_password_path, class: 'btn orange', style: 'width:170px' %>
+      <%= link_to 'Change password', user_edit_password_path, class: 'btn gray', style: 'width:170px' %>
       <br/><br/>
     </div>
 
     <div class="col-md-4">
       <%= form_for(@user) do |f| %>
-          <div class="wrapper">
-            <%= render 'shared/error_messages', object: f.object %>
-            <table id="password_table">
-              <tr>
-                <td>Name:</td>
-                <td><%= f.text_field :name %></td>
-              </tr>
-              <tr>
-                <td><br/></td>
-                <td><br/><%= f.submit 'Save changes', class: '' %></td>
-              </tr>
-            </table>
-
-
-          </div>
+          <%= render 'shared/error_messages', object: f.object %>
+          <table id="profile_table">
+            <tr>
+              <td>Name</td>
+              <td><%= f.text_field :name %></td>
+            </tr>
+            <tr>
+              <td><br/></td>
+              <td><br/><%= f.submit 'Save changes', class: '' %></td>
+            </tr>
+          </table>
       <% end %>
-
     </div>
+
   </div>
+
 </div>
