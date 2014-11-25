@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+
   def new
     @user = User.new
   end
@@ -29,7 +30,7 @@ class UsersController < ApplicationController
   end
 
   def show
-
+    @user = current_user
   end
 
   def edit
@@ -39,11 +40,12 @@ class UsersController < ApplicationController
   def update
     @user = current_user
     if @user.update(user_params)
-      flash[:success] = 'Profil uspesne zmeneny.'
-      redirect_to root_path
+      flash[:success] = 'Name successfuly changed.'
+      redirect_to user_edit_profile_path
     else
-      render 'edit'
+     render 'edit'
     end
+
   end
 
   private

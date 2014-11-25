@@ -6,11 +6,12 @@
   <table border="0" class="table">
     <tr>
       <th scope="col">N</th>
-      <th scope="col">Name </th>
-      <th scope="col">Description </th>
-      <th scope="col">Status </th>
-      <th scope="col">Created </th>
-      <th scope="col">Updated </th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Status</th>
+      <th scope="col">Created</th>
+      <th scope="col">Updated</th>
+      <th scope="col">Attributes</th>
     </tr>
 
     <%i=0%>
@@ -23,10 +24,22 @@
           <td><%= dataset.status %></td>
           <td><%= dataset.created_at.strftime("%d %b %H:%M") %></td>
           <td><%= dataset.updated_at.strftime("%d %b %H:%M") %></td>
-          <td><%= link_to 'Destroy', dataset_path(dataset),
-                          method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          <td><button class="btn btn-default btn-sm" id="showmodal"><span class="glyphicon glyphicon-pencil"></span></button> </td>
+          <td>
+            <% dataset = Dataset.find(dataset.id) %>
+            <% headers = dataset.headers.all %>
+            <% columns = headers.first.columns.all.order(:label) %>
+            <% array = columns.collect { |column| column.label } %>
+            <% s = '' %>
+            <% for i in 0..array.length-1 %>
+                <% s = s + array[i] %>
+                <% if i < array.length-1 %><% s = s + ',' %><% end %>
+                <% s = s + ' ' %>
+            <% end %>
+            <%= s %>
+          </td>
+          <td><a href="#" id="showmodal"><span class="glyphicon glyphicon-pencil"></span></a></td>
           <td><%= link_to 'Detail', dataset %></td>
+          <td><%= link_to 'Delete', dataset_path(dataset), method: :delete, data: { confirm: 'Do you really want to delete this dataset?' } %></td>
         </tr>
 
         <!-- Modal -->

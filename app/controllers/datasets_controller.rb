@@ -99,6 +99,10 @@ class DatasetsController < ApplicationController
     @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
     @AnalyzedDatasets = Dataset.where(user_id: current_user.id, deleted: false, analyzed_progress: 0).first(10)
 
+    # @dataset = Dataset.first
+    # @headers = @dataset.headers.all
+    # @columns = @headers.first.columns.all.order(:label)
+
   end
 
   def edit

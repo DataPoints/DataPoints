@@ -1,23 +1,38 @@
 <h1 class="title">Your profile</h1>
 <div>
-  <div>
-    <%= form_for(@user) do |f| %>
-        <div class=""wrapper">
+
+  <div class="wrapper row">
+    <div class="col-md-4">
+
+
+      <a href="http://gravatar.com/emails" target=_blank title="Change profile picture"><%= gravatar_for @user %></a>
+      <br/><b><%= @user.name %></b><br/><br/><br/>
+
+      <%= link_to 'Change email', user_edit_email_path, class: 'btn orange', style: 'width:170px' %>
+      <br/><br/>
+      <%= link_to 'Change password', user_edit_password_path, class: 'btn orange', style: 'width:170px' %>
+      <br/><br/>
+    </div>
+
+    <div class="col-md-4">
+      <%= form_for(@user) do |f| %>
+          <div class="wrapper">
             <%= render 'shared/error_messages', object: f.object %>
-            <%= f.label :name %><br />
-            <%= f.text_field :name %><br />
+            <table id="password_table">
+              <tr>
+                <td>Name:</td>
+                <td><%= f.text_field :name %></td>
+              </tr>
+              <tr>
+                <td><br/></td>
+                <td><br/><%= f.submit 'Save changes', class: '' %></td>
+              </tr>
+            </table>
 
-            <%= f.label :email %><br />
-            <%= f.text_field :email %><br />
 
-            <%= f.label :password %><br />
-            <%= f.password_field :password %><br />
+          </div>
+      <% end %>
 
-            <%= f.label :password_confirmation, 'Confirm password' %><br />
-            <%= f.password_field :password_confirmation %><br />
-
-            <%= f.submit 'Update', class: '' %>
-        </div>
-    <% end %>
+    </div>
   </div>
 </div>
