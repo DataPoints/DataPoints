@@ -18,7 +18,7 @@ class DatasetsController < ApplicationController
     dataset_already_exists = Dataset.where(originuri: @dataset.link).length > 0
 
 
-    if !dataset_already_exists
+    #if !dataset_already_exists
       #Dataset does not already exists
 
       begin
@@ -76,14 +76,14 @@ class DatasetsController < ApplicationController
         logger.warn 'Cannot connect to server: ' + @dataset.link
         render 'new'
       end
-    else
-      #Dataset already exists
-      existing_dataset = Dataset.where(originuri: @dataset.link)[0]
-      # TODO We need to create new mapping table dataset:user
-
-      flash[:success] = 'Dataset has not been downloaded, already exists :) '
-      redirect_to root_path
-    end
+    # else
+    #   #Dataset already exists
+    #   existing_dataset = Dataset.where(originuri: @dataset.link)[0]
+    #   # TODO We need to create new mapping table dataset:user
+    #
+    #   flash[:success] = 'Dataset has not been downloaded, already exists :) '
+    #   redirect_to root_path
+    # end
   end
 
   def update
@@ -119,15 +119,21 @@ class DatasetsController < ApplicationController
   end
 
   def show
-    @dataset = Dataset.find(params[:id])
-    if @dataset.downloadstatus == '0'
-      flash[:danger] = 'Sorry :( Dataset not yet analyzed'
-      redirect_to datasets_path
-      return
-    end
 
+    @dataset = Dataset.find(params[:id])
     @headers = @dataset.headers.all
     @columns = @headers.first.columns.all.order(:label)
+
+    name_of_dataset_data_table = @dataset.data_table_name
+    @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+
+    @number_of_data_rows = @data.count
+    if @number_of_data_rows > 15
+      @number_of_data_rows = 15
+    end
+
+    @names_of_data_columns = @data.column_names
+
   end
 
   def change_type

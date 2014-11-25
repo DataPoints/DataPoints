@@ -15,25 +15,27 @@
       <div class="wrapper">
         <%= render 'shared/error_messages', object: f.object %>
 
-        <table style="margin: auto;">
+        <table id="password_table">
           <tr>
-            <th><%= f.label :password_curr, 'Current password' %></th>
+            <td>Current password</td>
             <td><%= f.password_field :password_curr, placeholder: 'Current password' %></td>
           </tr>
 
           <tr>
-            <th><%= f.label :password, 'New password' %></th>
+            <td>New password</td>
             <td><%= f.password_field :password, placeholder: 'New password' %></td>
           </tr>
 
           <tr>
-            <th><%= f.label :password_confirmation, 'Confirm password' %></th>
+            <td>Confirm password</td>
             <td><%= f.password_field  :password_confirmation, placeholder: 'Confirm new password' %></td>
           </tr>
 
+
           <tr>
-            <td><%= link_to '< BACK', user_edit_profile_path, class: 'btn back_button' %></td>
-            <td><%= f.submit 'Save changes', class: '' %></td>
+
+            <td><br /><%= link_to '< BACK', user_edit_profile_path, class: 'btn orange', style: 'width: 130px' %></td>
+            <td><br /><%= f.submit 'Save changes', class: '' %></td>
           </tr>
         </table>
 
