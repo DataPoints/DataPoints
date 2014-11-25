@@ -40,8 +40,8 @@
 
         <% if logged_in? %>
            <%= link_to'Add Dataset',   datasets_new_path %>
-           <%= link_to 'Your datasets', datasets_show_path %>
-            <%= link_to "Profile",      edit_user_path(current_user) %>
+           <%= link_to 'Your datasets', datasets_path %>
+            <%= link_to "Profile",      user_edit_profile_path %>
             <%= link_to'Log out',      logout_url, method: 'delete' %>
         <% else %>
             <%= link_to 'Register',     signup_path, method: :get %>
