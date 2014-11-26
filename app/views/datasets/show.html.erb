@@ -1,3 +1,19 @@
+<script>
+    var handler = Gmaps.build('Google');
+    handler.buildMap({ internal: {id: 'map'}}, function(){
+        var markers = handler.addMarkers([
+            <% @coordinates_hash.each do |key, array| %>
+            <%= "{ lat: #{array[0]}, lng: #{array[1]} }," %>
+            <% end %>
+        ]);
+        handler.bounds.extendWith(markers);
+        handler.fitMapToBounds();
+    });
+</script>
+
+<div style='width: 800px; margin: auto;'>
+  <div id="map" style='width: 800px; height: 400px;'></div>
+</div>
 
 <%= link_to 'Back', datasets_path , style: 'left: 35px'%><br>
 
@@ -51,7 +67,7 @@
     Meno stlpca
     <%= select_tag(:column_id, options_for_select(@columns.collect {|column| [ column.label, column.id ]})) %>
     Typ v stlpci
-    <%= select_tag(:type_id, options_for_select([['Adresa', 1],['Meno', 2]])) %>
+    <%= select_tag(:type_id, options_for_select([['Adresa', 1],['Meno', 2],['Lokacia', 3]])) %>
     <%= hidden_field_tag :id , @dataset.id %>
     <%= submit_tag 'Update', class: 'btn btn-primary' %>
 <% end %>

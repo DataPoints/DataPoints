@@ -48,3 +48,6 @@ gem 'recaptcha', :require => 'recaptcha/rails'
 gem 'jquery-turbolinks'
 
 gem "rails_config"
+
+gem 'gmaps4rails'
+gem 'geocoder'
