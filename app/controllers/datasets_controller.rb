@@ -136,7 +136,8 @@ class DatasetsController < ApplicationController
 
     @coordinates_hash = { }
 
-    for i in 1..@data.count do
+    #for i in 1..@data.count do
+    for i in 1..10 do
       name_of_town = @data.find(i)['Mesto / Obec']
       coordinates = Geocoder.coordinates(name_of_town)
       @coordinates_hash[name_of_town.to_sym] = coordinates
