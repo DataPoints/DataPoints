@@ -2,23 +2,23 @@
 <html>
 <head>
   <title>DATA-POINTS</title>
-  <meta charset="utf-8" />
+  <meta charset="utf-8"/>
 
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <%= favicon_link_tag "fav-icon.png" %>
 
   <!-- OG -->
-  <meta property="og:title" content="Sofistikované spracovanie dát" />
+  <meta property="og:title" content="Sofistikované spracovanie dát"/>
   <meta property="og:site_name" content="datapoints.eu"/>
-  <meta property="og:description" content="STU FIIT - tímový projekt - Tím číslo 3. - Téma: Sofistikované spracovanie dát" />
-  <meta property="og:image" content="http://www.pro-media.sk/dataPoints/images/og-image.jpg" />
-  <link REL="SHORTCUT ICON" href="images/fav-icon.png" />
+  <meta property="og:description" content="STU FIIT - tímový projekt - Tím číslo 3. - Téma: Sofistikované spracovanie dát"/>
+  <meta property="og:image" content="http://www.pro-media.sk/dataPoints/images/og-image.jpg"/>
+  <link REL="SHORTCUT ICON" href="images/fav-icon.png"/>
 
   <!-- GOOGLE FONTS -->
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700,300' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'/>
   <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700' rel='stylesheet' type='text/css'>
 
@@ -39,28 +39,27 @@
         <%= link_to "Home", root_path %>
 
         <% if logged_in? %>
-           <%= link_to'Add Dataset',   datasets_new_path %>
-           <%= link_to 'Your datasets', datasets_path %>
-            <%= link_to "Profile",      user_edit_profile_path %>
-            <%= link_to'Log out',      logout_url, method: 'delete' %>
+            <%= link_to 'Add Dataset',   datasets_new_path %>
+            <%= link_to 'Your datasets', datasets_path %>
+            <%= link_to "Profile",       user_profile_edit_path %>
+            <%= link_to 'Log out',       logout_url, method: 'delete' %>
         <% else %>
-            <%= link_to 'Register',     signup_path, method: :get %>
-            <%= link_to 'Log in',       login_path %>
+            <%= link_to 'Register',      signup_path, method: :get %>
+            <%= link_to 'Log in',        login_path %>
         <% end %>
 
       </nav>
     </div>
 
-    <hr />
+    <hr/>
   </header>
 
   <main>
     <% flash.each do |message_type, message| %>
         <div class="alert alert-<%= message_type %>"><%= message %></div>
     <% end %>
-     <%= yield %>
+    <%= yield %>
   </main>
-
 
   <!-- FOOTER PUSHER -->
   <div id="push"></div>
@@ -76,13 +75,13 @@
       <%= link_to "Home", root_path %>
 
       <% if logged_in? %>
-          <%= link_to 'Add Dataset',    datasets_new_path %>
-          <%= link_to 'Your datasets',  datasets_path %>
-          <%= link_to "Profile",      user_edit_profile_path %>
-          <%= link_to 'Log out',        logout_url, method: 'delete' %>
+          <%= link_to 'Add Dataset'  , datasets_new_path %>
+          <%= link_to 'Your datasets', datasets_show_path %>
+          <%= link_to 'Profile' ,      user_profile_edit_path %>
+          <%= link_to 'Log out',       logout_url, method: 'delete' %>
       <% else %>
-          <%= link_to 'Register',     signup_path %>
-          <%= link_to 'Log in',       login_path %>
+          <%= link_to 'Register', signup_path %>
+          <%= link_to 'Log in',   login_path %>
       <% end %>
     </nav>
 
@@ -92,7 +91,7 @@
     </p>
 
     <!-- FIIT LOGO -->
-    <%= link_to image_tag('stu-fiit-logo.jpg', :size => '134, 55'), "http://www.fiit.stuba.sk/", :class => "fiit"%>
+    <%= link_to image_tag('stu-fiit-logo.jpg', :size => '134, 55'), "http://www.fiit.stuba.sk/", :class => "fiit" %>
 
   </div>
 </footer>

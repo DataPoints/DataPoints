@@ -1,30 +1,28 @@
 Rails.application.routes.draw do
   root 'home#index'
 
-  get 'user/edit/profile'   => 'users#edit'
-  get 'user/edit/email'     => 'email#edit'
-  get 'user/edit/password'  => 'password#edit'
-  patch 'user/edit/email'     => 'email#update'
-  patch 'user/edit/password'  => 'password#update'
-
   get 'datasets/new'
-  get 'datasets/show' =>'datasets#show'
+  get 'datasets/show' => 'datasets#show'
   get 'datasets/detail' => 'datasets#detail'
   get 'datasets/change_type' => 'datasets#change_type'
 
+  get   'user/profile/edit' => 'users#edit'
+  patch 'user/profile/edit' => 'users#update'
+  get   'user/email/edit' => 'users#edit_email'
+  patch 'user/email/edit' => 'users#update_email'
+  get   'user/password/edit'  => 'users#edit_password'
+  patch 'user/password/edit'  => 'users#update_password'
+
   get 'home/index'
   get 'signup' => 'users#new'
-  get 'login' => 'sessions#new'
-  post 'login' => 'sessions#create'
-
+  get    'login'  => 'sessions#new'
+  post   'login'  => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
   resources :users
   resources :datasets
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
-  resources :password
-  resources :email
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
