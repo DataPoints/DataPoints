@@ -28,14 +28,14 @@
             <% dataset = Dataset.find(dataset.id) %>
             <% headers = dataset.headers.all %>
             <% columns = headers.first.columns.all.order(:label) %>
-            <% array = columns.collect { |column| column.label } %>
-            <% s = '' %>
-            <% for i in 0..array.length-1 %>
-                <% s = s + array[i] %>
-                <% if i < array.length-1 %><% s = s + ',' %><% end %>
-                <% s = s + ' ' %>
+            <% columns_array = columns.collect { |column| column.label } %>
+            <% result_string = '' %>
+            <% for i in 0..columns_array.length-1 %>
+                <% result_string = result_string + columns_array[i] %>
+                <% if i < columns_array.length-1 %><% result_string = result_string + ',' %><% end %>
+                <% result_string = result_string + ' ' %>
             <% end %>
-            <%= s %>
+            <%= result_string %>
           </td>
           <td><a href="#" id="showmodal"><span class="glyphicon glyphicon-pencil"></span></a></td>
           <td><%= link_to 'Detail', dataset %></td>
