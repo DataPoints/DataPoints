@@ -47,4 +47,6 @@ gem 'autoprefixer-rails'
 gem 'recaptcha', :require => 'recaptcha/rails'
 gem 'jquery-turbolinks'
 
-gem "rails_config"
+gem 'rails_config'
+
+gem 'appmonitor'
