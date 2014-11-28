@@ -89,7 +89,7 @@ class DatasetsController < ApplicationController
   def update
     @dataset = Dataset.find(params[:id])
     if @dataset.update(dataset_params)
-      redirect_to @dataset
+      redirect_to datasets_path
     else
       render 'edit'
     end
