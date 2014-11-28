@@ -1,4 +1,3 @@
-
 <%= link_to 'Back', datasets_path , style: 'left: 35px'%><br>
 
 <table class="table table-striped" style="width: 400px; margin-left: 50px;">
@@ -40,7 +39,10 @@
     <% data_row = @data.find(i) %>
       <tr>
         <% for j in 0..@names_of_data_columns.count %>
-            <td><%= data_row[@names_of_data_columns[j]] %></td>
+            <td>
+              <%= data_row[@names_of_data_columns[j]] %>
+              <%  %>
+            </td>
         <% end %>
       </tr>
 <% end %>
