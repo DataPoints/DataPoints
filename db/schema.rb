@@ -53,13 +53,13 @@ ActiveRecord::Schema.define(version: 20141128162101) do
     t.string   "description"
     t.string   "link"
     t.integer  "user_id"
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
-    t.string   "data_table_name"
-    t.decimal  "analyzed_progress",           default: 0.0
-    t.boolean  "deleted",                     default: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
     t.string   "status"
-    t.string   "storage"
+    t.boolean  "deleted",                       default: false
+    t.string   "data_table_name"
+    t.decimal  "analyzed_progress",             default: 0.0
+    t.string   "storage",           limit: nil
     t.string   "filehash"
     t.string   "originuri"
     t.string   "downloadstatus",    limit: 1
