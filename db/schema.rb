@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141117223715) do
+ActiveRecord::Schema.define(version: 20141128162101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "1:1", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
 
   create_table "columns", force: true do |t|
     t.integer  "header_id"
@@ -27,6 +37,16 @@ ActiveRecord::Schema.define(version: 20141117223715) do
 
   add_index "columns", ["header_id"], name: "index_columns_on_header_id", using: :btree
   add_index "columns", ["type_id"], name: "index_columns_on_type_id", using: :btree
+
+  create_table "coordinates", force: true do |t|
+    t.string   "mesto"
+    t.float    "lat"
+    t.float    "lng"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "coordinates", ["mesto"], name: "index_coordinates_on_mesto", unique: true, using: :btree
 
   create_table "datasets", force: true do |t|
     t.string   "name"
