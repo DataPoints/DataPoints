@@ -1,6 +1,8 @@
 <script>
     google.maps.event.addDomListener(window, "load", initMap);
 
+    $(document).ready(initMap());
+
     function initMap() {
 
         var handler = Gmaps.build('Google');
@@ -20,9 +22,9 @@
         initMap()
     }
 
-        function HideMap() {
-            document.getElementById('MapWrapper').style.display = "none";
-        }
+    function HideMap() {
+        document.getElementById('MapWrapper').style.display = "none";
+    }
 </script>
 
 <%= link_to 'Back', datasets_path, style: 'left: 35px', class: 'btn btn-default' %><br>
@@ -90,7 +92,7 @@
 
 
 <%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
-    <%= label_tag(:column_id, 'Meno stlpca')%>
+    <%= label_tag(:column_id, 'Meno stlpca') %>
     <%= select_tag(:column_id, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
     <%= label_tag(:type_id, 'Typ v stlpci') %>
     <%= select_tag(:type_id, options_for_select([['Mesto', 1]])) %>
