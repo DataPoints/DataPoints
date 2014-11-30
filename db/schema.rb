@@ -16,6 +16,16 @@ ActiveRecord::Schema.define(version: 20141119231457) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "1:1", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
+
   create_table "columns", force: true do |t|
     t.integer  "header_id"
     t.string   "label"
@@ -33,12 +43,22 @@ ActiveRecord::Schema.define(version: 20141119231457) do
     t.string   "description"
     t.string   "link"
     t.integer  "user_id"
+<<<<<<< HEAD
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
     t.string   "status"
     t.boolean  "deleted",                     default: false
     t.string   "storage"
     t.decimal  "analyzed_progress",           default: 0.0
+=======
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.string   "status"
+    t.boolean  "deleted",                       default: false
+    t.string   "data_table_name"
+    t.decimal  "analyzed_progress",             default: 0.0
+    t.string   "storage",           limit: nil
+>>>>>>> remotes/origin/dev
     t.string   "filehash"
     t.string   "originuri"
     t.string   "downloadstatus",    limit: 1
