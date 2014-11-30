@@ -1,5 +1,33 @@
 
+
 <%= link_to 'Back', datasets_path , style: 'left: 35px'%><br>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Start Analyze
+</button>
+<br>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Analyze Information</h4>
+      </div>
+      <div class="modal-body">
+        Analyze can take a lot of time. Go for a cup of coffee and chillax. We will send you a email to let you know, that your dataset is over.   
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
+        <%= form_tag({controller: 'datasets', action: 'start_analyze'}, method: 'get', class: 'jahoda', data: {status: @dataset.status} ) do %>
+          <%= hidden_field_tag :id , @dataset.id %>
+          <%= submit_tag 'Start Analyze', class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
 
 <table class="table table-striped" style="width: 400px; margin-left: 50px;">
   <tr>

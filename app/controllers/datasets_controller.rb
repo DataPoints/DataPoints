@@ -1,6 +1,7 @@
 require 'net/http'
 require 'digest/md5'
 require 'table_factory.rb'
+require 'analyze_function.rb'
 
 class DatasetsController < ApplicationController
   before_action :logged_in_user, only: [:create, :destroy]
@@ -138,6 +139,16 @@ class DatasetsController < ApplicationController
     column_to_change_type.type_id = params[:type_id]
     column_to_change_type.save
     flash[:success] = 'Changes saved!'
+    redirect_to :back
+  end
+
+  def start_analyze
+    @dataset = Dataset.find(params[:id])
+    @dataset.status = 'S'
+    if @dataset.save 
+      flash[:success] = 'Wohoho the analyze was started!'
+    end
+    
     redirect_to :back
   end
 
