@@ -3,6 +3,9 @@
   <!-- Default panel contents -->
 
   <div class="panel-heading title">Your Datasets</div>
+
+  <%#= NamedEntity.new.def_types(27) %>
+
   <table border="0" class="table">
     <tr>
       <th scope="col">N</th>
@@ -11,6 +14,9 @@
       <th scope="col">Status </th>
       <th scope="col">Created </th>
       <th scope="col">Updated </th>
+      <th scope="col">Types</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
     </tr>
 
     <%i=0%>
@@ -23,6 +29,24 @@
           <td><%= dataset.status %></td>
           <td><%= dataset.created_at.strftime("%d %b %H:%M") %></td>
           <td><%= dataset.updated_at.strftime("%d %b %H:%M") %></td>
+          <td>
+            <% empty_columns = 0 %>
+            <% columns = @Columns[dataset.id] %>
+            <% columns.each do |column| %>
+              <% if column.type_id.blank? %>
+                <% empty_columns += 1 %>
+              <% else %>
+                <% type = Type.find(column.type_id) %>
+                <%= type.name %>,
+              <% end %>
+            <% end %>
+
+            <% if columns.count == empty_columns %>
+                There are no types defined for this dataset.<br />
+                Edit them in
+                <%= link_to 'Detail', dataset %>
+            <% end %>
+          </td>
           <td><%= link_to 'Destroy', dataset_path(dataset),
                           method: :delete, data: { confirm: 'Are you sure?' } %></td>
           <td><button class="btn btn-default btn-sm" id="showmodal"><span class="glyphicon glyphicon-pencil"></span></button> </td>

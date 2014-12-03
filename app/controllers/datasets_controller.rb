@@ -99,6 +99,12 @@ class DatasetsController < ApplicationController
     @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
     @AnalyzedDatasets = Dataset.where(user_id: current_user.id, deleted: false, analyzed_progress: 0).first(10)
 
+    @Columns = { }
+    @Datasets.each do |dataset|
+      @Dataset = Dataset.find(dataset.id)
+      header = dataset.headers.all
+      @Columns[dataset.id] = header.first.columns.all
+    end
   end
 
   def edit
@@ -129,6 +135,19 @@ class DatasetsController < ApplicationController
     end
 
     @names_of_data_columns = @data.column_names
+
+    #coordinates = Geocoder.coordinates(@data.find(1)['Mesto / Obec'])
+    #@lat = coordinates[0]
+    #@lng = coordinates[1]
+
+    @coordinates_hash = { }
+
+    #for i in 1..@data.count do
+    for i in 1..10 do
+      name_of_town = @data.find(i)['Mesto / Obec']
+      coordinates = Geocoder.coordinates(name_of_town)
+      @coordinates_hash[name_of_town.to_sym] = coordinates
+    end
 
   end
 
