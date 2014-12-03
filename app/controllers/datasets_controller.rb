@@ -103,6 +103,13 @@ class DatasetsController < ApplicationController
     # @headers = @dataset.headers.all
     # @columns = @headers.first.columns.all.order(:label)
 
+    @Columns = { }
+    @Datasets.each do |dataset|
+      @Dataset = Dataset.find(dataset.id)
+      header = dataset.headers.all
+      @Columns[dataset.id] = header.first.columns.all.order(:label)
+    end
+
   end
 
   def edit
