@@ -98,6 +98,13 @@ class DatasetsController < ApplicationController
     # @dataset = Dataset.find(params[:id])
     @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
     @AnalyzedDatasets = Dataset.where(user_id: current_user.id, deleted: false, analyzed_progress: 0).first(10)
+
+    @Columns = { }
+    @Datasets.each do |dataset|
+      @Dataset = Dataset.find(dataset.id)
+      header = dataset.headers.all
+      @Columns[dataset.id] = header.first.columns.all
+    end
   end
 
   def edit

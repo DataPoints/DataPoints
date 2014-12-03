@@ -4,7 +4,7 @@
 
   <div class="panel-heading title">Your Datasets</div>
 
-  <%= NamedEntity.new.def_types %>
+  <%#= NamedEntity.new.def_types(27) %>
 
   <table border="0" class="table">
     <tr>
@@ -30,10 +30,8 @@
           <td><%= dataset.created_at.strftime("%d %b %H:%M") %></td>
           <td><%= dataset.updated_at.strftime("%d %b %H:%M") %></td>
           <td>
-            <% dataset = Dataset.find(dataset.id) %>
-            <% headers = dataset.headers.all %>
-            <% columns = headers.first.columns.all %>
             <% empty_columns = 0 %>
+            <% columns = @Columns[dataset.id] %>
             <% columns.each do |column| %>
               <% if column.type_id.blank? %>
                 <% empty_columns += 1 %>
