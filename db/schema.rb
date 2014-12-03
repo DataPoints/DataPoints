@@ -11,20 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141128162101) do
+ActiveRecord::Schema.define(version: 20141117223715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "1:1", force: true do |t|
-    t.string "Obchodné meno"
-    t.string "PSČ"
-    t.string "Ulica"
-    t.string "Mesto / Obec"
-    t.string "IČO"
-    t.string "Výška pohľadávky"
-    t.string "Typ platiteľa"
-  end
 
   create_table "columns", force: true do |t|
     t.integer  "header_id"
