@@ -4,7 +4,6 @@
 # Description: Vytvorenie a naplnenie generickej tabulky na zaklade csv suboru.
 
 require 'csv'
-require 'stanford-core-nlp'
 require 'date'
 
 class TableFactory
@@ -105,8 +104,8 @@ class TableFactory
       new_column = Column.new
       new_column.label = header[i]
       new_column.header_id = id
-      new_column.datatyp = "string";
-      new_column.type_id = 1;
+      new_column.datatyp = "string"
+      new_column.type_id = nil
       new_column.save!
     end
     rescue
@@ -144,84 +143,5 @@ class TableFactory
       puts "#{i}:#{header[i]}"
       t.string :"#{header[i]}"
     end 
-  end
-
-  private
-  def def_type(data)
-    data.shift
-
-    #skontrolovat prve tri riadky pola prostrednictvom NER
-
-    #ak NER nevrati pri urcitom indexe name entity, skontrolovat prostrednictvom REGEX
-
-    #ak REGEX nevrati pri urcitom indexe name entity, skontrolovat cez vstavane funkcie z ruby
-
-    #ak nevrati RUBYCHECK pri urcitom indexe name entity, skontrolovat HEADERS
-  end
-
- private
- def def_type_by_NER(value)
-  begin
-    value = "j.kmetko@gmail.com";
-    pipeline =  StanfordCoreNLP.load(:tokenize, :ssplit, :pos, :lemma, :parse, :ner, :dcoref)
-    text = StanfordCoreNLP::Annotation.new(value)
-    pipeline.annotate(text)
-
-    text.get(:sentences).each do |sentence|
-      sentence.get(:tokens).each do |token|
-        # Named entity tag
-        namedentity = token.get(:named_entity_tag).to_s
-      end
-    end
-
-    #mapovanie vystupov :named_entity_tag na nase ekvivalenty
-
-    return namedentity
-  end
- end
-
-  private
-  def def_type_by_REGEX(values)
-    begin
-      values.each do |value|
-
-        #regex for email - upraveny standard z RFC 5322
-        if (value =~ /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/)
-          return "Email"
-        elsif value =~ /(?=\b[a-zA-Z ]*?[aeiouAEIOU][a-zA-Z ]*\b)\b[a-zA-Z ]*\b/
-            return "Meno"
-        elsif value =~ /^[a-zA-Z\u0080-\u024F\s\/\-\)\(\`\.\"\']+$/
-            return "Mesto"
-        else
-          return false
-        end
-        
-      end
-    end
- end
-
-  private
-  def def_type_by_RUBYCHECK(values)
-    begin
-
-    end
-  end
-
-  private
-  def def_type_by_LABEL
-    begin
-      header = data[0]
-
-      header.each do |value|
-        if (value == "Email" || value == "E-mail" || value == "email" || value = "e-mail")
-          return "Email"
-        elsif (value == "Mesto" || value == "mesto")
-          return "Mesto"
-        elsif (value == "Meno" || value == "meno")
-          return "Meno"
-        end
-      end
-
-    end
   end
 end

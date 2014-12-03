@@ -3,6 +3,9 @@
   <!-- Default panel contents -->
 
   <div class="panel-heading title">Your Datasets</div>
+
+  <%= NamedEntity.new.def_types %>
+
   <table border="0" class="table">
     <tr>
       <th scope="col">N</th>
@@ -30,15 +33,20 @@
             <% dataset = Dataset.find(dataset.id) %>
             <% headers = dataset.headers.all %>
             <% columns = headers.first.columns.all %>
+            <% empty_columns = 0 %>
             <% columns.each do |column| %>
               <% if column.type_id.blank? %>
-                    There are no types for this dataset yet.<br />
-                    Edit them in
-                    <%= link_to 'Detail', dataset %>
+                <% empty_columns += 1 %>
               <% else %>
                 <% type = Type.find(column.type_id) %>
                 <%= type.name %>,
               <% end %>
+            <% end %>
+
+            <% if columns.count == empty_columns %>
+                There are no types defined for this dataset.<br />
+                Edit them in
+                <%= link_to 'Detail', dataset %>
             <% end %>
           </td>
           <td><%= link_to 'Destroy', dataset_path(dataset),
