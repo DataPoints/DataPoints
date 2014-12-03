@@ -49,3 +49,6 @@ gem 'jquery-turbolinks'
 gem 'json'
 
 gem "rails_config"
+
+gem 'gmaps4rails'
+gem 'geocoder'

@@ -16,3 +16,5 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require datasets
+//= require underscore
+//= require gmaps/google

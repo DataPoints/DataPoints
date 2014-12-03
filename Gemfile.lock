@@ -45,6 +45,8 @@ GEM
     execjs (2.2.2)
     foreigner (1.6.1)
       activerecord (>= 3.0.0)
+    geocoder (1.2.6)
+    gmaps4rails (2.1.2)
     hike (1.2.3)
     i18n (0.6.11)
     jbuilder (2.2.3)
@@ -126,6 +128,8 @@ DEPENDENCIES
   bootstrap-sass (~> 3.2.0)
   coffee-rails (~> 4.0.0)
   foreigner
+  geocoder
+  gmaps4rails
   jbuilder (~> 2.0)
   jquery-rails
   jquery-turbolinks

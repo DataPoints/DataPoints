@@ -115,10 +115,10 @@ class DatasetsController < ApplicationController
   end
 
   def show
-
     @dataset = Dataset.find(params[:id])
     @headers = @dataset.headers.all
-    @columns = @headers.first.columns.all.order(:label)
+    @columns = @headers.first.columns.all.order(:id)
+    @coordinates = Coordinate.all
 
     name_of_dataset_data_table = @dataset.data_table_name
     @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
@@ -135,8 +135,8 @@ class DatasetsController < ApplicationController
     #@yData =data.pluck("Výška pohľadávky")[0..10].collect{|i| i.to_f}
     #@xData =data.pluck("Mesto / Obec")[0..10]
     if params[:xData].nil?
-    @xData = Array.[](1991,1992,1993,1994,1995)
-    @yData = Array.[](20,74,5,101,36)
+      @xData = Array.[](1991,1992,1993,1994,1995)
+      @yData = Array.[](20,74,5,101,36)
     else
       @xData=params[:xData]
       @yData=params[:yData].collect{|i| i.to_f}
@@ -145,9 +145,28 @@ class DatasetsController < ApplicationController
 
   def change_type
     @dataset = Dataset.find(params[:id])
+    name_of_dataset_data_table = @dataset.data_table_name
+    @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+
     column_to_change_type = @dataset.headers.first.columns.find(params[:column_id])
     column_to_change_type.type_id = params[:type_id]
     column_to_change_type.save
+
+    if params[:type_id] == '1'
+      for i in 1..@data.count do
+        name_of_town = @data.find(i)[Column.find(params[:column_id]).label]
+        if Coordinate.find_by_mesto(name_of_town).nil?
+          sleep(0.25) #kvoli prekroceniu limitu za sekundu requestov na google
+          coordinates = Geocoder.coordinates(name_of_town)
+          coordinate_to_save = Coordinate.new
+          coordinate_to_save.lat=coordinates[0]
+          coordinate_to_save.lng=coordinates[1]
+          coordinate_to_save.mesto=name_of_town
+          coordinate_to_save.save
+        end
+      end
+    end
+
     flash[:success] = 'Changes saved!'
     redirect_to :back
   end
@@ -164,8 +183,8 @@ class DatasetsController < ApplicationController
 
 
     data=data.order('"'+@columnX.to_s+'"')
-    @yData =data.pluck(@columnY.to_s)[0..10].collect{|i| i.to_f}
-    @xData =data.pluck(@columnX.to_s)[0..10]
+    @yData =data.pluck(@columnY.to_s)[0..20].collect{|i| i.gsub(/\s/, '').to_f}
+    @xData =data.pluck(@columnX.to_s)[0..20]
 
 
     puts 'Toto je stlpec'
