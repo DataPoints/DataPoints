@@ -1,28 +1,4 @@
 <script>
-    google.maps.event.addDomListener(window
-    function initMap() {
-
-        var handler = Gmaps.build('Google');
-        handler.buildMap({internal: {id: 'map'}}, function () {
-            var markers = handler.addMarkers([
-                <% @coordinates.each do |coordinate| %>
-                <%= "{ lat: #{coordinate.lat}, lng: #{coordinate.lng}, infowindow: \"#{coordinate.mesto}\" },".html_safe %>
-                <% end %>
-            ]);
-            handler.bounds.extendWith(markers);
-            handler.fitMapToBounds();
-        });
-    }
-
-    function ShowMap() {
-        document.getElementById('MapWrapper').style.display = "block";
-        initMap()
-    }
-
-    function HideMap() {
-        document.getElementById('MapWrapper').style.display = "none";
-    }
-
     $(function () {
         $('#test_chart').highcharts({
             title: {
@@ -61,8 +37,33 @@
         });
     });
 </script>
+<script>
+    google.maps.event.addDomListener(window, 'load', initMap);
 
-<%= link_to 'Back', datasets_path , style: 'left: 35px'%><br>
+    $(document).ready(initMap());
+
+    function initMap() {
+        var handler = Gmaps.build('Google');
+        handler.buildMap({internal: {id: 'map'}}, function () {
+            var markers = handler.addMarkers([
+                <% @coordinates.each do |coordinate| %>
+                <%= "{ lat: #{coordinate.lat}, lng: #{coordinate.lng}, infowindow: \"#{coordinate.mesto}\" },".html_safe %>
+                <% end %>
+            ]);
+            handler.bounds.extendWith(markers);
+            handler.fitMapToBounds();
+        });
+    }
+
+    function ShowMap() {
+        document.getElementById('MapWrapper').style.display = "block";
+        initMap()
+    }
+
+    function HideMap() {
+        document.getElementById('MapWrapper').style.display = "none";
+    }
+</script>
 
 <%= link_to 'Back', datasets_path, style: 'left: 35px', class: 'btn btn-default' %><br>
 
@@ -86,11 +87,11 @@
     <td><%= @dataset.description %></td>
   </tr>
   <tr>
-    <td><b>Dataset created_at: </b> </td>
+    <td><b>Dataset created_at: </b></td>
     <td><%= @dataset.created_at.strftime('%d %b %H:%M') %></td>
   </tr>
   <tr>
-    <td><b>Dataset updated_at: </b> </td>
+    <td><b>Dataset updated_at: </b></td>
     <td><%= @dataset.updated_at.strftime('%d %b %H:%M') %></td>
   </tr>
   <tr>
@@ -117,14 +118,14 @@
         <th><%= @names_of_data_columns[i] %></th>
     <% end %>
   </tr>
-<% for i in 1..@number_of_data_rows do %>
-    <% data_row = @data.find(i) %>
+  <% for i in 1..@number_of_data_rows do %>
+      <% data_row = @data.find(i) %>
       <tr>
         <% for j in 0..@names_of_data_columns.count %>
             <td><%= data_row[@names_of_data_columns[j]] %></td>
         <% end %>
       </tr>
-<% end %>
+  <% end %>
 </table>
 
 
@@ -139,10 +140,10 @@
 
 <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
     X
-    <%= select_tag(:column_x, options_for_select(@columns.collect {|column| [ column.label, column.id ]})) %>
+    <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
     Y
-    <%= select_tag(:column_y, options_for_select(@columns.collect {|column| [ column.label, column.id ]})) %>
-    <%= hidden_field_tag :id , @dataset.id %>
+    <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
+    <%= hidden_field_tag :id, @dataset.id %>
 
     <%= submit_tag 'Choose', class: 'btn btn-primary' %>
 <% end %>

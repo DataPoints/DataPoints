@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141117223715) do
+ActiveRecord::Schema.define(version: 20141128162101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,13 +53,13 @@ ActiveRecord::Schema.define(version: 20141117223715) do
     t.string   "description"
     t.string   "link"
     t.integer  "user_id"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
-    t.string   "status"
-    t.boolean  "deleted",                       default: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.string   "data_table_name"
-    t.decimal  "analyzed_progress",             default: 0.0
-    t.string   "storage",           limit: nil
+    t.decimal  "analyzed_progress",           default: 0.0
+    t.boolean  "deleted",                     default: false
+    t.string   "status"
+    t.string   "storage"
     t.string   "filehash"
     t.string   "originuri"
     t.string   "downloadstatus",    limit: 1
@@ -71,12 +71,10 @@ ActiveRecord::Schema.define(version: 20141117223715) do
   create_table "headers", force: true do |t|
     t.boolean  "origin"
     t.integer  "dataset_id"
-    t.integer  "column_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "headers", ["column_id"], name: "index_headers_on_column_id", using: :btree
   add_index "headers", ["dataset_id"], name: "index_headers_on_dataset_id", using: :btree
 
   create_table "users", force: true do |t|
