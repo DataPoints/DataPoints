@@ -1,3 +1,42 @@
+<script type="text/javascript" charset="utf-8">
+$(function () {
+  $('#test_chart').highcharts({
+    title: {
+    text: 'Users graph',
+    x: -20 //center
+    },
+
+    xAxis: {
+
+    categories: <%=raw @xData %>
+    },
+
+    yAxis: {
+      title: {
+      text: 'Selected Column'
+      },
+
+      plotLines: [{
+        value: 0,
+        width: 1,
+        color: '#808080'
+      }]
+    },
+
+    legend: {
+    layout: 'vertical',
+    align: 'right',
+    verticalAlign: 'middle',
+    borderWidth: 0
+    },
+
+    series: [{
+      name: 'Y axis',
+      data: <%=raw @yData %>
+      }]
+  });
+});
+</script>
 
 <%= link_to 'Back', datasets_path , style: 'left: 35px'%><br>
 
@@ -55,3 +94,15 @@
     <%= hidden_field_tag :id , @dataset.id %>
     <%= submit_tag 'Update', class: 'btn btn-primary' %>
 <% end %>
+
+<%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
+    X
+    <%= select_tag(:column_x, options_for_select(@columns.collect {|column| [ column.label, column.id ]})) %>
+    Y
+    <%= select_tag(:column_y, options_for_select(@columns.collect {|column| [ column.label, column.id ]})) %>
+    <%= hidden_field_tag :id , @dataset.id %>
+
+    <%= submit_tag 'Choose', class: 'btn btn-primary' %>
+<% end %>
+
+<div id='test_chart' style=" width: 1000px; height: 300px;margin: auto ;"></div>
