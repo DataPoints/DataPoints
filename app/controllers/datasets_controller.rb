@@ -140,6 +140,17 @@ class DatasetsController < ApplicationController
       end
     end
 
+    #data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+    #data=data.order('"'+"Mesto / Obec"+'"')
+    #@yData =data.pluck("Výška pohľadávky")[0..10].collect{|i| i.to_f}
+    #@xData =data.pluck("Mesto / Obec")[0..10]
+    if params[:xData].nil?
+      @xData = Array.[](1991,1992,1993,1994,1995)
+      @yData = Array.[](20,74,5,101,36)
+    else
+      @xData=params[:xData]
+      @yData=params[:yData].collect{|i| i.to_f}
+    end
   end
 
   def change_type
@@ -169,6 +180,30 @@ class DatasetsController < ApplicationController
     flash[:success] = 'Changes saved!'
     redirect_to :back
   end
+
+  def change_X_Y
+
+    dataset = Dataset.find(params[:id])
+    @columnX=dataset.headers.first.columns.find(params[:column_x]).label
+    @columnY=dataset.headers.first.columns.find(params[:column_y]).label
+
+
+    name_of_dataset_data_table = dataset.data_table_name
+    data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+
+
+    data=data.order('"'+@columnX.to_s+'"')
+    @yData =data.pluck(@columnY.to_s)[0..10].collect{|i| i.to_f}
+    @xData =data.pluck(@columnX.to_s)[0..10]
+
+
+    puts 'Toto je stlpec'
+    puts @yData.inspect
+    puts @xData.inspect
+    flash[:success] = 'values changed !'
+    redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xData => @xData,:yData => @yData
+  end
+
 
   private
   def dataset_params
