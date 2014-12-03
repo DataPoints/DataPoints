@@ -129,6 +129,19 @@ class DatasetsController < ApplicationController
 
     @names_of_data_columns = @data.column_names
 
+    #coordinates = Geocoder.coordinates(@data.find(1)['Mesto / Obec'])
+    #@lat = coordinates[0]
+    #@lng = coordinates[1]
+
+    @coordinates_hash = { }
+
+    #for i in 1..@data.count do
+    for i in 1..10 do
+      name_of_town = @data.find(i)['Mesto / Obec']
+      coordinates = Geocoder.coordinates(name_of_town)
+      @coordinates_hash[name_of_town.to_sym] = coordinates
+    end
+
   end
 
   def change_type

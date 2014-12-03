@@ -48,9 +48,3 @@ gem 'recaptcha', :require => 'recaptcha/rails'
 gem 'jquery-turbolinks'
 
 gem "rails_config"
-
-#Ruby Java Bridge
-gem 'rjb'
-
-#Gem for natural language processing
-gem 'stanford-core-nlp', '~> 0.5.1'
