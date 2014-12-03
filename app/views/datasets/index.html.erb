@@ -6,11 +6,12 @@
   <table border="0" class="table">
     <tr>
       <th scope="col">N</th>
-      <th scope="col">Name </th>
-      <th scope="col">Description </th>
-      <th scope="col">Status </th>
-      <th scope="col">Created </th>
-      <th scope="col">Updated </th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Status</th>
+      <th scope="col">Created</th>
+      <th scope="col">Updated</th>
+      <th scope="col">Attributes</th>
     </tr>
 
     <%i=0%>
@@ -23,27 +24,53 @@
           <td><%= dataset.status %></td>
           <td><%= dataset.created_at.strftime("%d %b %H:%M") %></td>
           <td><%= dataset.updated_at.strftime("%d %b %H:%M") %></td>
-          <td><%= link_to 'Destroy', dataset_path(dataset),
-                          method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          <td><%= link_to 'Edit',  '#', 'data-target' => "#myModal_#{dataset.id}", 'data-toggle' => 'modal' %>
-
-          <div class="modal fade" id='<%= "myModal_#{dataset.id}" %>' tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal fade"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                  <h4 class="modal-title" id="myModalLabel">Edit</h4>
-                </div>
-                <div class="modal-body">
-                  <%= render 'datasets/form', dataset: dataset, method: :get %>
-                </div>
-              </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-          </div><!-- /.modal -->
+          <td>
+            <% dataset = Dataset.find(dataset.id) %>
+            <% headers = dataset.headers.all %>
+            <% columns = headers.first.columns.all.order(:label) %>
+            <% columns_array = columns.collect { |column| column.label } %>
+            <% result_string = '' %>
+            <% for i in 0..columns_array.length-1 %>
+                <% result_string = result_string + columns_array[i] %>
+                <% if i < columns_array.length-1 %><% result_string = result_string + ',' %><% end %>
+                <% result_string = result_string + ' ' %>
+            <% end %>
+            <%= result_string %>
           </td>
+          <td><%= link_to 'Destroy', dataset_path(dataset),
+                          method: :delete, data: { confirm: 'Do you really want to delete this dataset?' } %></td>
+          <td><button class="btn btn-default btn-sm" id="showmodal"><span class="glyphicon glyphicon-pencil"></span></button> </td>
           <td><%= link_to 'Detail', dataset %></td>
-      </tr>
-    <%end%>
+        </tr>
+
+        <!-- Modal -->
+        <%= form_for dataset do |f| %>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <p>
+                      <%= f.label :name %><br>
+                      <%= f.text_field :name %>
+                    </p>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      <%= f.label :description %><br>
+                      <%= f.text_area :description %>
+                    </p>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <%= f.submit 'Save', class: "btn btn-primary"%>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <%end%>
+    <% end %>
   </table>
 </div>
 

@@ -1,13 +1,24 @@
 Rails.application.routes.draw do
   root 'home#index'
+
   get 'datasets/new'
+  get 'datasets/show' =>'datasets#show'
+  get 'datasets/detail' => 'datasets#detail'
   get 'datasets/change_type' => 'datasets#change_type'
   get 'datasets/change_X_Y' => 'datasets#change_X_Y'
-  get 'datasets/show' =>'datasets#show'
+
+
+  get   'user/profile/edit' => 'users#edit'
+  patch 'user/profile/edit' => 'users#update'
+  get   'user/email/edit' => 'users#edit_email'
+  patch 'user/email/edit' => 'users#update_email'
+  get   'user/password/edit'  => 'users#edit_password'
+  patch 'user/password/edit'  => 'users#update_password'
+
   get 'home/index'
   get 'signup' => 'users#new'
   get 'login' => 'sessions#new'
-  get 'datasets/detail' => 'datasets#detail'
+  
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
