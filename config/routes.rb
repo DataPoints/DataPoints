@@ -2,9 +2,11 @@ Rails.application.routes.draw do
   root 'home#index'
 
   get 'datasets/new'
-  get 'datasets/show' => 'datasets#show'
+  get 'datasets/show' =>'datasets#show'
   get 'datasets/detail' => 'datasets#detail'
   get 'datasets/change_type' => 'datasets#change_type'
+  get 'datasets/change_X_Y' => 'datasets#change_X_Y'
+
 
   get   'user/profile/edit' => 'users#edit'
   patch 'user/profile/edit' => 'users#update'
@@ -16,7 +18,7 @@ Rails.application.routes.draw do
   get 'home/index'
   get 'signup' => 'users#new'
   get 'login' => 'sessions#new'
-  get 'datasets/detail' => 'datasets#detail'
+  
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 

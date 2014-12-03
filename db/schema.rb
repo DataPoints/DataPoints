@@ -28,6 +28,16 @@ ActiveRecord::Schema.define(version: 20141119231457) do
   add_index "columns", ["header_id"], name: "index_columns_on_header_id", using: :btree
   add_index "columns", ["type_id"], name: "index_columns_on_type_id", using: :btree
 
+  create_table "coordinates", force: true do |t|
+    t.string   "mesto"
+    t.float    "lat"
+    t.float    "lng"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "coordinates", ["mesto"], name: "index_coordinates_on_mesto", unique: true, using: :btree
+
   create_table "datasets", force: true do |t|
     t.string   "name"
     t.string   "description"
