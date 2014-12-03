@@ -108,12 +108,6 @@
 
 <table class="table table-striped table-bordered" style="margin-left: 50px;">
   <tr>
-    <th>Type:</th>
-    <% @types.each do |type| %>
-        <th><%= type %></th>
-    <% end %>
-  </tr>
-  <tr>
     <% for i in 0..@names_of_data_columns.count %>
         <th><%= @names_of_data_columns[i] %></th>
     <% end %>
@@ -148,4 +142,4 @@
     <%= submit_tag 'Choose', class: 'btn btn-primary' %>
 <% end %>
 
-<div id='test_chart' style=" width: 1000px; height: 300px;margin: auto ;"></div>
+<div id='test_chart' style=" width: 100%; height: 300px;margin: auto ;"></div>

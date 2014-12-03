@@ -130,16 +130,6 @@ class DatasetsController < ApplicationController
 
     @names_of_data_columns = @data.column_names
 
-    @types = Array.new
-
-    @columns.each do |column|
-      if column.type_id.nil?
-        @types.push('undefined')
-      else
-        @types.push(column.type_id)
-      end
-    end
-
     #data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
     #data=data.order('"'+"Mesto / Obec"+'"')
     #@yData =data.pluck("Výška pohľadávky")[0..10].collect{|i| i.to_f}
@@ -193,8 +183,8 @@ class DatasetsController < ApplicationController
 
 
     data=data.order('"'+@columnX.to_s+'"')
-    @yData =data.pluck(@columnY.to_s)[0..10].collect{|i| i.to_f}
-    @xData =data.pluck(@columnX.to_s)[0..10]
+    @yData =data.pluck(@columnY.to_s)[0..20].collect{|i| i.gsub(/\s/, '').to_f}
+    @xData =data.pluck(@columnX.to_s)[0..20]
 
 
     puts 'Toto je stlpec'
