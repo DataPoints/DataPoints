@@ -4,7 +4,6 @@
 # Description: Vytvorenie a naplnenie generickej tabulky na zaklade csv suboru.
 
 require 'csv'
-require 'date'
 require 'named_entity'
 
 class TableFactory
@@ -108,7 +107,6 @@ class TableFactory
       new_column.label = header[i]
       new_column.header_id = id
       new_column.datatyp = "string"
-      new_column.type_id = nil
       new_column.save!
     end
     rescue

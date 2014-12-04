@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141127223537) do
+ActiveRecord::Schema.define(version: 20141203231751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -106,6 +106,26 @@ ActiveRecord::Schema.define(version: 20141127223537) do
     t.string "Typ platiteľa"
   end
 
+  create_table "4:18", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
+
+  create_table "4:19", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
+
   create_table "4:2", force: true do |t|
     t.string "Obchodné meno"
     t.string "PSČ"
@@ -116,6 +136,110 @@ ActiveRecord::Schema.define(version: 20141127223537) do
     t.string "Typ platiteľa"
   end
 
+  create_table "4:20", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
+
+  create_table "4:21", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
+
+  create_table "4:22", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
+
+  create_table "4:23", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
+
+  create_table "4:24", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
+
+  create_table "4:25", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
+
+  create_table "4:26", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+    t.string "Rok vystavenia"
+  end
+
+  create_table "4:27", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+    t.string "Rok vystavenia"
+  end
+
+  create_table "4:28", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+    t.string "Rok vystavenia"
+  end
+
+  create_table "4:29", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+    t.string "Rok vystavenia"
+  end
+
   create_table "4:3", force: true do |t|
     t.string "Obchodné meno"
     t.string "PSČ"
@@ -124,6 +248,28 @@ ActiveRecord::Schema.define(version: 20141127223537) do
     t.string "IČO"
     t.string "Výška pohľadávky"
     t.string "Typ platiteľa"
+  end
+
+  create_table "4:30", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+    t.string "Rok vystavenia"
+  end
+
+  create_table "4:31", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+    t.string "Rok vystavenia"
   end
 
   create_table "4:4", force: true do |t|
@@ -197,6 +343,16 @@ ActiveRecord::Schema.define(version: 20141127223537) do
 
   add_index "columns", ["header_id"], name: "index_columns_on_header_id", using: :btree
   add_index "columns", ["type_id"], name: "index_columns_on_type_id", using: :btree
+
+  create_table "coordinates", force: true do |t|
+    t.string   "mesto"
+    t.float    "lat"
+    t.float    "lng"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "coordinates", ["mesto"], name: "index_coordinates_on_mesto", unique: true, using: :btree
 
   create_table "datasets", force: true do |t|
     t.string   "name"
