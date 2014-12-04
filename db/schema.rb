@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141203231751) do
+ActiveRecord::Schema.define(version: 20141204015258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,16 +77,6 @@ ActiveRecord::Schema.define(version: 20141203231751) do
   end
 
   create_table "4:15", force: true do |t|
-    t.string "Obchodné meno"
-    t.string "PSČ"
-    t.string "Ulica"
-    t.string "Mesto / Obec"
-    t.string "IČO"
-    t.string "Výška pohľadávky"
-    t.string "Typ platiteľa"
-  end
-
-  create_table "4:16", force: true do |t|
     t.string "Obchodné meno"
     t.string "PSČ"
     t.string "Ulica"
@@ -272,6 +262,39 @@ ActiveRecord::Schema.define(version: 20141203231751) do
     t.string "Rok vystavenia"
   end
 
+  create_table "4:32", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+    t.string "Rok vystavenia"
+  end
+
+  create_table "4:33", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+    t.string "Rok vystavenia"
+  end
+
+  create_table "4:34", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+    t.string "Rok vystavenia"
+  end
+
   create_table "4:4", force: true do |t|
     t.string "Obchodné meno"
     t.string "PSČ"
@@ -377,12 +400,10 @@ ActiveRecord::Schema.define(version: 20141203231751) do
   create_table "headers", force: true do |t|
     t.boolean  "origin"
     t.integer  "dataset_id"
-    t.integer  "column_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "headers", ["column_id"], name: "index_headers_on_column_id", using: :btree
   add_index "headers", ["dataset_id"], name: "index_headers_on_dataset_id", using: :btree
 
   create_table "types", force: true do |t|
