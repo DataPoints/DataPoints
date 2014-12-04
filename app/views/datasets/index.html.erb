@@ -3,14 +3,30 @@
   <!-- Default panel contents -->
 
   <div class="panel-heading title">Your Datasets</div>
+
+  <%#= NamedEntity.new.def_types(27) %>
+
   <table border="0" class="table">
     <tr>
       <th scope="col">N</th>
+<<<<<<< HEAD
       <th scope="col">Name </th>
       <th scope="col">Description </th>
       <th scope="col">Status </th>
       <th scope="col">Created </th>
       <th scope="col">Updated </th>
+      <th scope="col">Types</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+=======
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Status</th>
+      <th scope="col">Created</th>
+      <th scope="col">Updated</th>
+      <th scope="col">Attributes</th>
+      <th scope="col">Types</th>
+>>>>>>> remotes/origin/dev
     </tr>
 
     <%i=0%>
@@ -23,8 +39,51 @@
           <td><%= dataset.status %></td>
           <td><%= dataset.created_at.strftime("%d %b %H:%M") %></td>
           <td><%= dataset.updated_at.strftime("%d %b %H:%M") %></td>
+          <td>
+<<<<<<< HEAD
+            <% empty_columns = 0 %>
+            <% columns = @Columns[dataset.id] %>
+            <% columns.each do |column| %>
+              <% if column.type_id.blank? %>
+                <% empty_columns += 1 %>
+              <% else %>
+                <% type = Type.find(column.type_id) %>
+                <%= type.name %>,
+              <% end %>
+=======
+            <% dataset = Dataset.find(dataset.id) %>
+            <% headers = dataset.headers.all %>
+            <% columns = headers.first.columns.all.order(:label) %>
+            <% columns_array = columns.collect { |column| column.label } %>
+            <% result_string = '' %>
+            <% for i in 0..columns_array.length-1 %>
+                <% result_string = result_string + columns_array[i] %>
+                <% if i < columns_array.length-1 %><% result_string = result_string + ',' %><% end %>
+                <% result_string = result_string + ' ' %>
+            <% end %>
+            <%= result_string %>
+          </td>
+          <td>
+            <% empty_columns = 0 %>
+            <% columns = @Columns[dataset.id] %>
+            <% columns.each do |column| %>
+                <% if column.type_id.blank? %>
+                    <% empty_columns += 1 %>
+                <% else %>
+                    <% type = Type.find(column.type_id) %>
+                    <%= type.name %>,
+                <% end %>
+>>>>>>> remotes/origin/dev
+            <% end %>
+
+            <% if columns.count == empty_columns %>
+                There are no types defined for this dataset.<br />
+                Edit them in
+                <%= link_to 'Detail', dataset %>
+            <% end %>
+          </td>
           <td><%= link_to 'Destroy', dataset_path(dataset),
-                          method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                          method: :delete, data: { confirm: 'Do you really want to delete this dataset?' } %></td>
           <td><button class="btn btn-default btn-sm" id="showmodal"><span class="glyphicon glyphicon-pencil"></span></button> </td>
           <td><%= link_to 'Detail', dataset %></td>
         </tr>
