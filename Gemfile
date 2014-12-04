@@ -48,3 +48,5 @@ gem 'recaptcha', :require => 'recaptcha/rails'
 gem 'jquery-turbolinks'
 
 gem "rails_config"
+gem 'delayed_job_active_record'
+gem "daemons"

@@ -11,20 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141117223715) do
+ActiveRecord::Schema.define(version: 20141204030724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "1:1", force: true do |t|
-    t.string "Obchodné meno"
-    t.string "PSČ"
-    t.string "Ulica"
-    t.string "Mesto / Obec"
-    t.string "IČO"
-    t.string "Výška pohľadávky"
-    t.string "Typ platiteľa"
+
+  create_table "analysis_results", force: true do |t|
+    t.integer  "dataset_id"
+    t.json     "result"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
+
+  add_index "analysis_results", ["dataset_id"], name: "index_analysis_results_on_dataset_id", using: :btree
 
   create_table "columns", force: true do |t|
     t.integer  "header_id"
@@ -38,25 +38,51 @@ ActiveRecord::Schema.define(version: 20141117223715) do
   add_index "columns", ["header_id"], name: "index_columns_on_header_id", using: :btree
   add_index "columns", ["type_id"], name: "index_columns_on_type_id", using: :btree
 
+  create_table "coordinates", force: true do |t|
+    t.string   "mesto"
+    t.float    "lat"
+    t.float    "lng"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "coordinates", ["mesto"], name: "index_coordinates_on_mesto", unique: true, using: :btree
+
   create_table "datasets", force: true do |t|
     t.string   "name"
     t.string   "description"
     t.string   "link"
     t.integer  "user_id"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.string   "status"
-    t.boolean  "deleted",                       default: false
-    t.string   "data_table_name"
-    t.decimal  "analyzed_progress",             default: 0.0
-    t.string   "storage",           limit: nil
+    t.boolean  "deleted",                     default: false
+    t.string   "storage"
+    t.decimal  "analyzed_progress",           default: 0.0
     t.string   "filehash"
     t.string   "originuri"
     t.string   "downloadstatus",    limit: 1
+    t.string   "data_table_name"
   end
 
   add_index "datasets", ["user_id", "created_at"], name: "index_datasets_on_user_id_and_created_at", using: :btree
   add_index "datasets", ["user_id"], name: "index_datasets_on_user_id", using: :btree
+
+  create_table "delayed_jobs", force: true do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "headers", force: true do |t|
     t.boolean  "origin"

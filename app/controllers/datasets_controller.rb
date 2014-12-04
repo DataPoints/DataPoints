@@ -2,6 +2,7 @@ require 'net/http'
 require 'digest/md5'
 require 'table_factory.rb'
 require 'analyze_function.rb'
+require 'sample_analyzer'
 
 class DatasetsController < ApplicationController
   before_action :logged_in_user, only: [:create, :destroy]
@@ -144,10 +145,28 @@ class DatasetsController < ApplicationController
 
   def start_analyze
     @dataset = Dataset.find(params[:id])
-    @dataset.status = 'S'
-    if @dataset.save 
-      flash[:success] = 'Wohoho the analyze was started!'
+
+    @dataset.status = 'A'
+    if @dataset.save
+      flash[:success] = 'Wohoho the analysis has started!'
     end
+
+    # analysisResult = AnalysisResult.create(
+    #     result: {
+    #         median_stlpca: "2,14",
+    #         pocet_poloziek: 10024
+    #     }
+    # )
+    # analysisResult.dataset = @dataset;
+    #
+    #
+    # if(analysisResult.save)
+    #   flash[:success] = 'Analysis completed successfully!'
+    #   @dataset.status = "EA"
+    #   @dataset.save
+    # end
+    sa = SampleAnalyzer.new
+    sa.delay.analyze(@dataset)
     
     redirect_to :back
   end
