@@ -1,23 +1,36 @@
 <h1 class="title">Your profile</h1>
-<div>
-  <div>
-    <%= form_for(@user) do |f| %>
-        <div class=""wrapper">
-            <%= render 'shared/error_messages', object: f.object %>
-            <%= f.label :name %><br />
-            <%= f.text_field :name %><br />
 
-            <%= f.label :email %><br />
-            <%= f.text_field :email %><br />
+<div class="wrapper">
 
-            <%= f.label :password %><br />
-            <%= f.password_field :password %><br />
+  <div class="row">
 
-            <%= f.label :password_confirmation, 'Confirm password' %><br />
-            <%= f.password_field :password_confirmation %><br />
+    <div class="col-md-3">
+      <a href="http://gravatar.com/emails" target=_blank title="Change profile picture"><%= gravatar_for @user %></a>
+      <br/>
+      <b><%= @user.name %></b>
+      <br/><br/><br/>
 
-            <%= f.submit 'Update', class: '' %>
-        </div>
-    <% end %>
+      <%= link_to 'Change E-mail',   user_email_edit_path,    class: 'btn gray', style: 'width:170px' %>
+      <br/><br/>
+      <%= link_to 'Change password', user_password_edit_path, class: 'btn gray', style: 'width:170px' %>
+      <br/><br/>
+    </div>
+
+    <div class="col-md-5">
+      <%= form_for(@user, url: user_profile_edit_path) do |f| %>
+          <%= render 'shared/error_messages', object: f.object %>
+          <table id="profile_table">
+            <tr>
+              <td>Name</td>
+              <td><%= f.text_field :name %></td>
+            </tr>
+            <tr>
+              <td><br/></td>
+              <td><br/><%= f.submit 'Save changes', class: '' %></td>
+            </tr>
+          </table>
+      <% end %>
+    </div>
+
   </div>
 </div>

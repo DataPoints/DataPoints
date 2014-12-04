@@ -27,6 +27,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    appmonitor (0.0.12)
     arel (5.0.1.20140414130214)
     autoprefixer-rails (4.0.1.1)
       execjs
@@ -123,6 +124,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  appmonitor
   autoprefixer-rails
   bcrypt
   bootstrap-sass (~> 3.2.0)
@@ -133,6 +135,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   jquery-turbolinks
+  json
   pg
   rails (= 4.1.6)
   rails_config
