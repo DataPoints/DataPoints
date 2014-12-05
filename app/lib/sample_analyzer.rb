@@ -2,8 +2,11 @@ class SampleAnalyzer
 
   def analyze(dataset)
 
-    puts "Going to sleep for 15 seconds"
-    sleep 15
+    dataset.status = "A"
+    dataset.save
+
+    puts "Going to sleep for 35 seconds"
+    sleep 35
     puts "Woke up from sleep"
 
     analysisResult = AnalysisResult.create(
