@@ -41,14 +41,50 @@ role :db,  %w{deploy@147.175.149.76}
 # setting per server overrides global ssh_options
 
 # Define server(s)
-server '147.175.149.76', user: 'deploy', roles: %w{web}
+set :password, ask('Server password', nil)
+server '147.175.149.76', user: 'deploy', password: fetch(:password), roles: %w{web app db}
 
-# SSH Options
-# See the example commented out section in the file
-# for more options.
-set :ssh_options, {
-    forward_agent: false,
-    auth_methods: %w(password),
-    password: 'deploy',
-    user: 'deploy',
-}
+
+# add email addresses for people who should receive deployment notifications
+load 'config/deploy/cap_notify.rb'
+
+# Create task to send a notification
+namespace :deploy do
+  desc "Send email notification"
+  task :send_notification do
+    Notifier.deploy_notification.deliver
+  end
+end
+
+after :deploy, 'deploy:send_notification'
+
+# desc 'Post deploy actions'
+# task :postprocess do
+#   on roles(:app), in: :sequence, wait: 1 do
+#       within '/home/deploy/datapoints/current' do
+#           # commands in this block execute as the "deploy" user.
+#           # with rails_env: :production do
+#               # execute *%w[ bundle install ]
+#               # execute ""
+#               # execute "rake assets:precompile"
+#               # execute "rake db:migrate"
+#           end
+#       end
+#   end
+# end
+
+# after 'deploy:published', :postprocess
+
+# on roles(:app), in: :sequence, wait: 1 do
+#   within "/home/deploy/datapoints/current" do
+#       # commands in this block execute as the "deploy" user.
+#       with rails_env: :production do
+#         # commands in this block execute with the environment
+#         # variable RAILS_ENV=production
+#         execute "pwd"
+#         # execute "rake assets:precompile"
+#         # execute "rake db:migrate"
+#       end
+#   end
+# end
+
