@@ -4,6 +4,7 @@
 # Description: Vytvorenie a naplnenie generickej tabulky na zaklade csv suboru.
 
 require 'csv'
+require 'named_entity'
 
 class TableFactory
  def builder(dataset)
@@ -31,6 +32,8 @@ class TableFactory
         flag += fill_column(header_id,data[0])
         #Naplnenie vyplnenej tabulky
         flag += fill_storage(name_of_data_table,data)
+        #Zisti typy columnov
+        NamedEntity.new.def_types(dataset.id)
         return flag
       else
         return 1
