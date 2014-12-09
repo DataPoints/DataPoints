@@ -35,7 +35,7 @@ gem 'foreigner'
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-# gem 'capistrano-rails'
+gem 'capistrano-rails'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
