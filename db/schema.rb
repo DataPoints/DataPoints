@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141117223715) do
+ActiveRecord::Schema.define(version: 20141203231751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "1:3", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+    t.string "Rok vystavenia"
+  end
 
   create_table "columns", force: true do |t|
     t.integer  "header_id"
@@ -66,6 +77,12 @@ ActiveRecord::Schema.define(version: 20141117223715) do
   end
 
   add_index "headers", ["dataset_id"], name: "index_headers_on_dataset_id", using: :btree
+
+  create_table "types", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "name"

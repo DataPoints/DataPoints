@@ -71,9 +71,9 @@
   <div id="map" style='width: 793px; height: 400px;'></div>
 </div>
 
-<button type="button" class="btn btn-primary btn-lg" onclick="ShowMap()">Show map</button>
+<button type="button" class="btn" onclick="ShowMap()">Show map</button>
 
-<button type="button" class="btn btn-primary btn-lg" onclick="HideMap()">Hide map</button>
+<button type="button" class="btn" onclick="HideMap()">Hide map</button>
 
 <hr>
 
@@ -108,6 +108,18 @@
 
 <table class="table table-striped table-bordered" style="margin-left: 50px;">
   <tr>
+    <td></td>
+    <% @columns.each do |column| %>
+        <td>
+          <%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
+              <%= hidden_field_tag :id, @dataset.id %>
+              <%= hidden_field_tag :column_id, column.id %>
+              <%= select_tag(:type_id, options_for_select(@types.collect { |type| [type.name, type.id] }, column.type_id ), :onchange => ("$(this).parent('form').submit();")) %>
+          <% end %>
+        </td>
+    <% end %>
+  </tr>
+  <tr>
     <% for i in 0..@names_of_data_columns.count %>
         <th><%= @names_of_data_columns[i] %></th>
     <% end %>
@@ -121,16 +133,6 @@
       </tr>
   <% end %>
 </table>
-
-
-<%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
-    <%= label_tag(:column_id, 'Meno stlpca') %>
-    <%= select_tag(:column_id, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
-    <%= label_tag(:type_id, 'Typ v stlpci') %>
-    <%= select_tag(:type_id, options_for_select([['Mesto', 1]])) %>
-    <%= hidden_field_tag :id, @dataset.id %>
-    <%= submit_tag 'Update', class: 'btn btn-primary' %>
-<% end %>
 
 <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
     X
