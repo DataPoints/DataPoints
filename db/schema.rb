@@ -11,17 +11,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141204030724) do
+ActiveRecord::Schema.define(version: 20141208163419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "3:46", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
+
+  create_table "3:47", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
+
+  create_table "3:48", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+    t.string "Rok vystavenia"
+  end
 
   create_table "analysis_results", force: true do |t|
     t.integer  "dataset_id"
     t.json     "result"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "analysisProgress", default: 0
   end
 
   add_index "analysis_results", ["dataset_id"], name: "index_analysis_results_on_dataset_id", using: :btree
