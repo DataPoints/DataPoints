@@ -99,11 +99,18 @@ class DatasetsController < ApplicationController
     @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
     @AnalyzedDatasets = Dataset.where(user_id: current_user.id, deleted: false, analyzed_progress: 0).first(10)
 
-    @Columns = { }
+    @Types = { }
     @Datasets.each do |dataset|
-      @Dataset = Dataset.find(dataset.id)
-      header = dataset.headers.all
-      @Columns[dataset.id] = header.first.columns.all.order(:id)
+      @Types[dataset.id] = []
+      @Dataset  = Dataset.find(dataset.id)
+      header    = dataset.headers.all
+      columns   = header.first.columns.all.order(:id)
+
+      columns.each do |column|
+        if !column.type_id.blank?
+          @Types[dataset.id] << Type.find(column.type_id).name
+        end
+      end
     end
   end
 

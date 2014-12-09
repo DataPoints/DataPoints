@@ -25,17 +25,12 @@
           <td><%= dataset.created_at.strftime("%d %b %H:%M") %></td>
           <td><%= dataset.updated_at.strftime("%d %b %H:%M") %></td>
           <td>
-            <% empty_columns = 0 %>
-            <% columns = @Columns[dataset.id] %>
-            <% columns.each do |column| %>
-                <% if column.type_id.blank? %>
-                    <% empty_columns += 1 %>
-                <% else %>
-                    <% type = Type.find(column.type_id) %>
-                    <%= type.name %>,
-                <% end %>
-            <% end %>
-            <% if columns.count == empty_columns %>
+            <% types = @Types[dataset.id] %>
+            <% if types.any? %>
+              <% types.each do |type| %>
+                <%= type %>,
+              <% end %>
+            <% else %>
                 There are no types defined for this dataset.<br />
                 Edit them in
                 <%= link_to 'Detail', dataset %>

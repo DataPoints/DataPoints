@@ -16,17 +16,11 @@ class NamedEntity
     @values = @data.content_columns();
     cols = @values.map(&:name)
 
-    @types_hash = { }
     for i in 0..cols.count-1
-      @types_hash[cols[i]]= get_type(@data.find(1)[cols[i]])
-    end
-
-    @types_hash.each do |key, type|
-      col = column.find_by(header_id: @headers.id, label: key)
+      type= get_type(@data.find(1)[cols[i]])
+      col = column.find_by(header_id: @headers.id, label: cols[i])
       col.update(type_id: type)
     end
-
-    return @types_hash
   end
 
   private
@@ -38,12 +32,12 @@ class NamedEntity
       #regex for email - upraveny standard z RFC 5322
       if value =~ emailREGEX
         type = "Email"
+      elsif value.valid_integer? || value.valid_float?
+        type = "Číslo"
       elsif !Geocoder.coordinates(value).nil?
         type = "Miesto"
       elsif value.valid_date?
         type = "Dátum"
-      elsif value.valid_integer? || value.valid_float?
-        type = "Číslo"
       elsif value =~ osobaREGEX
         type = "Osoba"
       else
