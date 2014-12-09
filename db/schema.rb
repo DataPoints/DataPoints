@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20141208163419) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+<<<<<<< HEAD
   create_table "3:46", force: true do |t|
     t.string "Obchodné meno"
     t.string "PSČ"
@@ -57,6 +58,8 @@ ActiveRecord::Schema.define(version: 20141208163419) do
 
   add_index "analysis_results", ["dataset_id"], name: "index_analysis_results_on_dataset_id", using: :btree
 
+=======
+>>>>>>> dev
   create_table "columns", force: true do |t|
     t.integer  "header_id"
     t.string   "label"
@@ -86,10 +89,18 @@ ActiveRecord::Schema.define(version: 20141208163419) do
     t.integer  "user_id"
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
+<<<<<<< HEAD
     t.string   "status"
     t.boolean  "deleted",                     default: false
     t.string   "storage"
     t.decimal  "analyzed_progress",           default: 0.0
+=======
+    t.string   "data_table_name"
+    t.decimal  "analyzed_progress",           default: 0.0
+    t.boolean  "deleted",                     default: false
+    t.string   "status"
+    t.string   "storage"
+>>>>>>> dev
     t.string   "filehash"
     t.string   "originuri"
     t.string   "downloadstatus",    limit: 1

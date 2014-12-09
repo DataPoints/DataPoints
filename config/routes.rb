@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   root 'home#index'
   get 'datasets/new'
   get 'datasets/change_type' => 'datasets#change_type'
+<<<<<<< HEAD
   get 'datasets/start_analyze' => 'datasets#start_analyze'
+=======
+  get 'datasets/change_X_Y' => 'datasets#change_X_Y'
+>>>>>>> dev
   get 'datasets/show' =>'datasets#show'
   get 'home/index'
   get 'signup' => 'users#new'

@@ -1,0 +1,6 @@
+api_key: 36558c42a87065a88599244cdae236d8
+project_id: '24'
+monitoring:
+  development: true
+  staging: true
+  production: true

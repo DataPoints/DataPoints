@@ -35,7 +35,7 @@ gem 'foreigner'
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-# gem 'capistrano-rails'
+gem 'capistrano-rails'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
@@ -46,6 +46,14 @@ gem 'autoprefixer-rails'
 
 gem 'recaptcha', :require => 'recaptcha/rails'
 gem 'jquery-turbolinks'
+gem 'json'
+
+gem 'rails_config'
+
+gem 'appmonitor'
+
+gem 'gmaps4rails'
+gem 'geocoder'
 
 gem "rails_config"
 gem 'delayed_job_active_record'
