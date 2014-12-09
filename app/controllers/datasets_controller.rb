@@ -132,6 +132,7 @@ class DatasetsController < ApplicationController
     @headers = @dataset.headers.all
     @columns = @headers.first.columns.all.order(:id)
     @coordinates = Coordinate.all
+    @types = Type.all
 
     name_of_dataset_data_table = @dataset.data_table_name
     @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
@@ -165,7 +166,7 @@ class DatasetsController < ApplicationController
     column_to_change_type.type_id = params[:type_id]
     column_to_change_type.save
 
-    if params[:type_id] == '1'
+    if params[:type_id] == '5'
       for i in 1..@data.count do
         name_of_town = @data.find(i)[Column.find(params[:column_id]).label]
         if Coordinate.find_by_mesto(name_of_town).nil?
