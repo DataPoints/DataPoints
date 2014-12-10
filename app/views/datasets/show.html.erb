@@ -65,73 +65,80 @@
     }
 </script>
 
-<%= link_to 'Back', datasets_path, style: 'left: 35px', class: 'btn btn-default' %><br>
+<%= link_to 'Back', datasets_path, style: 'left: 35px', class: 'btn btn-default left' %><br>
 
-<div id="MapWrapper" style='width: 800px; margin: auto; border: solid; box-shadow: 4px; padding: 1px; display: block;'>
-  <div id="map" style='width: 793px; height: 400px;'></div>
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-striped" style="max-width: 400px;">
+          <tr>
+            <td><b>Dataset name: </b></td>
+            <td><%= @dataset.name %></td>
+          </tr>
+          <tr>
+            <td><b>Dataset description: </b></td>
+            <td><%= @dataset.description %></td>
+          </tr>
+          <tr>
+            <td><b>Dataset created_at: </b></td>
+            <td><%= @dataset.created_at.strftime('%d %b %H:%M') %></td>
+          </tr>
+          <tr>
+            <td><b>Dataset updated_at: </b></td>
+            <td><%= @dataset.updated_at.strftime('%d %b %H:%M') %></td>
+          </tr>
+          <tr>
+            <td><b>Dataset analyzed_progress: </b></td>
+            <td> <%= @dataset.analyzed_progress %></td>
+          </tr>
+          <tr>
+            <td><b>Dataset pocet riadkov: </b></td>
+            <td> <%= @data.count %></td>
+          </tr>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+      <div id="MapWrapper" style='max-width: 800px; margin: auto; border: solid; box-shadow: 4px; padding: 1px; display: block;'>
+        <div id="map" style='max-width: 793px; height: 400px;'></div>
+      </div>
+
+      <button type="button" class="btn btn-default" onclick="ShowMap()">Show map</button>
+
+      <button type="button" class="btn btn-default" onclick="HideMap()">Hide map</button>
+    </div>
 </div>
-
-<button type="button" class="btn btn-primary btn-lg" onclick="ShowMap()">Show map</button>
-
-<button type="button" class="btn btn-primary btn-lg" onclick="HideMap()">Hide map</button>
 
 <hr>
 
-<table class="table table-striped" style="width: 400px; margin-left: 50px;">
+<table class="table table-striped table-bordered">
   <tr>
-    <td><b>Dataset name: </b></td>
-    <td><%= @dataset.name %></td>
+    <td></td>
+    <% @columns.each do |column| %>
+        <td>
+          <%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
+              <%= hidden_field_tag :id, @dataset.id %>
+              <%= hidden_field_tag :column_id, column.id %>
+              <%= select_tag(:type_id, options_for_select(@types.collect { |type| [type.name, type.id] }, column.type_id ), :onchange => ("$(this).parent('form').submit();")) %>
+          <% end %>
+        </td>
+    <% end %>
   </tr>
   <tr>
-    <td><b>Dataset description: </b></td>
-    <td><%= @dataset.description %></td>
-  </tr>
-  <tr>
-    <td><b>Dataset created_at: </b></td>
-    <td><%= @dataset.created_at.strftime('%d %b %H:%M') %></td>
-  </tr>
-  <tr>
-    <td><b>Dataset updated_at: </b></td>
-    <td><%= @dataset.updated_at.strftime('%d %b %H:%M') %></td>
-  </tr>
-  <tr>
-    <td><b>Dataset analyzed_progress: </b></td>
-    <td> <%= @dataset.analyzed_progress %></td>
-  </tr>
-  <tr>
-    <td><b>Dataset pocet riadkov: </b></td>
-    <td> <%= @data.count %></td>
-  </tr>
-</table>
-
-<br><br><br>
-
-<table class="table table-striped table-bordered" style="margin-left: 50px;">
-  <tr>
-    <% for i in 0..@names_of_data_columns.count %>
+    <% for i in 0..@names_of_data_columns.count-1 %>
         <th><%= @names_of_data_columns[i] %></th>
     <% end %>
   </tr>
   <% for i in 1..@number_of_data_rows do %>
       <% data_row = @data.find(i) %>
       <tr>
-        <% for j in 0..@names_of_data_columns.count %>
+        <% for j in 0..@names_of_data_columns.count-1 %>
             <td><%= data_row[@names_of_data_columns[j]] %></td>
         <% end %>
       </tr>
   <% end %>
 </table>
 
-
-<%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
-    <%= label_tag(:column_id, 'Meno stlpca') %>
-    <%= select_tag(:column_id, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
-    <%= label_tag(:type_id, 'Typ v stlpci') %>
-    <%= select_tag(:type_id, options_for_select([['Mesto', 1]])) %>
-    <%= hidden_field_tag :id, @dataset.id %>
-    <%= submit_tag 'Update', class: 'btn btn-primary' %>
-<% end %>
-
+<hr />
 <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
     X
     <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
@@ -139,7 +146,7 @@
     <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
     <%= hidden_field_tag :id, @dataset.id %>
 
-    <%= submit_tag 'Choose', class: 'btn btn-primary' %>
+    <%= submit_tag 'Choose', class: 'btn btn-default' %>
 <% end %>
 
-<div id='test_chart' style=" width: 100%; height: 300px;margin: auto ;"></div>
+<div id='test_chart' style="height: 300px;margin: auto ;"></div>

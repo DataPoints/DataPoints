@@ -1,69 +1,66 @@
-  <!-- CAROUSEL -->
-  <div id="carousel">
-    <%= image_tag 'carousel/carousel-1.jpg',:title => 'intro carousel'  %>
-  </div>
+<!-- CAROUSEL -->
+<div id="carousel">
+  <%= image_tag 'carousel/carousel-1.jpg',:title => 'intro carousel'  %>
+</div>
 
-  <!-- HOW DOES IT WORK -->
-  <section id="how-does-it-work" class="gray">
-    <div class="wrapper">
+<!-- HOW DOES IT WORK -->
+<section id="how-does-it-work">
+    <!-- TITLE -->
+    <h1 class="title">How does it work?</h1>
 
-      <!-- TITLE -->
-      <h1 class="title">How does it work?</h1>
-
-      <!-- BOXES -->
-      <div class="boxes">
-        <!-- UPLOAD -->
-        <div class="box">
-          <div class="left icon i-upload"></div>
-          <div class="right content">
-            <h1 class="title">Upload your data set</h1>
-            <p class="text">
-              You need only 4 clicks to upload your known/unknown data via our quick and easy form
-            </p>
-          </div>
-        </div>
-
-        <!-- PROCESS -->
-        <div class="box">
-          <div class="left icon i-stats"></div>
-          <div class="right content">
-            <h1 class="title">We’ll process them</h1>
-            <p class="text">
-              Everything runs in background, so you can get back to your every day business
-            </p>
-          </div>
-        </div>
-
-        <!-- CONTACT -->
-        <div class="box">
-          <div class="left icon i-mail-send"></div>
-          <div class="right content">
-            <h1 class="title">And contact you</h1>
-            <p class="text">
-              Right after everything has been done, we’ll send you the e-mail or SMS
-            </p>
-          </div>
+    <!-- BOXES -->
+    <div class="row boxes">
+      <!-- UPLOAD -->
+      <div class="col-md-4">
+        <div class="left glyphicon glyphicon-cloud-upload"></div>
+        <div class="right content">
+          <h1 class="title">Upload your data set</h1>
+          <p class="text">
+            You need only 4 clicks to upload your known/unknown data via our quick and easy form
+          </p>
         </div>
       </div>
 
+      <!-- PROCESS -->
+      <div class="col-md-4">
+        <div class="left glyphicon glyphicon-tasks"></div>
+        <div class="right content">
+          <h1 class="title">We’ll process them</h1>
+          <p class="text">
+            Everything runs in background, so you can get back to your every day business
+          </p>
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="col-md-4">
+        <div class="left glyphicon glyphicon-export"></div>
+        <div class="right content">
+          <h1 class="title">And contact you</h1>
+          <p class="text">
+            Right after everything has been done, we’ll send you the e-mail or SMS
+          </p>
+        </div>
+      </div>
     </div>
-  </section>
 
-  <!-- WE'RE HERE TO HELP -->
-  <section id="were-here-to-help" class="orange center">
-    <div class="wrapper">
+</section>
 
-      <!-- TITLE -->
-      <h1 class="title">We're here to help</h1>
+<!-- WE'RE HERE TO HELP -->
+<section id="were-here-to-help" class="bg-orange text-center">
+  <div class="wrapper">
 
-      <!-- TEXT -->
-      <p class="text">
-        If you’re new to the idea of being data-driven, or you would like to search through new statistical information, our tool will give you planty of option to do so. Join us and enjoy extensive reports and analyses.
-        <br /><br />
-      </p>
+    <!-- TITLE -->
+    <h1 class="title">We're here to help</h1>
 
-      <!-- BUTTON -->
-      <%= link_to_unless_current 'Explore new horizons',     signup_path, :class => "btn white uppercase" %>
+    <!-- TEXT -->
+    <p class="text">
+      If you’re new to the idea of being data-driven, or you would like to search through new statistical information, our tool will give you planty of option to do so. Join us and enjoy extensive reports and analyses.
+      <br /><br />
+    </p>
 
-    </div>
-  </section>
+    <!-- BUTTON -->
+    <%= link_to_unless_current 'Explore new horizons',     signup_path, :class => "btn white uppercase" %>
+
+  </div>
+</section>
