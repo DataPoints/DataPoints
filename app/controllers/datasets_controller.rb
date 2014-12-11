@@ -101,6 +101,19 @@ class DatasetsController < ApplicationController
     @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
     @AnalyzedDatasets = Dataset.where(user_id: current_user.id, deleted: false, analyzed_progress: 0).first(10)
 
+    @Types = { }
+    @Datasets.each do |dataset|
+      @Types[dataset.id] = []
+      @Dataset  = Dataset.find(dataset.id)
+      header    = dataset.headers.all
+      columns   = header.first.columns.all.order(:id)
+
+      columns.each do |column|
+        if !column.type_id.blank?
+          @Types[dataset.id] << Type.find(column.type_id).name
+        end
+      end
+    end
   end
 
   def edit
@@ -121,6 +134,7 @@ class DatasetsController < ApplicationController
     @headers = @dataset.headers.all
     @columns = @headers.first.columns.all.order(:id)
     @coordinates = Coordinate.all
+    @types = Type.all
 
     name_of_dataset_data_table = @dataset.data_table_name
     @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
@@ -154,7 +168,7 @@ class DatasetsController < ApplicationController
     column_to_change_type.type_id = params[:type_id]
     column_to_change_type.save
 
-    if params[:type_id] == '1'
+    if params[:type_id] == '5'
       for i in 1..@data.count do
         name_of_town = @data.find(i)[Column.find(params[:column_id]).label]
         if Coordinate.find_by_mesto(name_of_town).nil?

@@ -46,4 +46,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  RECAPTCHA_PUBLIC_KEY= '6LeMH_4SAAAAAAEqcIeENH_O6_E-8xX3DW1Fbqm1'
+  RECAPTCHA_PRIVATE_KEY= '6LeMH_4SAAAAAMWXZbRF0kHdenSg9DNRKMBDt0KF'
 end

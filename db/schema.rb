@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20141208163419) do
+=======
+ActiveRecord::Schema.define(version: 20141208122613) do
+>>>>>>> remotes/origin/dev
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +98,10 @@ ActiveRecord::Schema.define(version: 20141208163419) do
   end
 
   add_index "headers", ["dataset_id"], name: "index_headers_on_dataset_id", using: :btree
+
+  create_table "types", force: true do |t|
+    t.string "name"
+  end
 
   create_table "users", force: true do |t|
     t.string   "name"
