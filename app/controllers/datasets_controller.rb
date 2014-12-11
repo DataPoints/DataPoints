@@ -173,7 +173,7 @@ class DatasetsController < ApplicationController
     redirect_to :back
   end
 
-<<<<<<< HEAD
+
   def start_analyze
     @dataset = Dataset.find(params[:id])
 
@@ -202,7 +202,6 @@ class DatasetsController < ApplicationController
     redirect_to :back
   end
 
-=======
   def change_X_Y
 
     dataset = Dataset.find(params[:id])
@@ -227,7 +226,6 @@ class DatasetsController < ApplicationController
   end
 
 
->>>>>>> dev
   private
   def dataset_params
     params.require(:dataset).permit(:name, :description, :link)
