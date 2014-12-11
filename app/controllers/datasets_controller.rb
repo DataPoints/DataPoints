@@ -1,6 +1,8 @@
 require 'net/http'
 require 'digest/md5'
 require 'table_factory.rb'
+require 'analyze_function.rb'
+require 'sample_analyzer'
 
 class DatasetsController < ApplicationController
   before_action :logged_in_user, only: [:create, :destroy]
@@ -182,6 +184,22 @@ class DatasetsController < ApplicationController
     end
 
     flash[:success] = 'Changes saved!'
+    redirect_to :back
+  end
+
+
+  def start_analyze
+    @dataset = Dataset.find(params[:id])
+
+    @dataset.status = 'A'
+    if @dataset.save
+      flash[:success] = 'Wohoho the analysis has started!'
+    end
+
+
+    sa = SampleAnalyzer.new
+    sa.delay.analyze(@dataset)
+    
     redirect_to :back
   end
 
