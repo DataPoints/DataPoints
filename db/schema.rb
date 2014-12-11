@@ -11,14 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20141208163419) do
-=======
-ActiveRecord::Schema.define(version: 20141208122613) do
->>>>>>> remotes/origin/dev
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
 
 
   create_table "analysis_results", force: true do |t|
@@ -30,7 +27,6 @@ ActiveRecord::Schema.define(version: 20141208122613) do
   end
 
   add_index "analysis_results", ["dataset_id"], name: "index_analysis_results_on_dataset_id", using: :btree
-
 
   create_table "columns", force: true do |t|
     t.integer  "header_id"
@@ -61,14 +57,14 @@ ActiveRecord::Schema.define(version: 20141208122613) do
     t.integer  "user_id"
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
-    t.string   "data_table_name"
-    t.decimal  "analyzed_progress",           default: 0.0
-    t.boolean  "deleted",                     default: false
     t.string   "status"
+    t.boolean  "deleted",                     default: false
     t.string   "storage"
+    t.decimal  "analyzed_progress",           default: 0.0
     t.string   "filehash"
     t.string   "originuri"
     t.string   "downloadstatus",    limit: 1
+    t.string   "data_table_name"
   end
 
   add_index "datasets", ["user_id", "created_at"], name: "index_datasets_on_user_id_and_created_at", using: :btree

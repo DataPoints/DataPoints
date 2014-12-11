@@ -196,20 +196,7 @@ class DatasetsController < ApplicationController
       flash[:success] = 'Wohoho the analysis has started!'
     end
 
-    # analysisResult = AnalysisResult.create(
-    #     result: {
-    #         median_stlpca: "2,14",
-    #         pocet_poloziek: 10024
-    #     }
-    # )
-    # analysisResult.dataset = @dataset;
-    #
-    #
-    # if(analysisResult.save)
-    #   flash[:success] = 'Analysis completed successfully!'
-    #   @dataset.status = "EA"
-    #   @dataset.save
-    # end
+
     sa = SampleAnalyzer.new
     sa.delay.analyze(@dataset)
     
