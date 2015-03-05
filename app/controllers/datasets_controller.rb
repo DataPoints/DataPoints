@@ -60,7 +60,7 @@ class DatasetsController < ApplicationController
           TableFactory.new.builder(@dataset)
 
           flash[:success] = 'Dataset successfully downloaded :) ' + @dataset.link + " " + dataset_already_exists.to_s
-          render 'new'
+          render root_path
         else
           flash[:failure] = 'Dataset download failed :( ' + @dataset.link
           render 'new'
