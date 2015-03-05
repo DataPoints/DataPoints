@@ -57,11 +57,10 @@ class DatasetsController < ApplicationController
         @dataset.originuri = @dataset.link
 
         if @dataset.save
-
           TableFactory.new.builder(@dataset)
 
           flash[:success] = 'Dataset successfully downloaded :) ' + @dataset.link + " " + dataset_already_exists.to_s
-          redirect_to root_path
+          render 'new'
         else
           flash[:failure] = 'Dataset download failed :( ' + @dataset.link
           render 'new'
@@ -98,7 +97,7 @@ class DatasetsController < ApplicationController
   end
   def index
     # @dataset = Dataset.find(params[:id])
-    @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
+    @Datasets = Dataset.where.not(status: 'N').where(user_id: current_user.id, deleted: false).first(10)
     @AnalyzedDatasets = Dataset.where(user_id: current_user.id, deleted: false, analyzed_progress: 0).first(10)
 
     @Types = { }
