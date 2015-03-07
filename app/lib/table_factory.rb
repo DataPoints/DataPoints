@@ -8,7 +8,6 @@ require 'named_entity'
 
 class TableFactory
  def builder(dataset)
-    Thread.new do
       #Vytvorenie mena noveho datasetu
       num1 = dataset.user_id
       num2 = dataset.id
@@ -33,13 +32,12 @@ class TableFactory
         #Naplnenie vyplnenej tabulky
         flag += fill_storage(name_of_data_table,data)
         #Zisti typy columnov
-        NamedEntity.new.def_types(dataset.id)
+        # NamedEntity.new.def_types(dataset.id)
         return flag
       else
         return 1
       end
 
-    end
   end
 
   private

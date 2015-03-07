@@ -4,9 +4,9 @@
 # server in each group is considered to be the first
 # unless any hosts have the primary property set.
 # Don't declare `role :all`, it's a meta role
-role :app, %w{deploy@147.175.149.76}
-role :web, %w{deploy@147.175.149.76}
-role :db,  %w{deploy@147.175.149.76}
+role :app, %w{rails@178.62.29.235}
+role :web, %w{rails@178.62.29.235}
+role :db,  %w{rails@178.62.29.235}
 
 # Extended Server Syntax
 # ======================
@@ -42,7 +42,7 @@ role :db,  %w{deploy@147.175.149.76}
 
 # Define server(s)
 set :password, ask('Server password', nil)
-server '147.175.149.76', user: 'deploy', password: fetch(:password), roles: %w{web app db}
+server '178.62.29.235', user: 'rails', password: fetch(:password), roles: %w{web app db}
 
 
 # add email addresses for people who should receive deployment notifications

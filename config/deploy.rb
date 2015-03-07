@@ -8,7 +8,7 @@ set :repo_url, 'https://github.com/DataPoints/Sprint-1.git'
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, '/home/deploy/datapoints'
+set :deploy_to, '/home/rails'
 
 # Default value for :scm is :git
 # set :scm, :git
