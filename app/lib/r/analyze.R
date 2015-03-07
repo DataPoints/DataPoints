@@ -1,10 +1,12 @@
 library(RPostgreSQL)
 
+# funkcia nacita ulozeny csv subor do framu
 readCSV = function(f){
 	csv <- read.csv(file=f, sep=";")
 	return(csv)
 }
 
+# funkcia vyberie ciselne stlpce a spravi nad nimi statisticke funkcie, ktore zoskupi do summary framu
 analyze = function(csv){
 	nums <- sapply(csv, is.numeric)
 	min <- apply(csv[nums], 2, min)
@@ -16,11 +18,10 @@ analyze = function(csv){
 	return(summary)
 }
 
+# funkcia vezme summary frame a vlozi jeho hodnoty do tabulky
 DBinsert = function(summary, dataset_id){
 	drv <- dbDriver("PostgreSQL")
 	con <- dbConnect(drv, dbname="Skola_development")
-	#dbWriteTable(con, name='summaries', value=summary, append=TRUE)
-
 	ncols <- dim(summary)[2]
 
 	for (i in 1:ncols){
@@ -30,15 +31,15 @@ DBinsert = function(summary, dataset_id){
 	}
 	dbDisconnect(con)
 	dbUnloadDriver(drv)
-	return(print("Succeed!"))
+	return(0)
 }
 
-#begin
+# vezme argumenty path a id
 args <- commandArgs(trailingOnly = TRUE)
-path <- args[1] #v ruby datasets.storage "~/Downloads/testik.csv"
+path <- args[1] #v ruby datasets.storage
 dataset_id <- as.integer(args[2]) # v ruby datasets.id
 
+# zavola funkcie vyssie popisane
 csv <- readCSV(path)
 summary <- analyze(csv)
 DBinsert(summary, dataset_id)
-#end
