@@ -35,7 +35,7 @@ class DatasetsController < ApplicationController
   end
   def index
     # @dataset = Dataset.find(params[:id])
-    @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
+    @Datasets = Dataset.where.not(status: 'N').where(user_id: current_user.id, deleted: false).first(10)
     @AnalyzedDatasets = Dataset.where(user_id: current_user.id, deleted: false, analyzed_progress: 0).first(10)
 
     @Types = { }
