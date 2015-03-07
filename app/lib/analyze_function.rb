@@ -5,6 +5,16 @@
 
 class AnalyzeFunction
 
+def r_analyze_dataset(dataset)
+  dataset_id = dataset.id
+  path = dataset.storage
+  puts path
+  puts dataset_id
+  cmd = 'Rscript lib/analyze.R'
+  puts Exec_command(cmd)
+
+end
+
  def analyze_dataset
  	@new_class, @column_names = loading_table("1:1")
  	number_of_unique_values_in_da_columnes(@new_class,@column_names)
