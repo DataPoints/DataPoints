@@ -2,17 +2,17 @@
 # Created at: 30.11. 2014
 #
 # Description: Vytvorenie a naplnenie generickej tabulky na zaklade csv suboru.
+require 'cmd_interface'
 
 class AnalyzeFunction
 
 def r_analyze_dataset(dataset)
-  dataset_id = dataset.id
-  path = dataset.storage
-  puts path
-  puts dataset_id
-  cmd = 'Rscript lib/analyze.R'
-  puts Exec_command(cmd)
-
+  Thread.new do
+    dataset_id = dataset.id
+    path = dataset.storage
+    cmd = "Rscript app/lib/r/analyze.R #{path} #{dataset_id}"
+    CMDInterface.new.Exec_command(cmd)
+  end
 end
 
  def analyze_dataset
