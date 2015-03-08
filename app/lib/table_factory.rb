@@ -1,5 +1,6 @@
 # Name of Author: Peter Uherek, Martin Losak
 # Created at: 17.11. 2014
+# Updated at: 3.3. 2015
 #
 # Description: Vytvorenie a naplnenie generickej tabulky na zaklade csv suboru.
 
@@ -16,8 +17,19 @@ class TableFactory
       #Nahratie dat z datasetu
       path = dataset.storage
       puts path
+      #Kontrola ci je subor csv
+
+      if control_file_format(path) == 1
+        upload_dataset_table("data_table_name","N/A",dataset)
+        upload_dataset_table("status","N",dataset)
+        return 1
+
+      end
+      
       data = parsing_csv(path)
       if data == 1
+        upload_dataset_table("data_table_name","N/A",dataset)
+        upload_dataset_table("status","N",dataset)
         return 1
       end
 
@@ -36,11 +48,29 @@ class TableFactory
         NamedEntity.new.def_types(dataset.id)
         return flag
       else
+        upload_dataset_table("data_table_name","N/A",dataset)
+        upload_dataset_table("status","N",dataset)
         return 1
       end
 
     end
   end
+
+
+
+
+ private
+ def control_file_format(path)
+   number_of_last_occurence_dots=path.rindex('.')
+   format = path[number_of_last_occurence_dots,path.length]
+   puts format
+
+   if format =='.csv'
+      return 0
+   else
+     return 1
+   end
+ end
 
   private
   def upload_dataset_table(name,stor,dataset)
