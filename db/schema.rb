@@ -11,12 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141208163419) do
+ActiveRecord::Schema.define(version: 20150307203642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-
+  create_table "1:1", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
 
   create_table "analysis_results", force: true do |t|
     t.integer  "dataset_id"
@@ -57,14 +65,14 @@ ActiveRecord::Schema.define(version: 20141208163419) do
     t.integer  "user_id"
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
-    t.string   "status"
-    t.boolean  "deleted",                     default: false
-    t.string   "storage"
+    t.string   "data_table_name"
     t.decimal  "analyzed_progress",           default: 0.0
+    t.boolean  "deleted",                     default: false
+    t.string   "status"
+    t.string   "storage"
     t.string   "filehash"
     t.string   "originuri"
     t.string   "downloadstatus",    limit: 1
-    t.string   "data_table_name"
   end
 
   add_index "datasets", ["user_id", "created_at"], name: "index_datasets_on_user_id_and_created_at", using: :btree
@@ -94,6 +102,15 @@ ActiveRecord::Schema.define(version: 20141208163419) do
   end
 
   add_index "headers", ["dataset_id"], name: "index_headers_on_dataset_id", using: :btree
+
+  create_table "summaries", force: true do |t|
+    t.integer "dataset_id"
+    t.text    "header"
+    t.float   "min"
+    t.float   "max"
+    t.float   "median"
+    t.float   "mean"
+  end
 
   create_table "types", force: true do |t|
     t.string "name"
