@@ -1,1 +1,3 @@
-dataset_target_path : "/Users/alexostrovsky/Downloads/"
+dataset_target_path : "/Users/igordanis/Downloads/datapoints/"
+numberOfDownloadAttemptsBeforeFailure : 3
+delayBetweenAnotherDownloadAttempt : 10

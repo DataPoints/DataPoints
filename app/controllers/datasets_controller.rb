@@ -14,8 +14,9 @@ class DatasetsController < ApplicationController
   def create
     #Bind dataset variable with values from form data
     @dataset = current_user.datasets.build(dataset_params)
+    @dataset.save
 
-    w = WorkFlow.new.start(@dataset)
+    w = WorkFlow.new.delay.start(@dataset)
     if w == true
       flash[:success] = 'Dataset uspesne nahraty.'
     else
