@@ -6,6 +6,14 @@ require 'cmd_interface'
 
 class AnalyzeFunction
 
+def r_clean_dataset(dataset)
+  Thread.new do
+    path = dataset.storage
+    cmd = "Rscript app/lib/r/cleanData.R #{path}"
+    CMDInterface.new.Exec_command(cmd)
+  end
+end
+
 def r_analyze_dataset(dataset)
   Thread.new do
     dataset_id = dataset.id
@@ -30,8 +38,8 @@ end
 		:select => 'count(*) count, #{column_name}',
 		:group => '#{column_name}',
 		:order => 'count DESC',
-		:linit => 1) 
-   
+		:linit => 1)
+
 		#puts result
 		puts "Hallo"
 	end
@@ -49,11 +57,11 @@ end
  private
  def loading_table(name_of_dataset)
     begin
-	new_class = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset } 
+	new_class = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset }
 	column_names = new_class.columns.map(&:name)
-	rescue 
+	rescue
 		puts "Error #{$!}"
-	end 
+	end
 	return new_class,column_names
  end
 end

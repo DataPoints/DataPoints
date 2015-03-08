@@ -58,6 +58,7 @@ class DatasetsController < ApplicationController
 
         if @dataset.save
           TableFactory.new.builder(@dataset)
+          AnalyzeFunction.new.r_clean_dataset(@dataset)
           AnalyzeFunction.new.r_analyze_dataset(@dataset)
 
           flash[:success] = 'Dataset successfully downloaded :) ' + @dataset.link + " " + dataset_already_exists.to_s
