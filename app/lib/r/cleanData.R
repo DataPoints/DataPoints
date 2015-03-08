@@ -1,7 +1,7 @@
 args <- commandArgs(trailingOnly = TRUE)
 path <- args[1]
 
-data <- read.csv(file=path, sep=';', stringsAsFactors=FALSE, fileEncoding="latin1")
+data <- read.csv(file=path, sep=';', stringsAsFactors=FALSE, fileEncoding="windows-1250")
 
 cleanData <- function(cell){
   #replace commas by dots
