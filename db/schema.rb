@@ -16,6 +16,16 @@ ActiveRecord::Schema.define(version: 20150307203642) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "1:1", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
+  end
+
   create_table "analysis_results", force: true do |t|
     t.integer  "dataset_id"
     t.json     "result"
