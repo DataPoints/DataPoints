@@ -15,8 +15,12 @@ class DatasetsController < ApplicationController
     #Bind dataset variable with values from form data
     @dataset = current_user.datasets.build(dataset_params)
 
-    WorkFlow.new.start(@dataset)
-    flash[:info] = 'Dataset sa spracovava... V pripade chyby vam bude poslany email.'
+    w = WorkFlow.new.start(@dataset)
+    if w == true
+      flash[:success] = 'Dataset uspesne nahraty.'
+    else
+      flash[:danger] = w
+    end
     redirect_to root_path
   end
 

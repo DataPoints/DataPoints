@@ -5,10 +5,12 @@ class WorkFlow
       download
       pred_processing
       find_type
+      return true
     rescue Exception => e
       @dataset.status = e.to_s
       @dataset.save
-      @dataset.user.send_error_email(e.to_s)
+      return e
+      # @dataset.user.send_error_email(e.to_s)
     end
   end
 
