@@ -25,7 +25,7 @@ Rails.application.configure do
       authentication: 'plain',
       enable_starttls_auto: true
   }
-  host = 'team03-14.ucebne.fiit.stuba.sk:8080'
+  host = '178.62.29.235'
   config.action_mailer.default_url_options = { host: host }
 
   # Print deprecation notices to the Rails logger.
