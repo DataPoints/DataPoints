@@ -2,8 +2,26 @@
 # Created at: 30.11. 2014
 #
 # Description: Vytvorenie a naplnenie generickej tabulky na zaklade csv suboru.
+require 'cmd_interface'
 
 class AnalyzeFunction
+
+def r_clean_dataset(dataset)
+  Thread.new do
+    path = dataset.storage
+    cmd = "Rscript app/lib/r/cleanData.R #{path}"
+    CMDInterface.new.Exec_command(cmd)
+  end
+end
+
+def r_analyze_dataset(dataset)
+  Thread.new do
+    dataset_id = dataset.id
+    path = dataset.storage
+    cmd = "Rscript app/lib/r/analyze.R #{path} #{dataset_id}"
+    CMDInterface.new.Exec_command(cmd)
+  end
+end
 
  def analyze_dataset
  	@new_class, @column_names = loading_table("1:1")
@@ -20,8 +38,8 @@ class AnalyzeFunction
 		:select => 'count(*) count, #{column_name}',
 		:group => '#{column_name}',
 		:order => 'count DESC',
-		:linit => 1) 
-   
+		:linit => 1)
+
 		#puts result
 		puts "Hallo"
 	end
@@ -39,11 +57,11 @@ class AnalyzeFunction
  private
  def loading_table(name_of_dataset)
     begin
-	new_class = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset } 
+	new_class = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset }
 	column_names = new_class.columns.map(&:name)
-	rescue 
+	rescue
 		puts "Error #{$!}"
-	end 
+	end
 	return new_class,column_names
  end
 end

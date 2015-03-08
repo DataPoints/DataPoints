@@ -28,18 +28,17 @@ class DatasetsController < ApplicationController
       render 'edit'
     end
   end
-
   def index
     # @dataset = Dataset.find(params[:id])
     @Datasets = Dataset.where.not(status: 'N').where(user_id: current_user.id, deleted: false).first(10)
     @AnalyzedDatasets = Dataset.where(user_id: current_user.id, deleted: false, analyzed_progress: 0).first(10)
 
-    @Types = {}
+    @Types = { }
     @Datasets.each do |dataset|
       @Types[dataset.id] = []
-      @Dataset = Dataset.find(dataset.id)
-      header = dataset.headers.all
-      columns = header.first.columns.all.order(:id)
+      @Dataset  = Dataset.find(dataset.id)
+      header    = dataset.headers.all
+      columns   = header.first.columns.all.order(:id)
 
       columns.each do |column|
         if !column.type_id.blank?
@@ -84,11 +83,11 @@ class DatasetsController < ApplicationController
     #@yData =data.pluck("Výška pohľadávky")[0..10].collect{|i| i.to_f}
     #@xData =data.pluck("Mesto / Obec")[0..10]
     if params[:xData].nil?
-      @xData = Array.[](1991, 1992, 1993, 1994, 1995)
-      @yData = Array.[](20, 74, 5, 101, 36)
+      @xData = Array.[](1991,1992,1993,1994,1995)
+      @yData = Array.[](20,74,5,101,36)
     else
       @xData=params[:xData]
-      @yData=params[:yData].collect { |i| i.to_f }
+      @yData=params[:yData].collect{|i| i.to_f}
     end
   end
 
@@ -132,7 +131,7 @@ class DatasetsController < ApplicationController
 
     sa = SampleAnalyzer.new
     sa.delay.analyze(@dataset)
-
+    
     redirect_to :back
   end
 
@@ -148,7 +147,7 @@ class DatasetsController < ApplicationController
 
 
     data=data.order('"'+@columnX.to_s+'"')
-    @yData =data.pluck(@columnY.to_s)[0..20].collect { |i| i.gsub(/\s/, '').to_f }
+    @yData =data.pluck(@columnY.to_s)[0..20].collect{|i| i.gsub(/\s/, '').to_f}
     @xData =data.pluck(@columnX.to_s)[0..20]
 
 
@@ -156,7 +155,7 @@ class DatasetsController < ApplicationController
     puts @yData.inspect
     puts @xData.inspect
     flash[:success] = 'values changed !'
-    redirect_to :controller => 'datasets', :action => 'show', :id => params[:id], :xData => @xData, :yData => @yData
+    redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xData => @xData,:yData => @yData
   end
 
 
