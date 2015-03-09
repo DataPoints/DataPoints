@@ -24,3 +24,4 @@ config/environments/*.local.yml
 /.idea
 /.idea/*
 >>>>>>> remotes/origin/dev
+config/settings/development.yml

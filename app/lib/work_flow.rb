@@ -16,11 +16,12 @@ class WorkFlow
       download
       pred_processing
       find_type
-      return true
+      r_scripts
+      @dataset.status = 'OK'
+      @dataset.save
     rescue Exception => e
       @dataset.status = e.to_s
       @dataset.save
-      return e
       # @dataset.user.send_error_email(e.to_s)
     end
   end
@@ -102,7 +103,7 @@ class WorkFlow
       puts 'Downloaded file is not csv file type: ' + p.message
       raise 'Downloaded file is not csv file type: ' + p.message
     rescue SocketError => r
-      puts'Cannot connect to server: ' + @dataset.link
+      puts 'Cannot connect to server: ' + @dataset.link
       if currentDownloadAttempt < numberOfDownloadAttemptsBeforeFailure
         currentDownloadAttempt+=1
         puts "Going to sleep before another download attempt"
@@ -130,5 +131,10 @@ class WorkFlow
 
   def find_type
     NamedEntity.new.def_types(@dataset.id)
+  end
+
+  def r_scripts
+    AnalyzeFunction.new.r_clean_dataset(@dataset)
+    AnalyzeFunction.new.r_analyze_dataset(@dataset)
   end
 end

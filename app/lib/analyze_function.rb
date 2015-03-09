@@ -7,20 +7,20 @@ require 'cmd_interface'
 class AnalyzeFunction
 
 def r_clean_dataset(dataset)
-  Thread.new do
+  # Thread.new do
     path = dataset.storage
     cmd = "Rscript app/lib/r/cleanData.R #{path}"
     CMDInterface.new.Exec_command(cmd)
-  end
+  # end
 end
 
 def r_analyze_dataset(dataset)
-  Thread.new do
+  # Thread.new do
     dataset_id = dataset.id
     path = dataset.storage
     cmd = "Rscript app/lib/r/analyze.R #{path} #{dataset_id}"
     CMDInterface.new.Exec_command(cmd)
-  end
+  # end
 end
 
  def analyze_dataset

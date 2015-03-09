@@ -16,12 +16,8 @@ class DatasetsController < ApplicationController
     @dataset = current_user.datasets.build(dataset_params)
     @dataset.save
 
-    w = WorkFlow.new.delay.start(@dataset)
-    if w == true
-      flash[:success] = 'Dataset uspesne nahraty.'
-    else
-      flash[:danger] = w
-    end
+    WorkFlow.new.delay.start(@dataset)
+    flash[:info] = 'Dataset sa spracovava...'
     redirect_to root_path
   end
 
