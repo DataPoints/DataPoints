@@ -20,7 +20,8 @@ class WorkFlow
       @dataset.status = 'OK'
       @dataset.save
     rescue Exception => e
-      @dataset.status = e.to_s
+      @dataset.status = 'N'
+      puts e.to_s
       @dataset.save
       # @dataset.user.send_error_email(e.to_s)
     end
@@ -124,9 +125,7 @@ class WorkFlow
   end
 
   def pred_processing
-    if TableFactory.new.builder(@dataset) != 0
-      raise 'Nastala chyba pri predprocesingu...'
-    end
+    TableFactory.new.builder(@dataset)
   end
 
   def find_type

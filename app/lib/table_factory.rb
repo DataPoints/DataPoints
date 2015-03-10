@@ -1,72 +1,48 @@
 # Name of Author: Peter Uherek, Martin Losak
 # Created at: 17.11. 2014
-# Updated at: 3.3. 2015
+# Updated at: 9.3. 2015
 #
 # Description: Vytvorenie a naplnenie generickej tabulky na zaklade csv suboru.
 
 require 'csv'
 require 'named_entity'
+require 'cmd_interface'
+
 
 class TableFactory
  def builder(dataset)
       #Vytvorenie mena noveho datasetu
-      num1 = dataset.user_id
-      num2 = dataset.id
-      name_of_data_table = "#{num1}:#{num2}"
+      name_of_data_table = "#{dataset.user_id}:#{dataset.id}"
       #Nahratie dat z datasetu
       path = dataset.storage
-      puts path
       #Kontrola ci je subor csv
-
-      if control_file_format(path) == 1
-        upload_dataset_table("data_table_name","N/A",dataset)
-        upload_dataset_table("status","N",dataset)
-        return 1
-
-      end
-      
+      control_file_format(path)
+      #Nahratie a parsovanie datasetu
       data = parsing_csv(path)
-      if data == 1
-        upload_dataset_table("data_table_name","N/A",dataset)
-        upload_dataset_table("status","N",dataset)
-        return 1
-      end
 
-      flag = 0
       #Generice vytvorenie tabuliek
-      if create_table(name_of_data_table,data[0]) == 0
-        #Ulozenie mena datasetu do tabulky datasets
-        flag += upload_dataset_table("data_table_name",name_of_data_table,dataset)
-        #Vytvorenie noveho zaznamu v tabulke headers 
-        header_id = fill_header(dataset.id)
-        #Vytvorenie noveho zaznamu v tabulke columns
-        flag += fill_column(header_id,data[0])
-        #Naplnenie vyplnenej tabulky
-        flag += fill_storage(name_of_data_table,data)
-        #Zisti typy columnov
-        # NamedEntity.new.def_types(dataset.id)
-        return flag
-      else
-        upload_dataset_table("data_table_name","N/A",dataset)
-        upload_dataset_table("status","N",dataset)
-        return 1
-      end
-
+      create_table(name_of_data_table,data[0])
+      #Ulozenie mena datasetu do tabulky datasets
+      upload_dataset_table("data_table_name",name_of_data_table,dataset)
+      #Vytvorenie noveho zaznamu v tabulke headers
+      header_id = fill_header(dataset.id)
+      #Vytvorenie noveho zaznamu v tabulke columns
+      fill_column(header_id,data[0])
+      #Naplnenie vyplnenej tabulky
+      fill_storage(name_of_data_table,data)
+      #Zisti typy columnov
+      # NamedEntity.new.def_types(dataset.id)
   end
-
-
-
 
  private
  def control_file_format(path)
    number_of_last_occurence_dots=path.rindex('.')
    format = path[number_of_last_occurence_dots,path.length]
    puts format
-
-   if format =='.csv'
-      return 0
-   else
-     return 1
+   if format !='.csv'
+      cmd = "rm #{path}"
+      CMDInterface.new.Exec_command(cmd)
+      raise "Dataset is not .csv file"
    end
  end
 
@@ -75,10 +51,8 @@ class TableFactory
     begin
      dataset.update(:"#{name}" => stor)                 
     rescue Exception => e
-        puts "Update chrashed. Error #{$!}"
-       return 1               
+      raise "Update chrashed. Error #{$!}"
     end
-    return 0                
   end
 
   private
@@ -89,8 +63,7 @@ class TableFactory
     header = csv[0]
     puts header
     rescue
-      puts "Path to the dataset is wrong. Error: #{$!}"
-      return 1
+      raise "Path to the dataset is wrong. Error: #{$!}"
     end
     return csv
   end
@@ -111,10 +84,8 @@ class TableFactory
       new_record.save! 
     end
     rescue
-      puts "Process crashed during insert new records into #{name_of_dataset}. Error #{$!}"
-      return 1
+      raise "Process crashed during insert new records into #{name_of_dataset}. Error #{$!}"
     end
-      return 0
   end
 
   private
@@ -138,16 +109,13 @@ class TableFactory
       new_column.save!
     end
     rescue
-      puts "Process chrashed during insert new records into Columns table.Error #{$!}"
-      return 1
+      raise "Process chrashed during insert new records into Columns table.Error #{$!}"
     end
-    return 0
   end
 
  private
   def create_table(name_of_data_table,header)
-    flag1 = table_creator(name_of_data_table,method(:column_factory),header)
-    return flag1
+    table_creator(name_of_data_table,method(:column_factory),header)
   end
 
   def table_creator(name,function,header)
@@ -159,10 +127,8 @@ class TableFactory
         end
       end
     rescue
-      puts "Table wasn`t created. Error #{$!}"
-      return 1
+      raise "Table wasn`t created. Error #{$!}"
     end
-    return 0
   end
 
   private
