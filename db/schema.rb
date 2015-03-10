@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150307203642) do
+ActiveRecord::Schema.define(version: 20150310095728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20150307203642) do
     t.string   "filehash"
     t.string   "originuri"
     t.string   "downloadstatus",    limit: 1
+    t.integer  "downloadProgress"
   end
 
   add_index "datasets", ["user_id", "created_at"], name: "index_datasets_on_user_id_and_created_at", using: :btree

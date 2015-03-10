@@ -3,14 +3,26 @@ require 'digest/md5'
 require 'table_factory.rb'
 require 'analyze_function.rb'
 require 'sample_analyzer'
+require 'logger'
+require 'io/console'
 
 
 class FileTypeError < Exception
 end
 
+class FileSizeExceedsQuota < Exception
+end
+
+class CannotAccessToUrl < Exception
+end
+
+
 class WorkFlow
+
   def start(dataset)
-    puts "dataset being downloaded"
+    @logger = Logger.new(STDOUT)
+    @logger.level = Logger::DEBUG
+    @logger.debug "dataset being downloaded"
     @dataset = dataset
     begin
       download
@@ -29,7 +41,7 @@ class WorkFlow
 
   def download
     #Select dataset from database by origin_uri
-    dataset_already_exists = Dataset.where(originuri: @dataset.link).length > 0
+    #dataset_already_exists = Dataset.where(originuri: @dataset.link).length > 0
 
     #Prepare enviroment variables
     origin_uri = URI(@dataset.link)
@@ -40,14 +52,17 @@ class WorkFlow
     currentDownloadAttempt = 1
     numberOfDownloadAttemptsBeforeFailure = Settings.numberOfDownloadAttemptsBeforeFailure
     delayBetweenAnotherDownloadAttempt = Settings.delayBetweenAnotherDownloadAttempt
+    @fileMaxSizeInBytes = Settings.fileMaxSizeInBytes
+    @fileToBeWrittenInto = nil
 
     #if !dataset_already_exists
     #Dataset does not already exists
 
     begin
 
-      if (!origin_uri.host)
-        raise TypeError, "Wrong URL"
+      if (origin_uri == nil)
+        puts origin_uri.host + " " + @dataset.link
+        raise CannotAccessToUrl, "Provided url is not Url"
       end
 
       @totalSize = 0
@@ -60,17 +75,33 @@ class WorkFlow
         response = http.request_head(origin_uri)
         @totalSize = response['content-length'].to_i
 
+        if(! response.kind_of? Net::HTTPSuccess)
+          raise CannotAccessToUrl, response.code
+        end
+        if(@totalSize > @fileMaxSizeInBytes)
+          @logger.warn "File size: #@totalSize exceeds allowed quota #@fileMaxSizeInBytes"
+          raise FileSizeExceedsQuota, "File size: #@totalSize exceeds allowed quota #@fileMaxSizeInBytes"
+        end
         if (!(response['content-type'].include? "text/csv") && !(response['content-type'].include? "text/plain"))
+          @logger.warn "File has wrong content type: " + response['content-type']
           raise FileTypeError, response['content-type']
         end
 
+        lastWrittenPercentualProgress = 0;
         http.request request do |response|
           #We need to open file for binary write
           File.open(target_uri, "wb+") do |f|
             response.read_body do |chunk|
               f.write(chunk)
               @counter += chunk.length
-              puts "chunk: #@counter  / of total: #@totalSize"
+              currentProgress = (@counter.to_f/@totalSize*100).round
+              @logger.debug "chunk: #@counter  / of total: #@totalSize in percent:"  + currentProgress.to_s
+              if(currentProgress / 10 > lastWrittenPercentualProgress / 10)
+                lastWrittenPercentualProgress = currentProgress
+                @dataset.downloadProgress = currentProgress;
+                @dataset.save
+                @logger.debug "Download progress has been written to db: " + @dataset.downloadProgress.to_s + " %"
+              end
             end
           end
         end
@@ -83,45 +114,32 @@ class WorkFlow
       @dataset.storage = target_uri
       @dataset.downloadstatus = 1
       @dataset.originuri = @dataset.link
+      @dataset.save
 
-      if @dataset.save
-
-        # TableFactory.new.builder(@dataset)
-
-        # flash[:success] = 'Dataset successfully downloaded :) ' + @dataset.link + " " + dataset_already_exists.to_s
-        # return 'Dataset successfully downloaded :) ' + @dataset.link + " " + dataset_already_exists.to_s
-        # redirect_to root_path
-        #   return
-      else
-        raise 'Database insertion during download phase failed ' + @dataset.link
-        #   # render 'new'
-      end
-
-    rescue TypeError => e
-      puts 'URL seems to be invalid : ' + @dataset.link
-      raise 'URL: "' + @dataset.link + '" you provided seems to be invalid :( '
+        # rescue TypeError => e
+        #   raise 'URL: "' + @dataset.link + '" you provided seems to be invalid :( ' + e.message
+    rescue FileSizeExceedsQuota => q
+      @logger.warn q.message
+      raise FileSizeExceedsQuota, q.message
     rescue FileTypeError => p
-      puts 'Downloaded file is not csv file type: ' + p.message
+      @logger.warn 'Downloaded file is not csv file type: ' + p.message
       raise 'Downloaded file is not csv file type: ' + p.message
+    rescue CannotAccessToUrl => k
+      @logger.warn 'Cannot access to provided url: ' + @dataset.link + ' ; reason: ' + k.message
+      raise 'Cannot access to provided url: ' + @dataset.link + ' ; reason: ' + k.message
     rescue SocketError => r
-      puts 'Cannot connect to server: ' + @dataset.link
+      @logger.warn 'Cannot connect to server: ' + @dataset.link
       if currentDownloadAttempt < numberOfDownloadAttemptsBeforeFailure
         currentDownloadAttempt+=1
-        puts "Going to sleep before another download attempt"
+        @logger.debug "Going to sleep before another download attempt"
         sleep delayBetweenAnotherDownloadAttempt * currentDownloadAttempt
-        puts "Woken up from sleep before another download attempt"
+        @logger.debug "Woken up from sleep before another download attempt"
         retry
       end
       raise 'Cannot connect to server: ' + @dataset.link
+      ensure
+        # Always will be executed
     end
-    # else
-    #   #Dataset already exists
-    #   existing_dataset = Dataset.where(originuri: @dataset.link)[0]
-    #   # TODO We need to create new mapping table dataset:user
-    #
-    #   flash[:success] = 'Dataset has not been downloaded, already exists :) '
-    #   redirect_to root_path
-    # end
   end
 
   def pred_processing

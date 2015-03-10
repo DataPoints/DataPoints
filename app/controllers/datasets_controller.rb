@@ -18,7 +18,7 @@ class DatasetsController < ApplicationController
 
     WorkFlow.new.delay.start(@dataset)
     flash[:info] = 'Dataset sa spracovava...'
-    redirect_to root_path
+    redirect_to datasets_path
   end
 
   def update
@@ -29,6 +29,7 @@ class DatasetsController < ApplicationController
       render 'edit'
     end
   end
+
   def index
     # @dataset = Dataset.find(params[:id])
     @Datasets = Dataset.where.not(status: 'N').where(user_id: current_user.id, deleted: false).first(10)
