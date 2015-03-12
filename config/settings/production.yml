@@ -2,3 +2,6 @@ dataset_target_path : "/home/rails/temp"
 numberOfDownloadAttemptsBeforeFailure : 3
 delayBetweenAnotherDownloadAttempt : 10
 fileMaxSizeInBytes : 1000000
+dbName : 'Skola_production'
+dbUsername : 'martin'
+dbPassword : 'heslo'

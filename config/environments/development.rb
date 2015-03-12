@@ -50,12 +50,4 @@ Rails.application.configure do
   RECAPTCHA_PRIVATE_KEY = '6LcDi_0SAAAAAIDZOiNvsmn9z5xct2YwakuDjGyg'
 
   config.log_level = :warn
-
-  # added local variables /Martin
-  config.before_configuration do
-    env_file = File.join(Rails.root, 'config', 'local_env.yml')
-    YAML.load(File.open(env_file)).each do |key, value|
-      ENV[key.to_s] = value
-    end if File.exists?(env_file)
-  end
 end

@@ -18,7 +18,11 @@ def r_analyze_dataset(dataset)
   # Thread.new do
     dataset_id = dataset.id
     path = dataset.storage
-    cmd = "Rscript app/lib/r/analyze.R #{path} #{dataset_id}"
+    dbName = Settings.dbName
+    dbUsername = Settings.dbUsername
+    dbPassword = Settings.dbPassword
+    cmd = "Rscript app/lib/r/analyze.R #{path} #{dataset_id} #{dbName} #{dbUsername} #{dbPassword}"
+    puts cmd
     CMDInterface.new.Exec_command(cmd)
   # end
 end
