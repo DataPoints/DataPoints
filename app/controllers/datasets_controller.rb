@@ -69,6 +69,7 @@ class DatasetsController < ApplicationController
     @columns = @headers.first.columns.all.order(:id)
     @coordinates = Coordinate.all
     @types = Type.all
+    @summaries = Summary.all
 
     name_of_dataset_data_table = @dataset.data_table_name
     @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
@@ -106,7 +107,7 @@ class DatasetsController < ApplicationController
       for i in 1..@data.count do
         name_of_town = @data.find(i)[Column.find(params[:column_id]).label]
         if Coordinate.find_by_mesto(name_of_town).nil?
-          sleep(0.25) #kvoli prekroceniu limitu za sekundu requestov na google
+          sleep(0.25) # kvoli prekroceniu limitu za sekundu requestov na google
           coordinates = Geocoder.coordinates(name_of_town)
           coordinate_to_save = Coordinate.new
           coordinate_to_save.lat=coordinates[0]

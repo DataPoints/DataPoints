@@ -148,26 +148,28 @@
     <td><%= @dataset.description %></td>
   </tr>
   <tr>
-    <td><b>Dataset created_at: </b></td>
+    <td><b>Dataset created at: </b></td>
     <td><%= @dataset.created_at.strftime('%d %b %H:%M') %></td>
   </tr>
   <tr>
-    <td><b>Dataset updated_at: </b></td>
+    <td><b>Dataset updated at: </b></td>
     <td><%= @dataset.updated_at.strftime('%d %b %H:%M') %></td>
   </tr>
   <tr>
-    <td><b>Dataset analyzed_progress: </b></td>
+    <td><b>Dataset analyzed progress: </b></td>
     <td> <%= @dataset.analyzed_progress %></td>
   </tr>
   <tr>
-    <td><b>Dataset pocet riadkov: </b></td>
+    <td><b>Dataset number of rows: </b></td>
     <td> <%= @data.count %></td>
   </tr>
 </table>
 
 <br><br><br>
 
+<!-- table of data with changing header type -->
 <table class="table table-striped table-bordered" style="margin-left: 50px;">
+  <!-- changing header type -->
   <tr>
     <td></td>
     <% @columns.each do |column| %>
@@ -180,11 +182,13 @@
         </td>
     <% end %>
   </tr>
+  <!-- header line -->
   <tr>
     <% for i in 0..@names_of_data_columns.count %>
         <th><%= @names_of_data_columns[i] %></th>
     <% end %>
   </tr>
+  <!-- generating matrix of data -->
   <% for i in 1..@number_of_data_rows do %>
       <% data_row = @data.find(i) %>
       <tr>
@@ -193,6 +197,22 @@
         <% end %>
       </tr>
   <% end %>
+  <!-- summary for each column -->
+  <tr>
+    <td><strong>MIN<br>MAX<br>MEAN<br>MEDIAN</strong></td>
+    <% @columns.each do |column| %>
+        <td>
+          <% @summaries.each do |summary| %>
+              <% if (summary.dataset_id == @dataset.id) and (summary.header == column.label) %>
+                  <%= summary.min %><br>
+                  <%= summary.max %><br>
+                  <%= summary.mean %><br>
+                  <%= summary.median %><br>
+              <% end %>
+          <% end %>
+        </td>
+    <% end %>
+  </tr>
 </table>
 
 <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
