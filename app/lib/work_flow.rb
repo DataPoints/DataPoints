@@ -29,10 +29,10 @@ class WorkFlow
       pred_processing
       find_type
       r_scripts
-      @dataset.status = 'OK'
+      @dataset.status = 'P'
       @dataset.save
     rescue Exception => e
-      @dataset.status = 'N'
+      @dataset.status = 'E'
       puts e.to_s
       @dataset.save
       # @dataset.user.send_error_email(e.to_s)

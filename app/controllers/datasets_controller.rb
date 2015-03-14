@@ -14,7 +14,9 @@ class DatasetsController < ApplicationController
   def create
     #Bind dataset variable with values from form data
     @dataset = current_user.datasets.build(dataset_params)
+    @dataset.status = 'S'
     @dataset.save
+
 
     WorkFlow.new.delay.start(@dataset)
     flash[:info] = 'Dataset sa spracovava...'
@@ -32,19 +34,20 @@ class DatasetsController < ApplicationController
 
   def index
     # @dataset = Dataset.find(params[:id])
-    @Datasets = Dataset.where.not(status: 'N').where(user_id: current_user.id, deleted: false).first(10)
-    @AnalyzedDatasets = Dataset.where(user_id: current_user.id, deleted: false, analyzed_progress: 0).first(10)
+    @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
 
     @Types = { }
     @Datasets.each do |dataset|
       @Types[dataset.id] = []
-      @Dataset  = Dataset.find(dataset.id)
-      header    = dataset.headers.all
-      columns   = header.first.columns.all.order(:id)
+      if dataset.status == 'P' || dataset.status == 'A'
+        @Dataset  = Dataset.find(dataset.id)
+        header    = dataset.headers.all
+        columns   = header.first.columns.all.order(:id)
 
-      columns.each do |column|
-        if !column.type_id.blank?
-          @Types[dataset.id] << Type.find(column.type_id).name
+        columns.each do |column|
+          if !column.type_id.blank?
+            @Types[dataset.id] << Type.find(column.type_id).name
+          end
         end
       end
     end

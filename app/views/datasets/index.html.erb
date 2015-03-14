@@ -12,6 +12,7 @@
       <th scope="col">Created </th>
       <th scope="col">Updated </th>
       <th scope="col">Types </th>
+      <th scope="col">Analysys progress </th>
     </tr>
 
     <%i=0%>
@@ -21,7 +22,14 @@
           <td><%=i%></td>
           <td type="edit"><%= dataset.name %></td>
           <td type="edit"><%= dataset.description %></td>
-          <td><%= dataset.status %></td>
+          <td>
+            <% case dataset.status
+                 when 'P' %><span class="label label-success">Success downloaded</span>
+                <% when 'A' %><span class="label label-primary">Analyzed</span>
+                <% when 'S' %><span class="label label-info">In process</span>
+                <% when 'E' %> <span class="label label-danger">Error</span>
+            <% end %>
+          </td>
           <td><%= dataset.created_at.strftime("%d %b %H:%M") %></td>
           <td><%= dataset.updated_at.strftime("%d %b %H:%M") %></td>
           <td>
@@ -31,10 +39,11 @@
                 <%= type %>,
               <% end %>
             <% else %>
-                There are no types defined for this dataset.<br />
-                Edit them in
-                <%= link_to 'Detail', dataset %>
+                There are no types defined for this dataset
             <% end %>
+          </td>
+          <tds>
+            <%= dataset.analyzed_progress.to_s + "%"%>
           </td>
           <td><%= link_to 'Destroy', dataset_path(dataset),
                           method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -54,38 +63,14 @@
             </div><!-- /.modal-dialog -->
           </div><!-- /.modal -->
           </td>
-          <td><%= link_to 'Detail', dataset %></td>
+          <td>
+            <% if dataset.status == 'P' or dataset.status == 'A'%>
+                <%= link_to 'Detail', dataset %>
+            <% else %>
+                Detail
+            <% end %>
+          </td>
       </tr>
     <%end%>
-  </table>
-</div>
-
-<br /><br />
-
-<div class="panel panel-default wrapper">
-  <!-- Default panel contents -->
-
-  <div class="panel-heading title whiteBg">Your Analyzed Datasets</div>
-  <table border="0" class="table">
-    <tr>
-      <th scope="col">N</th>
-      <th scope="col">Name </th>
-      <th scope="col">Description </th>
-      <th scope="col">Analysys progress </th>
-    </tr>
-
-    <%i=0%>
-    <% @AnalyzedDatasets.each do |dataset| %>
-        <tr>
-          <%i=i+1%>
-          <td><%=i%></td>
-          <td type="edit"><%= dataset.name %></td>
-          <td type="edit"><%= dataset.description %></td>
-          <td>
-            <%= dataset.analyzed_progress%>
-            <%= raw "%" %>
-          </td>
-        </tr>
-    <% end %>
   </table>
 </div>
