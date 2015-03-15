@@ -2,7 +2,7 @@ library(RPostgreSQL)
 
 # funkcia nacita ulozeny csv subor do framu
 readCSV = function(f){
-	csv <- read.csv(file=f, sep=";")
+	csv <- read.csv(file=f, sep=";", check.names=FALSE)
 	return(csv)
 }
 
@@ -19,9 +19,9 @@ analyze = function(csv){
 }
 
 # funkcia vezme summary frame a vlozi jeho hodnoty do tabulky
-DBinsert = function(summary, dataset_id){
+DBinsert = function(summary, dataset_id, dbName, dbUsername, dbPassword){
 	drv <- dbDriver("PostgreSQL")
-	con <- dbConnect(drv, dbname="Skola_development")
+	con <- dbConnect(drv, dbname=dbName, user= dbUsername, password=dbPassword)
 	ncols <- dim(summary)[2]
 
 	for (i in 1:ncols){
@@ -34,12 +34,15 @@ DBinsert = function(summary, dataset_id){
 	return(0)
 }
 
-# vezme argumenty path a id
+# vezme argumenty csv.path, dataset.id, dbName, dbUsername a dbPassword
 args <- commandArgs(trailingOnly = TRUE)
 path <- args[1] #v ruby datasets.storage
 dataset_id <- as.integer(args[2]) # v ruby datasets.id
+dbName <- args[3]
+dbUsername <- args[4]
+dbPassword <- args[5] 
 
 # zavola funkcie vyssie popisane
 csv <- readCSV(path)
 summary <- analyze(csv)
-DBinsert(summary, dataset_id)
+DBinsert(summary, dataset_id, dbName, dbUsername, dbPassword)
