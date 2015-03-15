@@ -2,6 +2,3 @@ dataset_target_path : "/home/martin/"
 numberOfDownloadAttemptsBeforeFailure : 3
 delayBetweenAnotherDownloadAttempt : 10
 fileMaxSizeInBytes : 1000000
-dbName : 'Skola_development'
-dbUsername : 'martin'
-dbPassword : 'heslo'
