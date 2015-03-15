@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :admin do
+  get 'dashboard/index'
+  end
+
   root 'home#index'
   get 'datasets/new'
   get 'datasets/change_type' => 'datasets#change_type'
@@ -12,6 +16,11 @@ Rails.application.routes.draw do
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
+  namespace :admin do
+    get 'dashboard' => 'dashboard#index'
+    resources :users
+  end
+  
   resources :users
   resources :datasets
   resources :account_activations, only: [:edit]
