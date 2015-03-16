@@ -54,3 +54,9 @@ gem 'appmonitor'
 
 gem 'gmaps4rails'
 gem 'geocoder'
+
+gem "rails_config"
+gem 'delayed_job_active_record'
+gem "daemons"
+
+gem 'kaminari'

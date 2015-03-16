@@ -34,7 +34,7 @@
 
     <!-- NAVIGATION -->
     <nav class="navbar navbar-default" role="navigation">
-      <div class="container-fluid">
+      <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsed-nav">
@@ -67,47 +67,51 @@
     </nav>
 
     <!-- MAIN CONTENT -->
-    <main class="text-center">
+    <main class="container text-center">
       <% flash.each do |message_type, message| %>
           <div class="alert alert-<%= message_type %>"><%= message %></div>
       <% end %>
       <%= yield %>
     </main>
 
+    <br /><br />
+
     <div id="push"></div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="row">
+  <div class="container">
+      <div class="row">
 
-    <!-- NAVIGATION -->
-    <div class="col-md-6">
-        <nav>
-           <%= link_to'Home', root_path %> |
-           <%= link_to'About Us', about_us_path %> |
-          <% if logged_in? %>
-               <%= link_to'Add Dataset', datasets_new_path %> |
-              <%= link_to 'Your datasets', datasets_path %> |
-              <%= link_to "Profile", edit_user_path(current_user) %> |
-              <%= link_to'Log out', logout_url, method: 'delete' %> |
-        <% else %>
-               <%= link_to 'Register', signup_path, method: :get %> |
-              <%= link_to 'Log in', login_path %> |
-        <% end %>
-           <%= link_to'Contact', contact_us_path %>
-        </nav>
-        <!-- COPYRIGHT -->
-        <p class="copyright">
-          Copyright © 2014 Team No.3. All rights reserved
-        </p>
-    </div>
+        <!-- NAVIGATION -->
+        <div class="col-md-6">
+            <nav>
+               <%= link_to'Home', root_path %> |
+               <%= link_to'About Us', about_us_path %> |
+              <% if logged_in? %>
+                   <%= link_to'Add Dataset', datasets_new_path %> |
+                  <%= link_to 'Your datasets', datasets_path %> |
+                  <%= link_to "Profile", edit_user_path(current_user) %> |
+                  <%= link_to'Log out', logout_url, method: 'delete' %> |
+            <% else %>
+                   <%= link_to 'Register', signup_path, method: :get %> |
+                  <%= link_to 'Log in', login_path %> |
+            <% end %>
+               <%= link_to'Contact', contact_us_path %>
+            </nav>
+            <!-- COPYRIGHT -->
+            <p class="copyright">
+              Copyright © 2014 Team No.3. All rights reserved
+            </p>
+        </div>
 
-    <!-- FIIT LOGO -->
-    <div class="col-md-6">
-        <%= link_to image_tag('stu-fiit-logo.jpg', :size => '134, 55'), "http://www.fiit.stuba.sk/", :class => "fiit"%>
-    </div>
+        <!-- FIIT LOGO -->
+        <div class="col-md-6">
+            <%= link_to image_tag('stu-fiit-logo.jpg', :size => '134, 55'), "http://www.fiit.stuba.sk/", :class => "fiit"%>
+        </div>
 
+      </div>
   </div>
 </footer>
 

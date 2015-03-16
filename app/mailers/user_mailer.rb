@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default from: "noreply@example.com"
+  default from: "noreply@datapoints.com"
 
   def account_activation(user)
     @user = user
@@ -9,5 +9,11 @@ class UserMailer < ActionMailer::Base
   def password_reset(user)
     @user = user
     mail to: user.email, subject: "Password reset"
+  end
+
+  def error_mail(user, error)
+    @user = user
+    @error = error
+    mail to: user.email, subject: "Nastala chyba"
   end
 end

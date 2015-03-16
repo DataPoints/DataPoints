@@ -1,30 +1,35 @@
 Rails.application.routes.draw do
-  get 'contact_us/index'
-
-  get 'contact/index'
-
-  get 'about_us/index'
+  namespace :admin do
+  get 'dashboard/index'
+  end
 
   root 'home#index'
   get 'datasets/new'
   get 'datasets/change_type' => 'datasets#change_type'
+  get 'datasets/start_analyze' => 'datasets#start_analyze'
   get 'datasets/change_X_Y' => 'datasets#change_X_Y'
   get 'datasets/show' =>'datasets#show'
   get 'home/index'
   get 'signup' => 'users#new'
   get 'login' => 'sessions#new'
   get 'datasets/detail' => 'datasets#detail'
-  get 'about_us/index' => 'about_us#index'
-  get 'contact_us/index' => 'contact_us#index'
+  get 'contact_us/index'
+  get 'contact/index'
+  get 'about_us/index'
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
+  namespace :admin do
+    get 'dashboard' => 'dashboard#index'
+    resources :users
+  end
+  
   resources :users
   resources :datasets
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
-  resources :about_us
   resources :contact_us
+  resources :about_us
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -53,6 +53,12 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     colorize (0.7.3)
+    daemons (1.1.9)
+    delayed_job (4.0.4)
+      activesupport (>= 3.0, < 4.2)
+    delayed_job_active_record (4.0.2)
+      activerecord (>= 3.0, < 4.2)
+      delayed_job (>= 3.0, < 4.1)
     erubis (2.7.0)
     execjs (2.2.2)
     foreigner (1.6.1)
@@ -71,6 +77,9 @@ GEM
       railties (>= 3.1.0)
       turbolinks
     json (1.8.1)
+    kaminari (0.16.3)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     mime-types (2.4.3)
@@ -148,6 +157,8 @@ DEPENDENCIES
   bootstrap-sass (~> 3.2.0)
   capistrano-rails
   coffee-rails (~> 4.0.0)
+  daemons
+  delayed_job_active_record
   foreigner
   geocoder
   gmaps4rails
@@ -155,6 +166,7 @@ DEPENDENCIES
   jquery-rails
   jquery-turbolinks
   json
+  kaminari
   pg
   rails (= 4.1.6)
   rails_config

@@ -5,8 +5,8 @@
 
 class NamedEntity
 
-  public
   def def_types(dataset_id)
+    puts dataset_id
     @dataset                    = Dataset.find(dataset_id)
     @headers                    = Header.find_by(dataset_id: @dataset.id)
     name_of_dataset_data_table  = @dataset.data_table_name
