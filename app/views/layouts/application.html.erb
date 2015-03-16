@@ -30,78 +30,90 @@
 </head>
 <body>
 
-<!-- HOLDER -->
-<div id="holder">
-  <!-- HEADER -->
-  <header>
-    <!-- WRAPPER -->
-    <div class="wrapper">
-      <!-- LOGO -->
-      <%= link_to image_tag('logo.png', :size => '274, 100'), root_path, :id => "header-logo" %>
+<div id="wrap">
 
-      <!-- NAVIGATION -->
-      <nav>
-        <%= link_to "Home", root_path %>
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsed-nav">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <%= link_to image_tag('logo.png', :size => '220, 80'), root_path, :id => "header-logo" %>
+        </div>
 
-        <% if logged_in? %>
-           <%= link_to'Add Dataset',   datasets_new_path %>
-           <%= link_to 'Your datasets', datasets_path %>
-            <%= link_to "Profile",      edit_user_path(current_user) %>
-            <%= link_to'Log out',      logout_url, method: 'delete' %>
-        <% else %>
-            <%= link_to 'Register',     signup_path, method: :get %>
-            <%= link_to 'Log in',       login_path %>
-        <% end %>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="collapsed-nav">
+          <ul class="nav navbar-nav navbar-right">
+            <li><%= link_to'Home', root_path %></li>
+            <li><%= link_to'About Us', about_us_path %></li>
+            <% if logged_in? %>
+                <li><%= link_to'Add Dataset', datasets_new_path %></li>
+                <li><%= link_to 'Your datasets', datasets_path %></li>
+                <li><%= link_to "Profile", edit_user_path(current_user) %></li>
+                <li><%= link_to'Log out', logout_url, method: 'delete' %></li>
+            <% else %>
+                <li><%= link_to 'Register', signup_path, method: :get %></li>
+                <li><%= link_to 'Log in', login_path %></li>
+            <% end %>
+            <li><%= link_to'Contact', contact_us_path %></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-      </nav>
-    </div>
+    <!-- MAIN CONTENT -->
+    <main class="container text-center">
+      <% flash.each do |message_type, message| %>
+          <div class="alert alert-<%= message_type %>"><%= message %></div>
+      <% end %>
+      <%= yield %>
+    </main>
 
-    <hr />
-  </header>
+    <br /><br />
 
-  <main>
-    <% flash.each do |message_type, message| %>
-        <div class="alert alert-<%= message_type %>"><%= message %></div>
-    <% end %>
-     <%= yield %>
-  </main>
-
-
-  <!-- FOOTER PUSHER -->
-  <div id="push"></div>
-
+    <div id="push"></div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="wrapper">
+  <div class="container">
+      <div class="row">
 
-    <!-- NAVIGATION -->
-    <nav>
-      <%= link_to "Home", root_path %>
+        <!-- NAVIGATION -->
+        <div class="col-md-6">
+            <nav>
+               <%= link_to'Home', root_path %> |
+               <%= link_to'About Us', about_us_path %> |
+              <% if logged_in? %>
+                   <%= link_to'Add Dataset', datasets_new_path %> |
+                  <%= link_to 'Your datasets', datasets_path %> |
+                  <%= link_to "Profile", edit_user_path(current_user) %> |
+                  <%= link_to'Log out', logout_url, method: 'delete' %> |
+            <% else %>
+                   <%= link_to 'Register', signup_path, method: :get %> |
+                  <%= link_to 'Log in', login_path %> |
+            <% end %>
+               <%= link_to'Contact', contact_us_path %>
+            </nav>
+            <!-- COPYRIGHT -->
+            <p class="copyright">
+              Copyright © 2014 Team No.3. All rights reserved
+            </p>
+        </div>
 
-      <% if logged_in? %>
-          <%= link_to 'Add Dataset',    datasets_new_path %>
-          <%= link_to 'Your datasets',  datasets_path %>
+        <!-- FIIT LOGO -->
+        <div class="col-md-6">
+            <%= link_to image_tag('stu-fiit-logo.jpg', :size => '134, 55'), "http://www.fiit.stuba.sk/", :class => "fiit"%>
+        </div>
 
-          <%= link_to 'Log out',        logout_url, method: 'delete' %>
-      <% else %>
-          <%= link_to 'Register',     signup_path %>
-          <%= link_to 'Log in',       login_path %>
-      <% end %>
-    </nav>
-
-    <!-- COPYRIGHT -->
-    <p class="copyright">
-      Copyright © 2014 Team No.3. All rights reserved
-    </p>
-
-    <!-- FIIT LOGO -->
-    <%= link_to image_tag('stu-fiit-logo.jpg', :size => '134, 55'), "http://www.fiit.stuba.sk/", :class => "fiit"%>
-
+      </div>
   </div>
 </footer>
 
-</div>
 </body>
 </html>

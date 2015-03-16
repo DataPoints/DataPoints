@@ -1,11 +1,7 @@
 /*CSS FILE*/
 
-form{
-    position: relative;
-    text-align: center !important;
-}
-
 label{
+    disply: inline-block;
     padding: 4px 10px 4px 10px;
 
     background: #f46430;
@@ -20,7 +16,7 @@ label.checkbox{
     /*DISCUSS WITH TEAM*/
 }
 
-form input, select, form textarea{
+form input:not([type=hidden]), form textarea{
     margin: 0 0 15px 0;
 
     width: 350px;
@@ -29,7 +25,6 @@ form input, select, form textarea{
     background: #f3f3f3;
     border: 1px solid #d2d2d2;
     font-size: 14px;
-    text-transform: uppercase;
     font-style: italic;
     color: #8b8b8b;
     -webkit-box-sizing: border-box;
@@ -73,17 +68,6 @@ form input[type=submit]{
 
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
-}
-
-form input[type=submit]:hover{
-    background: #272727;
-    color: #fff;
-}
-
-form input[type=checkbox]{
-    display: block;
-    width: auto !important;
-    border: 10px solid #000;
 }
 
 .inline-small{
