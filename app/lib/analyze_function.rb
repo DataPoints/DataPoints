@@ -7,20 +7,23 @@ require 'cmd_interface'
 class AnalyzeFunction
 
 def r_clean_dataset(dataset)
-  # Thread.new do
     path = dataset.storage
     cmd = "Rscript app/lib/r/cleanData.R #{path}"
     CMDInterface.new.Exec_command(cmd)
-  # end
 end
 
 def r_analyze_dataset(dataset)
-  # Thread.new do
     dataset_id = dataset.id
     path = dataset.storage
-    cmd = "Rscript app/lib/r/analyze.R #{path} #{dataset_id}"
+
+    config   = Rails.configuration.database_configuration
+    dbName = config[Rails.env]["database"]
+    dbUsername = config[Rails.env]["username"]
+    dbPassword = config[Rails.env]["password"]
+
+    cmd = "Rscript app/lib/r/analyze.R #{path} #{dataset_id} #{dbName} #{dbUsername} #{dbPassword}"
+    puts cmd
     CMDInterface.new.Exec_command(cmd)
-  # end
 end
 
  def analyze_dataset
