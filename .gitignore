@@ -23,4 +23,7 @@ config/environments/*.local.yml
 # Ignore rubymine config files
 /.idea
 /.idea/*
->>>>>>> remotes/origin/dev
+>>>>>>> remotes/origin/
+
+config/environments/*.rb
+config/settings/*.yml
