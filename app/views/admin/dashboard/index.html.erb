@@ -1,22 +1,27 @@
-<%= link_to 'Back', root_path, style: 'left: 35px', class: 'btn btn-default' %><br>
+<h1>Zoznam používateľov</h1>
+<br />
 
-
-<h1>Admin::Zoznam používateľov</h1>
-
-<table class="table">
-	<th>Meno</th>
-	<th>Email</th>
-	<% @users.each do |u| %>
-		<tr>
-			<td>
-		    	<%= u.name %>
-		    </td>
-		    <td>
-		    	<%= u.email %>
-		    </td>
-		</tr>
-	<% end %>
+<table class="table" style="color:white">
+  <th>Meno</th>
+  <th>Email</th>
+  <th>Action</th>
+  <% @users.each do |u| %>
+      <tr>
+        <td>
+          <%= u.name %>
+        </td>
+        <td>
+          <%= u.email %>
+        </td>
+        <td>
+          <%= link_to 'Destroy',
+                      url_for(:controller => 'admin/dashboard', :action => 'destroy', :id => u.id),
+                      method: :delete,
+                      data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+  <% end %>
 </table>
 <div>
-	<%= paginate @users %> 
+  <%= paginate @users %>
 </div>

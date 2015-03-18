@@ -12,3 +12,11 @@ Type.create(name: 'Dátum')
 Type.create(name: 'Číslo')
 Type.create(name: 'Miesto')
 Type.create(name: 'Osoba')
+
+User.create(
+    name: 'admin',
+    email: 'admin@admin.dp',
+    password: '00000000',
+    isAdmin: true,
+    activated: true
+)
