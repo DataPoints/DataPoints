@@ -15,14 +15,22 @@ class Admin::DashboardController < Admin::AdminController
   before_action :logged_in_user, only: [:create, :destroy]
 
   def index
-  	 @users = User.page(1)
-  	 @datasets = Dataset.page(params[:page]).per(5) 
+    @users = User.page(params[:page]).per(5)
   end
 
-  def deleteUser
-  	 userToBeDeleted = User.find(params[:id])
-  	 puts user.name
-  	 redirect_to dashboard_path
+  def destroy
+    begin
+      @user = User.find(params[:id])
+      unless @user.id == @current_user.id
+        logger.info "Deleting user: " + @user.name
+        @user.destroy
+      else
+        logger.warn "User tried to delete self via admin panel"
+      end
+    rescue ActiveRecord::RecordNotFound  => e
+    ensure
+      redirect_to url_for(:controller => 'admin/dashboard', :action => 'index')
+    end
   end
 
 end

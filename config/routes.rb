@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  namespace :admin do
-  get 'dashboard/index'
-  end
 
   root 'home#index'
   get 'datasets/new'
@@ -13,18 +10,23 @@ Rails.application.routes.draw do
   get 'signup' => 'users#new'
   get 'login' => 'sessions#new'
   get 'datasets/detail' => 'datasets#detail'
+  get 'contact_us/index'
+  get 'contact/index'
+  get 'about_us/index'
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
   namespace :admin do
-    get 'dashboard' => 'dashboard#index'
-    resources :users
+    get 'dashboard/index' => 'dashboard#index'
+    delete 'dashboard/delete/:id' => 'dashboard#destroy'
   end
   
   resources :users
   resources :datasets
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
+  resources :contact_us
+  resources :about_us
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
