@@ -30,3 +30,10 @@ User.create(
     isAdmin: true,
     activated: true
 )
+
+users=User.all
+
+users.each do |user|
+
+DatasetFactory.new.firstDataset(user.id)
+end
