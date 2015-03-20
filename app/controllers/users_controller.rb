@@ -15,7 +15,6 @@ class UsersController < ApplicationController
       #recaptcha
 
 
-
       #Docasne
       #@user.activate
       #log_in @user
@@ -38,11 +37,30 @@ class UsersController < ApplicationController
 
   def update
     @user = current_user
-    if @user.update(user_params)
-      flash[:success] = 'Profil uspesne zmeneny.'
-      redirect_to root_path
+    if params[:user][:psw] == 'true'
+      if @user.authenticate(params[:user][:old_password])
+        if @user.update(user_params)
+          flash[:success] = 'Profil uspesne zmeneny.'
+          redirect_to edit_user_path
+        else
+          render 'edit'
+        end
+      else
+        @user.errors.add(:base, "Change password zle heslo")
+        render 'edit'
+      end
     else
-      render 'edit'
+      if @user.authenticate(params[:user][:password])
+        if @user.update(user_params)
+          flash[:success] = 'Profil uspesne zmeneny.'
+          redirect_to edit_user_path
+        else
+          render 'edit'
+        end
+      else
+        @user.errors.add(:base, "Parametre zle heslo")
+        render 'edit'
+      end
     end
   end
 

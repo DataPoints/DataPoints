@@ -1,23 +1,58 @@
-<h1 class="title">Your profile</h1>
-<div>
-  <div>
-    <%= form_for(@user) do |f| %>
-        <div class=""wrapper">
-            <%= render 'shared/error_messages', object: f.object %>
-            <%= f.label :name %><br />
-            <%= f.text_field :name %><br />
+<%= render 'shared/error_messages', object: @user %>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Change parameters
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        <%= form_for @user do |f| %>
+            <div class="wrapper">
+              <%= f.label :name %><br/>
+              <%= f.text_field :name %><br/>
 
-            <%= f.label :email %><br />
-            <%= f.text_field :email %><br />
+              <%= f.label :email %><br/>
+              <%= f.text_field :email %><br/>
 
-            <%= f.label :password %><br />
-            <%= f.password_field :password %><br />
+              <%= f.label :password, 'Confirm with password' %><br/>
+              <%= f.password_field :password %><br/>
 
-            <%= f.label :password_confirmation, 'Confirm password' %><br />
-            <%= f.password_field :password_confirmation %><br />
+              <%= f.submit 'Save changes', class: '' %>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Change password
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="panel-body">
+        <%= form_for @user do |f| %>
+            <div class="wrapper">
+              <%= f.hidden_field :psw, value: true %>
+              <%= f.label :old_password %><br/>
+              <%= f.password_field :old_password %><br/>
 
-            <%= f.submit 'Update', class: '' %>
-        </div>
-    <% end %>
+              <%= f.label :password %><br/>
+              <%= f.password_field :password %><br/>
+
+              <%= f.label :password_confirmation %><br/>
+              <%= f.password_field :password_confirmation %><br/>
+
+              <%= f.submit 'Change password', class: '' %>
+            </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>

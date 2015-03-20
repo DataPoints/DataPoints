@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141208163419) do
+ActiveRecord::Schema.define(version: 20150315150209) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
 
 
   create_table "analysis_results", force: true do |t|
@@ -57,14 +56,15 @@ ActiveRecord::Schema.define(version: 20141208163419) do
     t.integer  "user_id"
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
-    t.string   "status"
-    t.boolean  "deleted",                     default: false
-    t.string   "storage"
+    t.string   "data_table_name"
     t.decimal  "analyzed_progress",           default: 0.0
+    t.boolean  "deleted",                     default: false
+    t.string   "status"
+    t.string   "storage"
     t.string   "filehash"
     t.string   "originuri"
     t.string   "downloadstatus",    limit: 1
-    t.string   "data_table_name"
+    t.integer  "downloadProgress"
   end
 
   add_index "datasets", ["user_id", "created_at"], name: "index_datasets_on_user_id_and_created_at", using: :btree
@@ -95,6 +95,15 @@ ActiveRecord::Schema.define(version: 20141208163419) do
 
   add_index "headers", ["dataset_id"], name: "index_headers_on_dataset_id", using: :btree
 
+  create_table "summaries", force: true do |t|
+    t.integer "dataset_id"
+    t.text    "header"
+    t.float   "min"
+    t.float   "max"
+    t.float   "median"
+    t.float   "mean"
+  end
+
   create_table "types", force: true do |t|
     t.string "name"
   end
@@ -111,6 +120,7 @@ ActiveRecord::Schema.define(version: 20141208163419) do
     t.datetime "activated_at"
     t.string   "reset_digest"
     t.datetime "reset_sent_at"
+    t.boolean  "isAdmin",           default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :email, presence: true, format: {with: VALID_EMAIL_REGEX}, uniqueness: {case_sensitive: false}
   has_secure_password
-  validates :password, length: {minimum: 6}
+  validates :password, length: {minimum: 6}, allow_blank: true
 
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
@@ -25,6 +25,10 @@ class User < ActiveRecord::Base
 
   def send_activation_email
     UserMailer.account_activation(self).deliver
+  end
+
+  def send_error_email(error)
+    UserMailer.error_mail(self, error).deliver
   end
 
   def create_reset_digest

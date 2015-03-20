@@ -12,80 +12,15 @@ class DatasetsController < ApplicationController
   end
 
   def create
-
     #Bind dataset variable with values from form data
     @dataset = current_user.datasets.build(dataset_params)
-
-    #Select dataset from database by origin_uri
-    dataset_already_exists = Dataset.where(originuri: @dataset.link).length > 0
-
-
-    #if !dataset_already_exists
-      #Dataset does not already exists
-
-      begin
-        #Prepare enviroment variables
-        origin_uri = URI(@dataset.link)
-        target_file = (0...50).map { ('a'..'z').to_a[rand(26)] }.join
-        target_extension = File.extname(origin_uri.path)
-        target_uri = Settings.dataset_target_path + target_file + target_extension
-
-        if(! origin_uri.host)
-          raise TypeError, "Wrong URL"
-        end
-
-        #Download dataset from given url
-        Net::HTTP.start(origin_uri.host, origin_uri.port) do |http|
-          request = Net::HTTP::Get.new origin_uri
-
-          http.request request do |response|
-            #We need to open file for binary write
-            File.open(target_uri, "wb+") do |f|
-              response.read_body do |chunk|
-                f.write(chunk)
-              end
-            end
-          end
-        end
-
-        #Create datasets hash
-        dataset_hash = Digest::MD5.hexdigest(File.read(target_uri))
-
-        @dataset.filehash = dataset_hash
-        @dataset.storage = target_uri
-        @dataset.downloadstatus = 1
-        @dataset.originuri = @dataset.link
-
-        if @dataset.save
-
-          TableFactory.new.builder(@dataset)
-
-          flash[:success] = 'Dataset successfully downloaded :) ' + @dataset.link + " " + dataset_already_exists.to_s
-          redirect_to root_path
-        else
-          flash[:failure] = 'Dataset download failed :( ' + @dataset.link
-          render 'new'
-        end
+    @dataset.status = 'S'
+    @dataset.save
 
 
-
-      rescue TypeError => e
-        flash[:fail] = 'URL: "' + @dataset.link + '" you provided seems to be invalid :( '
-        logger.warn 'URL seems to be invalid : ' + @dataset.link
-        render 'new'
-      rescue SocketError => r
-        flash[:fail] = 'Cannot connect to server: ' + @dataset.link
-        logger.warn 'Cannot connect to server: ' + @dataset.link
-        render 'new'
-      end
-    # else
-    #   #Dataset already exists
-    #   existing_dataset = Dataset.where(originuri: @dataset.link)[0]
-    #   # TODO We need to create new mapping table dataset:user
-    #
-    #   flash[:success] = 'Dataset has not been downloaded, already exists :) '
-    #   redirect_to root_path
-    # end
+    WorkFlow.new.delay.start(@dataset)
+    flash[:info] = 'Dataset sa spracovava...'
+    redirect_to datasets_path
   end
 
   def update
@@ -96,21 +31,23 @@ class DatasetsController < ApplicationController
       render 'edit'
     end
   end
+
   def index
     # @dataset = Dataset.find(params[:id])
     @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
-    @AnalyzedDatasets = Dataset.where(user_id: current_user.id, deleted: false, analyzed_progress: 0).first(10)
 
     @Types = { }
     @Datasets.each do |dataset|
       @Types[dataset.id] = []
-      @Dataset  = Dataset.find(dataset.id)
-      header    = dataset.headers.all
-      columns   = header.first.columns.all.order(:id)
+      if dataset.status == 'P' || dataset.status == 'A'
+        @Dataset  = Dataset.find(dataset.id)
+        header    = dataset.headers.all
+        columns   = header.first.columns.all.order(:id)
 
-      columns.each do |column|
-        if !column.type_id.blank?
-          @Types[dataset.id] << Type.find(column.type_id).name
+        columns.each do |column|
+          if !column.type_id.blank?
+            @Types[dataset.id] << Type.find(column.type_id).name
+          end
         end
       end
     end
@@ -135,6 +72,7 @@ class DatasetsController < ApplicationController
     @columns = @headers.first.columns.all.order(:id)
     @coordinates = Coordinate.all
     @types = Type.all
+    @summaries = Summary.all
 
     name_of_dataset_data_table = @dataset.data_table_name
     @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
@@ -172,7 +110,7 @@ class DatasetsController < ApplicationController
       for i in 1..@data.count do
         name_of_town = @data.find(i)[Column.find(params[:column_id]).label]
         if Coordinate.find_by_mesto(name_of_town).nil?
-          sleep(0.25) #kvoli prekroceniu limitu za sekundu requestov na google
+          sleep(0.25) # kvoli prekroceniu limitu za sekundu requestov na google
           coordinates = Geocoder.coordinates(name_of_town)
           coordinate_to_save = Coordinate.new
           coordinate_to_save.lat=coordinates[0]
