@@ -24,7 +24,7 @@ default: &default
 development:
   <<: *default
   database: Skola_development
-  username: 
+  username:
   password:
 
   # The specified database role being used to connect to postgres.
@@ -60,7 +60,7 @@ development:
 test:
   <<: *default
   database: Skola_test
-  username: martin
+  username:
   password:
 
 # As with config/secrets.yml, you never want to store sensitive information,
@@ -85,5 +85,5 @@ test:
 production:
   <<: *default
   database: Skola_production
-  username: martin
-  password:
+  username:
+  password: 

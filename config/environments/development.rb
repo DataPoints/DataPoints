@@ -21,8 +21,6 @@ Rails.application.configure do
       domain: 'localhost',
       user_name:
       password:
-      user_name: '',
-      password:  '',
       authentication: 'plain',
       enable_starttls_auto: true
   }
