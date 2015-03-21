@@ -11,7 +11,7 @@ class UsersController < ApplicationController
       @user.save
       @user.send_activation_email
       flash[:info] = 'Please check your email to activate your account.'
-
+      DatasetFactory.new.delay.firstDataset(@user.id)
       #recaptcha
 
 

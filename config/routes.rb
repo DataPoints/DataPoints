@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  namespace :admin do
-  get 'dashboard/index'
-  end
 
   root 'home#index'
   get 'datasets/new'
@@ -20,8 +17,8 @@ Rails.application.routes.draw do
   delete 'logout' => 'sessions#destroy'
 
   namespace :admin do
-    get 'dashboard' => 'dashboard#index'
-    resources :users
+    get 'dashboard/index' => 'dashboard#index'
+    delete 'dashboard/delete/:id' => 'dashboard#destroy'
   end
   
   resources :users
