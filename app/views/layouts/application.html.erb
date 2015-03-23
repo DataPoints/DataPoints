@@ -50,17 +50,27 @@
         <div class="collapse navbar-collapse" id="collapsed-nav">
           <ul class="nav navbar-nav navbar-right">
             <li><%= link_to'Home', root_path %></li>
-            <li><%= link_to'About Us', about_us_path %></li>
+            <!--<li><%= link_to'About Us', about_us_path %></li>-->
             <% if logged_in? %>
                 <li><%= link_to'Add Dataset', datasets_new_path %></li>
                 <li><%= link_to 'Your datasets', datasets_path %></li>
                 <li><%= link_to "Profile", edit_user_path(current_user) %></li>
+
+                <% if @current_user.isAdmin %>
+                    <li>
+                        <%= link_to 'Admin',
+                                    url_for(:controller => 'admin/dashboard', :action => 'index'),
+                                    method: :get
+                        %>
+                    </li>
+                <% end %>
+
                 <li><%= link_to'Log out', logout_url, method: 'delete' %></li>
             <% else %>
                 <li><%= link_to 'Register', signup_path, method: :get %></li>
                 <li><%= link_to 'Log in', login_path %></li>
             <% end %>
-            <li><%= link_to'Contact', contact_us_path %></li>
+            <!--<li><%= link_to'Contact', contact_us_path %></li>-->
           </ul>
         </div>
       </div>

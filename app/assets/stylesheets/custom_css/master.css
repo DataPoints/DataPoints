@@ -135,7 +135,7 @@ main{
 }
 
 .table th{
-    background: #f46430;
+    background: #f46430 !important;
     color: #ffffff;
     text-align: center;
 }
@@ -241,4 +241,13 @@ footer .fiit{
 
 .boxes .glyphicon{
     font-size: 40px;
+}
+
+/*-----------JIRA OKNO---------*/
+#jira-okno{
+    display: none;
+}
+
+#jira-okno .body{
+
 }
