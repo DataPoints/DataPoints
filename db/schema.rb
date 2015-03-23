@@ -16,7 +16,6 @@ ActiveRecord::Schema.define(version: 20150315150209) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-
   create_table "analysis_results", force: true do |t|
     t.integer  "dataset_id"
     t.json     "result"
