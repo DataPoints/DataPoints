@@ -69,7 +69,7 @@
     <!-- MAIN CONTENT -->
     <main class="container text-center">
       <% flash.each do |message_type, message| %>
-          <div class="alert alert-<%= message_type %>"><%= message %></div>
+          <div class="flash alert alert-<%= message_type %>"><%= message %></div>
       <% end %>
       <%= yield %>
     </main>
