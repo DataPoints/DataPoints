@@ -20,7 +20,7 @@ Rails.application.configure do
       port: 587,
       domain: 'localhost',
       user_name: '',
-      password:  '',
+      password: '',
       authentication: 'plain',
       enable_starttls_auto: true
   }
