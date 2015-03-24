@@ -277,7 +277,7 @@
 </div>
 
 <script>
-    $(function() {
+    function handleJiraOkno() {
         var dataTable = $("#data-table");
         var jiraOkno = $("#jira-okno");
         var closeJiraOkno = $("#close-jira-okno");
@@ -296,7 +296,6 @@
         });
         $('.body', jiraOkno).append('</table>');
 
-
         closeJiraOkno.click(function () {
             dataTable.removeClass('col-md-9');
             dataTable.addClass('col-md-12');
@@ -309,13 +308,16 @@
             jiraOkno.css({ display: 'block' });
         });
 
-        $("tr", dataTable).not('.stats').hover(function () {
+        $("tr", dataTable).not('.stats').click(function () {
             data = $("td", this);
 
             data.each(function(index){
-                $('.body tr:nth-child('+ (index+1) +') td:nth-child(2)', jiraOkno).text( $(this).text() );
+                $('.body tr:nth-child('+ (index+2) +') td:nth-child(2)', jiraOkno).text( $(this).text() );
             });
         });
+    };
 
+    $(document).ready(function(){
+        $(window).load( handleJiraOkno() );
     });
 </script>
