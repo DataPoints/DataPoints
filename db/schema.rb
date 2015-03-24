@@ -91,7 +91,8 @@ ActiveRecord::Schema.define(version: 20150316201502) do
     t.string "Ulica"
     t.string "Mesto_Obec"
     t.string "ICO"
-    t.string "Vyska_poladavky"
+    t.string "Vyska_pohladavky"
+    t.string "Typ_platitela"
   end
 
   create_table "headers", force: true do |t|
