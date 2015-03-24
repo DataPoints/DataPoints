@@ -22,6 +22,18 @@ main{
     }
 }
 
+/* flash */
+.alert{
+    position: relative;
+    z-index: 99;
+}
+
+/* carousel */
+#carousel{
+    position: relative;
+    z-index: 1;
+}
+
 /* navbar */
 .navbar-default {
     background: #f46430;
@@ -29,6 +41,7 @@ main{
     border: none;
     border-radius: 0;
     padding: 15px 40px 15px 40px;
+    z-index: 2;
 }
 /* title */
 .navbar-default .navbar-brand {
@@ -107,6 +120,11 @@ main{
     color: #f46430;
 
 
+}
+
+/* recaptcha */
+#recaptcha_area{
+    margin: 0 auto 50px auto;
 }
 
 /*tables*/
