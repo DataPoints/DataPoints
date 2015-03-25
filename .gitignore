@@ -20,6 +20,7 @@
 /.idea
 /.idea/*
 
+config/database.yml
 
 config/environments/*.rb
 config/settings/*.yml
