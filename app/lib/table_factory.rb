@@ -20,7 +20,7 @@ class TableFactory
       #Nahratie a parsovanie datasetu
       data = parsing_csv(path)
 
-      #Generice vytvorenie tabuliek
+      #Genericke vytvorenie tabuliek
       create_table(name_of_data_table,data[0])
       #Ulozenie mena datasetu do tabulky datasets
       upload_dataset_table("data_table_name",name_of_data_table,dataset)
@@ -51,19 +51,21 @@ class TableFactory
     begin
      dataset.update(:"#{name}" => stor)                 
     rescue Exception => e
-      raise "Update chrashed. Error #{$!}"
+      raise "Update crashed. Error #{$!}"
     end
   end
 
   private
   def parsing_csv(path)
     begin
-    file = File.read(path).force_encoding('Windows-1250').encode('UTF-8')
-    csv = CSV.parse(file, :col_sep => ';')
-    header = csv[0]
-    puts header
+      puts path
+      file = File.read(path)
+      puts file
+      csv = CSV.parse(file, :col_sep => ';')
+      header = csv[0]
+      puts header
     rescue
-      raise "Path to the dataset is wrong. Error: #{$!}"
+        raise "Path to the dataset is wrong. Error: #{$!}"
     end
     return csv
   end
