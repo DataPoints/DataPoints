@@ -122,7 +122,7 @@ class DatasetsController < ApplicationController
       end
     end
 
-    redirect_to datasets_path(@dataset, :anchor => 'type')
+    redirect_to dataset_path(@dataset, :anchor => 'type')
   end
 
 
