@@ -198,7 +198,7 @@
       </tr>
       <!-- header line -->
       <tr>
-        <% for i in 0..@names_of_data_columns.count-1 %>
+        <% for i in 0...@names_of_data_columns.count %>
             <th><%= @names_of_data_columns[i] %></th>
         <% end %>
       </tr>
@@ -206,14 +206,14 @@
       <% for i in 1..@number_of_data_rows do %>
           <% data_row = @data.find(i) %>
           <tr>
-            <% for j in 0..@names_of_data_columns.count-1 %>
+            <% for j in 0...@names_of_data_columns.count %>
                 <td><%= data_row[@names_of_data_columns[j]] %></td>
             <% end %>
           </tr>
       <% end %>
       <!-- summary for each column -->
       <tr class="stats">
-        <th><strong>MIN<br>MAX<br>MEAN<br>MEDIAN</strong></th>
+        <th>MIN<br>MAX<br>MEAN<br>MEDIAN</th>
         <% @columns.each do |column| %>
             <th>
               <% @summaries.each do |summary| %>
