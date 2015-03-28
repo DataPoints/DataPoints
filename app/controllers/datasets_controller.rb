@@ -5,7 +5,8 @@ require 'analyze_function.rb'
 require 'sample_analyzer'
 
 class DatasetsController < ApplicationController
-  before_action :logged_in_user, only: [:create, :destroy]
+  before_action :logged_in_user
+  before_action :correct_user, except: [:index, :new, :create]
 
   def new
     @dataset = Dataset.new
@@ -164,6 +165,13 @@ class DatasetsController < ApplicationController
     redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xData => @xData,:yData => @yData
   end
 
+  def correct_user
+    dataset = Dataset.find(params[:id])
+    if dataset.user != current_user
+      flash[:danger] = 'Permission denied.'
+      redirect_to root_path
+    end
+  end
 
   private
   def dataset_params
