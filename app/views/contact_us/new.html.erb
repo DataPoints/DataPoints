@@ -1,0 +1,50 @@
+<div class="row text-center">
+  <div class="col-md-6">
+    <h1>Contact us</h1>
+    <p>
+      We're here to answer any question you may have about our project. Reach out to us and we'll respond as soon as we can.
+      <br /><br />
+      Even if there is something you have always wanted to experience and can't find it on our project, let us know and we promise we'll do our best to find it for you and send you that.
+    </p>
+
+    <%= form_for @contact_us, :url => { :action => "create" }, :html => { :method => :post } do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+        <div class="row">
+          <div class="col-md-6">
+           <%= f.label "Name" %><br>
+           <%= f.text_field :sender_name, style: 'width: 100%', value: 'Your whole name' %><br>
+          </div>
+
+          <div class="col-md-6">
+             <%= f.label "Email" %><br>
+             <%= f.text_field :email, style: 'width: 100%', value: 'Your e-mail'%><br>
+          </div>
+        </div>
+
+          <div class="row">
+            <div class="col-md-12">
+                <%= f.label "Details" %><br>
+                <%= f.text_area :content, style: 'width: 100%', value: 'Feel free and ask a question or give us a hint.'%><br>
+            </div>
+          </div>
+        <%= recaptcha_tags style: 'width: 100%' %>
+        <%= f.submit "Submit" %>
+    <% end %>
+  </div>
+
+  <div class="col-md-6">
+    <h2>E-mail:</h2>
+    Currently unavailible
+
+    <h2>Telephone:</h2>
+    Currently unavailible
+
+    <h2>Skype:</h2>
+    Currently unavailible
+
+    <h2>Address:</h2>
+    Ilkovicova 4<br />
+    841 05, Bratislava<br />
+    Slovakia
+  </div>
+</div>

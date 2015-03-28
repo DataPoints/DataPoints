@@ -44,7 +44,7 @@ gem 'bcrypt'
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
 
-gem 'recaptcha', :require => 'recaptcha/rails'
+gem 'recaptcha', '~> 0.4.0', :require => 'recaptcha/rails'
 gem 'jquery-turbolinks'
 gem 'json'
 
@@ -59,4 +59,4 @@ gem "rails_config"
 gem 'delayed_job_active_record'
 gem "daemons"
 
-gem 'kaminari'
+#gem "kaminari"
