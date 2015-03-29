@@ -28,9 +28,10 @@ class WorkFlow
     begin
       download
       check_semicolon
+      r_cleanData
       pred_processing
       find_type
-      r_scripts
+      r_analyze
       @dataset.status = 'P'
       @dataset.save
     rescue Exception => e
@@ -139,8 +140,8 @@ class WorkFlow
         retry
       end
       raise 'Cannot connect to server: ' + @dataset.link
-    ensure
-      # Always will be executed
+      ensure
+        # Always will be executed
     end
   end
 
@@ -152,8 +153,11 @@ class WorkFlow
     NamedEntity.new.def_types(@dataset.id)
   end
 
-  def r_scripts
+  def r_cleanData
     AnalyzeFunction.new.r_clean_dataset(@dataset)
+  end
+
+  def r_analyze
     AnalyzeFunction.new.r_analyze_dataset(@dataset)
   end
 
