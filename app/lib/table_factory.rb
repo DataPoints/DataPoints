@@ -15,6 +15,9 @@ class TableFactory
       name_of_data_table = "#{dataset.user_id}:#{dataset.id}"
       #Nahratie dat z datasetu
       path = dataset.storage
+      #Uprava bodkociariek
+      CheckSemicolon.new.add_semicolon(dataset.storage)
+      puts "storage is here: " + dataset.storage
       #Kontrola ci je subor csv
       control_file_format(path)
       #Nahratie a parsovanie datasetu

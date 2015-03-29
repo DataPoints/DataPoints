@@ -2,6 +2,7 @@ require 'net/http'
 require 'digest/md5'
 require 'table_factory.rb'
 require 'analyze_function.rb'
+require 'check_semicolon'
 require 'sample_analyzer'
 require 'logger'
 require 'io/console'
@@ -26,6 +27,7 @@ class WorkFlow
     @dataset = dataset
     begin
       download
+      check_semicolon
       pred_processing
       find_type
       r_scripts
@@ -137,8 +139,8 @@ class WorkFlow
         retry
       end
       raise 'Cannot connect to server: ' + @dataset.link
-      ensure
-        # Always will be executed
+    ensure
+      # Always will be executed
     end
   end
 
@@ -153,5 +155,9 @@ class WorkFlow
   def r_scripts
     AnalyzeFunction.new.r_clean_dataset(@dataset)
     AnalyzeFunction.new.r_analyze_dataset(@dataset)
+  end
+
+  def check_semicolon
+    CheckSemicolon.new.add_semicolon(@dataset.storage)
   end
 end
