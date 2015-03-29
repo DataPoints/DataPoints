@@ -35,7 +35,7 @@ class DatasetsController < ApplicationController
 
   def index
     # @dataset = Dataset.find(params[:id])
-    @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
+    @Datasets = Dataset.where(user_id: current_user.id, deleted: false).page(params[:page]).per(25)
 
     @Types = { }
     @Datasets.each do |dataset|
@@ -76,12 +76,13 @@ class DatasetsController < ApplicationController
     @summaries = Summary.all
 
     name_of_dataset_data_table = @dataset.data_table_name
-    @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+    @data = Class.new(ActiveRecord::Base){self.table_name = name_of_dataset_data_table }
+    @data = @data.page(params[:page]).per(25)
 
     @number_of_data_rows = @data.count
-    if @number_of_data_rows > 15
-      @number_of_data_rows = 15
-    end
+    # if @number_of_data_rows > 15
+    #   @number_of_data_rows = 15
+    # end
 
     @names_of_data_columns = @data.column_names
 
