@@ -7,6 +7,7 @@
 require 'csv'
 require 'named_entity'
 require 'cmd_interface'
+require 'check_semicolon'
 
 
 class TableFactory
