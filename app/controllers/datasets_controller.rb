@@ -106,6 +106,10 @@ class DatasetsController < ApplicationController
     column_to_change_type.type_id = params[:type_id]
     column_to_change_type.save
 
+    if params[:type_id] == '4'
+      AnalyzeFunction.new.delay.r_analyze_dataset_user(@dataset,column_to_change_type)
+    end
+
     if params[:type_id] == '5'
       for i in 1..@data.count do
         name_of_town = @data.find(i)[Column.find(params[:column_id]).label]

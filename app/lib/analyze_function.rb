@@ -15,16 +15,32 @@ end
 
 def r_analyze_dataset(dataset)
     dataset_id = dataset.id
-    path = dataset.storage
+    header_id = dataset.headers.first.id
 
     config   = Rails.configuration.database_configuration
     dbName = config[Rails.env]["database"]
     dbUsername = config[Rails.env]["username"]
     dbPassword = config[Rails.env]["password"]
 
-    cmd = "Rscript app/lib/r/analyze.R #{path} #{dataset_id} #{dbName} #{dbUsername} #{dbPassword}"
+    cmd = "Rscript app/lib/r/analyze.R #{dbName} #{dbUsername} #{dbPassword} #{dataset_id} #{header_id} "
     puts cmd
     CMDInterface.new.Exec_command(cmd)
+end
+
+def r_analyze_dataset_user(dataset,column)
+  dataset_id = dataset.id
+  column_id = column.id
+  column_name = column.label
+
+
+  config   = Rails.configuration.database_configuration
+  dbName = config[Rails.env]["database"]
+  dbUsername = config[Rails.env]["username"]
+  dbPassword = config[Rails.env]["password"]
+
+  cmd = "Rscript app/lib/r/analyze.R  #{dbName} #{dbUsername} #{dbPassword} #{dataset_id} #{column_id} #{column_name}"
+  puts cmd
+  CMDInterface.new.Exec_command(cmd)
 end
 
  def analyze_dataset
