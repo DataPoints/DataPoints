@@ -286,7 +286,7 @@
         var dataTable = $("#data-table");
         var jiraOkno = $("#jira-okno");
         var closeJiraOkno = $("#close-jira-okno");
-        var header = $("th", dataTable);
+        var header = $("th", dataTable).not('.stats th');
 
         $('.body', jiraOkno).append('<table class="table table-striped table-bordered">');
         header.each(function(){
