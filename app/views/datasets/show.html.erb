@@ -317,7 +317,5 @@
         });
     };
 
-    $(document).ready(function(){
-        $(window).load( handleJiraOkno() );
-    });
+    $(document).on('page:load', handleJiraOkno())
 </script>
