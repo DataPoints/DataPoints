@@ -7,7 +7,8 @@ class CreateFirstDatasets < ActiveRecord::Migration
       t.string :"Ulica"
       t.string :"Mesto_Obec"
       t.string :"ICO"
-      t.string :"Vyska_poladavky"
+      t.string :"Vyska_pohladavky"
+      t.string :"Typ_platitela"
     end
   end
 end

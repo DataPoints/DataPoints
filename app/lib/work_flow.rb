@@ -26,9 +26,10 @@ class WorkFlow
     @dataset = dataset
     begin
       download
+      r_cleanData
       pred_processing
       find_type
-      r_scripts
+      r_analyze
       @dataset.status = 'P'
       @dataset.save
     rescue Exception => e
@@ -150,8 +151,11 @@ class WorkFlow
     NamedEntity.new.def_types(@dataset.id)
   end
 
-  def r_scripts
+  def r_cleanData
     AnalyzeFunction.new.r_clean_dataset(@dataset)
+  end
+
+  def r_analyze
     AnalyzeFunction.new.r_analyze_dataset(@dataset)
   end
 end
