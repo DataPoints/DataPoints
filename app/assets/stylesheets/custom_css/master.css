@@ -15,11 +15,26 @@ main{
     padding: 0 40px 0 40px;
 }
 
-/*collapse*/
-@media (min-width: 900px) and (max-width: 1000px) {
-    .collapse {
-        display: none !important;
-    }
+/*nodal*/
+#myModalLabel{
+    background: #fff;
+    color: #f46430;
+}
+
+.modal-body{
+    color: #000;
+}
+
+.modal-footer{
+    text-align: center;
+}
+
+.modal-footer > .btn{
+    display: none;
+}
+
+.modal-footer .jahoda .btn{
+    margin: 0px;
 }
 
 /* flash */

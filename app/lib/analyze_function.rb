@@ -9,6 +9,7 @@ class AnalyzeFunction
 def r_clean_dataset(dataset)
     path = dataset.storage
     cmd = "Rscript app/lib/r/cleanData.R #{path}"
+    puts cmd
     CMDInterface.new.Exec_command(cmd)
 end
 

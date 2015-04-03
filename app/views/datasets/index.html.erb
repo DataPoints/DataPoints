@@ -5,7 +5,7 @@
   <div class="panel-heading title">Your Datasets</div>
   <table border="0" class="table">
     <tr>
-      <th scope="col">N</th>
+      <!--<th scope="col">N</th>-->
       <th scope="col">Name </th>
       <th scope="col">Description </th>
       <th scope="col">Status </th>
@@ -22,7 +22,7 @@
     <% @Datasets.each do |dataset| %>
         <tr>
           <%i=i+1%>
-          <td><%=i%></td>
+          <!--<td><%=i%></td>-->
           <td type="edit"><%= dataset.name %></td>
           <td type="edit"><%= dataset.description %></td>
           <td>
@@ -70,10 +70,13 @@
             <% if dataset.status == 'P' or dataset.status == 'A'%>
                 <%= link_to 'Detail', dataset %>
             <% else %>
-                Detail
+                Detail nie je k dispozicii
             <% end %>
           </td>
       </tr>
     <%end%>
   </table>
+  <div>
+    <%= paginate @Datasets %>
+  </div>
 </div>

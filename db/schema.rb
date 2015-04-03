@@ -16,43 +16,6 @@ ActiveRecord::Schema.define(version: 20150316201502) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "1:57", force: true do |t|
-    t.string "Obchodné meno"
-    t.string "PSČ"
-    t.string "Ulica"
-    t.string "Mesto / Obec"
-    t.string "IČO"
-    t.string "Výška pohľadávky"
-  end
-
-  create_table "1:59", force: true do |t|
-    t.string "Obchodné meno"
-    t.string "PSČ"
-    t.string "Ulica"
-    t.string "Mesto / Obec"
-    t.string "IČO"
-    t.string "Výška pohľadávky"
-  end
-
-  create_table "1:60", force: true do |t|
-    t.string "Obchodné meno"
-    t.string "PSČ"
-    t.string "Ulica"
-    t.string "Mesto / Obec"
-    t.string "IČO"
-    t.string "Výška pohľadávky"
-  end
-
-  create_table "1:63", force: true do |t|
-    t.string "Obchodne meno"
-    t.string "PSC"
-    t.string "Ulica"
-    t.string "Mesto / Obec"
-    t.string "ICO"
-    t.string "Vyska pohladavky"
-    t.string "Typ platitela"
-  end
-
   create_table "analysis_results", force: true do |t|
     t.integer  "dataset_id"
     t.json     "result"
@@ -128,7 +91,8 @@ ActiveRecord::Schema.define(version: 20150316201502) do
     t.string "Ulica"
     t.string "Mesto_Obec"
     t.string "ICO"
-    t.string "Vyska_poladavky"
+    t.string "Vyska_pohladavky"
+    t.string "Typ_platitela"
   end
 
   create_table "headers", force: true do |t|
