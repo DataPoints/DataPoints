@@ -27,8 +27,9 @@ class WorkFlow
     @dataset = dataset
     begin
       download
-      check_semicolon
+      remove_semicolon
       r_cleanData
+      add_semicolon
       pred_processing
       find_type
       r_analyze
@@ -161,7 +162,11 @@ class WorkFlow
     AnalyzeFunction.new.r_analyze_dataset(@dataset)
   end
 
-  def check_semicolon
+  def remove_semicolon
+    CheckSemicolon.new.remove_semicolon(@dataset.storage)
+  end
+
+  def add_semicolon
     CheckSemicolon.new.add_semicolon(@dataset.storage)
   end
 end

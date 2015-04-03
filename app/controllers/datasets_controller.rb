@@ -3,7 +3,6 @@ require 'digest/md5'
 require 'table_factory.rb'
 require 'analyze_function.rb'
 require 'sample_analyzer'
-require 'check_semicolon'
 
 class DatasetsController < ApplicationController
   before_action :logged_in_user
