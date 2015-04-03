@@ -14,7 +14,7 @@ analyze = function(data){
 CountSummaries = function(dataset_id,header_id){
 
     drv <- dbDriver("PostgreSQL")
-	con <- dbConnect(drv, dbname=dbName, user= dbUsername, password=dbPassword)
+	con <- dbConnect(drv, dbname=dbName, user= dbUsername, password=dbPassword,host='localhost')
 
     resultSet <- dbSendQuery(con,paste("SELECT * FROM columns WHERE type_id=4 AND header_id=",header_id))
     numberColumns <- fetch(resultSet,n=-1)
@@ -46,7 +46,7 @@ CountSummaries = function(dataset_id,header_id){
 CountSummary = function(dataset_id,column_id,column_name){
 
     drv <- dbDriver("PostgreSQL")
-    con <- dbConnect(drv, dbname=dbName, user= dbUsername, password=dbPassword)
+    con <- dbConnect(drv, dbname=dbName, user= dbUsername, password=dbPassword,host='localhost')
 
     resultSet <- dbSendQuery(con,paste("SELECT * FROM summaries where dataset_id=",dataset_id," AND header= ","'",column_name,"'",sep=""))
     SummaryData <-fetch(resultSet,n=-1)
