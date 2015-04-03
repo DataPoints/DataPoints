@@ -14,17 +14,13 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
-<<<<<<< HEAD
-config/settings.local.yml
-config/settings/*.local.yml
-config/environments/*.local.yml
-=======
+
 
 # Ignore rubymine config files
 /.idea
 /.idea/*
->>>>>>> remotes/origin/
 
-config/environments/*.rb
-config/settings/*.yml
-config/database.yml
+# Application credentials and configuration files
+/config/environments/*.rb
+/config/settings/*.yml
+/config/database.yml

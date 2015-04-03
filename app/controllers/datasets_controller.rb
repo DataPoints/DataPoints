@@ -5,7 +5,8 @@ require 'analyze_function.rb'
 require 'sample_analyzer'
 
 class DatasetsController < ApplicationController
-  before_action :logged_in_user, only: [:create, :destroy]
+  before_action :logged_in_user
+  before_action :correct_user, except: [:index, :new, :create]
 
   def new
     @dataset = Dataset.new
@@ -34,7 +35,7 @@ class DatasetsController < ApplicationController
 
   def index
     # @dataset = Dataset.find(params[:id])
-    @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
+    @Datasets = Dataset.where(user_id: current_user.id, deleted: false).page(params[:page]).per(25)
 
     @Types = { }
     @Datasets.each do |dataset|
@@ -75,12 +76,13 @@ class DatasetsController < ApplicationController
     @summaries = Summary.all
 
     name_of_dataset_data_table = @dataset.data_table_name
-    @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+    @data = Class.new(ActiveRecord::Base){self.table_name = name_of_dataset_data_table }
+    @data = @data.page(params[:page]).per(25)
 
     @number_of_data_rows = @data.count
-    if @number_of_data_rows > 15
-      @number_of_data_rows = 15
-    end
+    # if @number_of_data_rows > 15
+    #   @number_of_data_rows = 15
+    # end
 
     @names_of_data_columns = @data.column_names
 
@@ -163,6 +165,13 @@ class DatasetsController < ApplicationController
     redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xData => @xData,:yData => @yData
   end
 
+  def correct_user
+    dataset = Dataset.find(params[:id])
+    if dataset.user != current_user
+      flash[:danger] = 'Permission denied.'
+      redirect_to root_path
+    end
+  end
 
   private
   def dataset_params

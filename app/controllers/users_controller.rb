@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+  before_action 'logged_in_user', except: [:new, :create]
+  before_action :correct_user, except: [:new, :create]
+
   def new
     @user = User.new
   end
@@ -61,6 +64,13 @@ class UsersController < ApplicationController
         @user.errors.add(:base, "Parametre zle heslo")
         render 'edit'
       end
+    end
+  end
+
+  def correct_user
+    if User.find(params[:id]) != current_user
+      flash[:danger] = 'Permission denied.'
+      redirect_to root_path
     end
   end
 

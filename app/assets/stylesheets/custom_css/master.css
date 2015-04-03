@@ -15,11 +15,38 @@ main{
     padding: 0 40px 0 40px;
 }
 
-/*collapse*/
-@media (min-width: 900px) and (max-width: 1000px) {
-    .collapse {
-        display: none !important;
-    }
+/*nodal*/
+#myModalLabel{
+    background: #fff;
+    color: #f46430;
+}
+
+.modal-body{
+    color: #000;
+}
+
+.modal-footer{
+    text-align: center;
+}
+
+.modal-footer > .btn{
+    display: none;
+}
+
+.modal-footer .jahoda .btn{
+    margin: 0px;
+}
+
+/* flash */
+.alert{
+    position: relative;
+    z-index: 99;
+}
+
+/* carousel */
+#carousel{
+    position: relative;
+    z-index: 1;
 }
 
 /* navbar */
@@ -29,6 +56,7 @@ main{
     border: none;
     border-radius: 0;
     padding: 15px 40px 15px 40px;
+    z-index: 2;
 }
 /* title */
 .navbar-default .navbar-brand {
@@ -107,6 +135,11 @@ main{
     color: #f46430;
 
 
+}
+
+/* recaptcha */
+#recaptcha_area{
+    margin: 0 auto 50px auto;
 }
 
 /*tables*/
