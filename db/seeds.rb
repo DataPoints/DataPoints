@@ -19,7 +19,6 @@ csv = CSV.parse(file, :col_sep => ';')
 
 csv.shift
 csv.each do |row|
-
   FirstDataset.create(Obchodne_meno:row[0], PSC:row[1],Ulica:row[2],Mesto_Obec:row[3],ICO:row[4],Vyska_pohladavky:row[5],Typ_platitela:row[6])
 end
 
@@ -34,6 +33,5 @@ User.create(
 users=User.all
 
 users.each do |user|
-
 DatasetFactory.new.firstDataset(user.id)
 end

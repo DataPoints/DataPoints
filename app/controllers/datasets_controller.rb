@@ -36,7 +36,7 @@ class DatasetsController < ApplicationController
 
   def index
     # @dataset = Dataset.find(params[:id])
-    @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
+    @Datasets = Dataset.where(user_id: current_user.id, deleted: false).page(params[:page]).per(25)
 
     @Types = { }
     @Datasets.each do |dataset|
@@ -77,12 +77,13 @@ class DatasetsController < ApplicationController
     @summaries = Summary.all
 
     name_of_dataset_data_table = @dataset.data_table_name
-    @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+    @data = Class.new(ActiveRecord::Base){self.table_name = name_of_dataset_data_table }
+    @data = @data.page(params[:page]).per(25)
 
     @number_of_data_rows = @data.count
-    if @number_of_data_rows > 15
-      @number_of_data_rows = 15
-    end
+    # if @number_of_data_rows > 15
+    #   @number_of_data_rows = 15
+    # end
 
     @names_of_data_columns = @data.column_names
 
@@ -101,45 +102,43 @@ class DatasetsController < ApplicationController
 
   def change_type
     @dataset = Dataset.find(params[:id])
-    name_of_dataset_data_table = @dataset.data_table_name
-    @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
 
     column_to_change_type = @dataset.headers.first.columns.find(params[:column_id])
     column_to_change_type.type_id = params[:type_id]
+    column_to_change_type.analyze = true
     column_to_change_type.save
 
-    if params[:type_id] == '5'
-      for i in 1..@data.count do
-        name_of_town = @data.find(i)[Column.find(params[:column_id]).label]
-        if Coordinate.find_by_mesto(name_of_town).nil?
-          sleep(0.25) # kvoli prekroceniu limitu za sekundu requestov na google
-          coordinates = Geocoder.coordinates(name_of_town)
-          coordinate_to_save = Coordinate.new
-          coordinate_to_save.lat=coordinates[0]
-          coordinate_to_save.lng=coordinates[1]
-          coordinate_to_save.mesto=name_of_town
-          coordinate_to_save.save
-        end
-      end
-    end
-
-    flash[:success] = 'Changes saved!'
-    redirect_to :back
+    redirect_to dataset_path(@dataset, :anchor => 'type')
   end
 
 
   def start_analyze
     @dataset = Dataset.find(params[:id])
 
-    @dataset.status = 'A'
-    if @dataset.save
-      flash[:success] = 'Wohoho the analysis has started!'
+    changed_columns=@dataset.headers.first.columns.where(analyze: true)
+
+    changed_columns.each do |col|
+
+      if (col.analyze == true)
+        if(col.type_id==4)
+          AnalyzeFunction.new.delay.r_analyze_dataset_user(@dataset,col)
+        elsif(col.type_id==5)
+          AnalyzeFunction.new.delay.count_lat_long(@dataset,col)
+        end
+        col.analyze = false
+        col.save
+      end
     end
+   # @dataset.status = 'A'
+   # if @dataset.save
+   #  flash[:success] = 'Wohoho the analysis has started!'
+   # end
 
 
-    sa = SampleAnalyzer.new
-    sa.delay.analyze(@dataset)
-    
+   # sa = SampleAnalyzer.new
+   # sa.delay.analyze(@dataset)
+
+
     redirect_to :back
   end
 
@@ -162,8 +161,7 @@ class DatasetsController < ApplicationController
     puts 'Toto je stlpec'
     puts @yData.inspect
     puts @xData.inspect
-    flash[:success] = 'values changed !'
-    redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xData => @xData,:yData => @yData
+    redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xData => @xData,:yData => @yData, :anchor => 'change'
   end
 
   def correct_user
