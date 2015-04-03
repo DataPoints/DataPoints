@@ -123,8 +123,7 @@ class DatasetsController < ApplicationController
       end
     end
 
-    flash[:success] = 'Changes saved!'
-    redirect_to :back
+    redirect_to dataset_path(@dataset, :anchor => 'type')
   end
 
 
@@ -162,8 +161,7 @@ class DatasetsController < ApplicationController
     puts 'Toto je stlpec'
     puts @yData.inspect
     puts @xData.inspect
-    flash[:success] = 'values changed !'
-    redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xData => @xData,:yData => @yData
+    redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xData => @xData,:yData => @yData, :anchor => 'change'
   end
 
   def correct_user

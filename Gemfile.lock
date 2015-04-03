@@ -77,9 +77,6 @@ GEM
       railties (>= 3.1.0)
       turbolinks
     json (1.8.1)
-    kaminari (0.16.3)
-      actionpack (>= 3.0.0)
-      activesupport (>= 3.0.0)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     mime-types (2.4.3)
@@ -112,7 +109,7 @@ GEM
     rake (10.4.0)
     rdoc (4.1.2)
       json (~> 1.4)
-    recaptcha (0.3.6)
+    recaptcha (0.4.0)
     sass (3.2.19)
     sass-rails (4.0.5)
       railties (>= 4.0.0, < 5.0)
@@ -166,11 +163,10 @@ DEPENDENCIES
   jquery-rails
   jquery-turbolinks
   json
-  kaminari
   pg
   rails (= 4.1.6)
   rails_config
-  recaptcha
+  recaptcha (~> 0.4.0)
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
   spring
