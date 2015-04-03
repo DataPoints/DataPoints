@@ -16,15 +16,17 @@
           </div>
 
           <div class="col-md-6">
+
              <%= f.label "Email" %><br>
+
              <%= f.text_field :email, style: 'width: 100%', value: 'Your e-mail'%><br>
           </div>
         </div>
 
           <div class="row">
             <div class="col-md-12">
-                <%= f.label "Details" %><br>
-                <%= f.text_area :content, style: 'width: 100%', value: 'Feel free and ask a question or give us a hint.'%><br>
+                <%= f.label "Message" %><br>
+                <%= f.text_area :content, style: 'width: 100%', value: 'Feel free and ask a question or give us a hint.', rows: '10'%><br>
             </div>
           </div>
         <%= recaptcha_tags style: 'width: 100%' %>
