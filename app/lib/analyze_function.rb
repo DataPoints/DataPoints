@@ -15,16 +15,32 @@ end
 
 def r_analyze_dataset(dataset)
     dataset_id = dataset.id
-    path = dataset.storage
+    header_id = dataset.headers.first.id
 
     config   = Rails.configuration.database_configuration
     dbName = config[Rails.env]["database"]
     dbUsername = config[Rails.env]["username"]
     dbPassword = config[Rails.env]["password"]
 
-    cmd = "Rscript app/lib/r/analyze.R #{path} #{dataset_id} #{dbName} #{dbUsername} #{dbPassword}"
+    cmd = "Rscript app/lib/r/analyze.R #{dbName} #{dbUsername} #{dbPassword} #{dataset_id} #{header_id} "
     puts cmd
     CMDInterface.new.Exec_command(cmd)
+end
+
+def r_analyze_dataset_user(dataset,column)
+  dataset_id = dataset.id
+  column_id = column.id
+  column_name = column.label
+
+
+  config   = Rails.configuration.database_configuration
+  dbName = config[Rails.env]["database"]
+  dbUsername = config[Rails.env]["username"]
+  dbPassword = config[Rails.env]["password"]
+
+  cmd = "Rscript app/lib/r/analyze.R  #{dbName} #{dbUsername} #{dbPassword} #{dataset_id} #{column_id} #{column_name}"
+  puts cmd
+  CMDInterface.new.Exec_command(cmd)
 end
 
  def analyze_dataset
@@ -68,4 +84,23 @@ end
 	end
 	return new_class,column_names
  end
+
+  def count_lat_long(dataset, column)
+
+    name_of_dataset_data_table = dataset.data_table_name
+    data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+
+    for i in 1..data.count do
+      name_of_town = data.find(i)[column.label]
+      if Coordinate.find_by_mesto(name_of_town).nil?
+        sleep(0.25) # kvoli prekroceniu limitu za sekundu requestov na google
+        coordinates = Geocoder.coordinates(name_of_town)
+        coordinate_to_save = Coordinate.new
+        coordinate_to_save.lat=coordinates[0]
+        coordinate_to_save.lng=coordinates[1]
+        coordinate_to_save.mesto=name_of_town
+        coordinate_to_save.save
+      end
+    end
+  end
 end
