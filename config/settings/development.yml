@@ -1,4 +1,4 @@
-dataset_target_path : "/users/igordanis/Downloads/datapoints"
+dataset_target_path : "/home/jkmetko/RubymineProjects/"
 numberOfDownloadAttemptsBeforeFailure : 3
 delayBetweenAnotherDownloadAttempt : 10
 fileMaxSizeInBytes : 1000000

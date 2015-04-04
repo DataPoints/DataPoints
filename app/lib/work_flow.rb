@@ -2,6 +2,7 @@ require 'net/http'
 require 'digest/md5'
 require 'table_factory.rb'
 require 'analyze_function.rb'
+require 'check_semicolon'
 require 'sample_analyzer'
 require 'logger'
 require 'io/console'
@@ -26,7 +27,9 @@ class WorkFlow
     @dataset = dataset
     begin
       download
+      remove_semicolon
       r_cleanData
+      add_semicolon
       pred_processing
       find_type
       r_analyze
@@ -157,5 +160,13 @@ class WorkFlow
 
   def r_analyze
     AnalyzeFunction.new.r_analyze_dataset(@dataset)
+  end
+
+  def remove_semicolon
+    CheckSemicolon.new.remove_semicolon(@dataset.storage)
+  end
+
+  def add_semicolon
+    CheckSemicolon.new.add_semicolon(@dataset.storage)
   end
 end
