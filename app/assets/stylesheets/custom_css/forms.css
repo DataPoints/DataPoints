@@ -1,6 +1,10 @@
 /*CSS FILE*/
 
 
+div.social-button{
+    display: block !important
+}
+
 .social-button button{
     width: 350px;
     height: auto;
