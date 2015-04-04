@@ -204,7 +204,7 @@
       </tr>
       <!-- generating matrix of data -->
       <% @data.each do |data_row| %>
-          <tr>
+          <tr class="body">
             <% for j in 0...@names_of_data_columns.count %>
                 <td><%= data_row[@names_of_data_columns[j]] %></td>
             <% end %>
@@ -307,7 +307,7 @@
             jiraOkno.css({ display: 'none' });
         });
 
-        $("tr", dataTable).click(function () {
+        $("tr.body", dataTable).click(function () {
             dataTable.removeClass('col-md-12');
             dataTable.addClass('col-md-9');
             jiraOkno.css({ display: 'block' });
