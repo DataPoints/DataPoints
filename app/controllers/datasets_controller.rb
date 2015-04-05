@@ -20,16 +20,18 @@ class DatasetsController < ApplicationController
 
 
     WorkFlow.new.delay.start(@dataset)
-    flash[:info] = 'Dataset sa spracovava...'
+    flash[:info] = 'Dataset is processing...'
     redirect_to datasets_path
   end
 
   def update
     @dataset = Dataset.find(params[:id])
     if @dataset.update(dataset_params)
-      redirect_to datasets_path
+      flash[:success] = 'Dataset information updated.'
+      redirect_to :back
     else
-      render 'edit'
+      flash[:danger] = 'Dataset information update failed.'
+      redirect_to :back
     end
   end
 
@@ -61,9 +63,11 @@ class DatasetsController < ApplicationController
   def destroy
     @dataset = Dataset.find(params[:id])
     if @dataset.update(deleted: true)
-      redirect_to datasets_path
+      flash[:success] = 'Dataset was deleted.'
+      redirect_to :back
     else
-      render 'edit'
+      flash[:danger] = 'Dataset deletion failed.'
+      redirect_to :back
     end
   end
 
