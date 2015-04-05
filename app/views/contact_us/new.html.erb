@@ -12,21 +12,21 @@
         <div class="row">
           <div class="col-md-6">
            <%= f.label "Name" %><br>
-           <%= f.text_field :sender_name, style: 'width: 100%', value: 'Your whole name' %><br>
+           <%= f.text_field :sender_name, style: 'width: 100%', placeholder: 'Your whole name' %><br>
           </div>
 
           <div class="col-md-6">
 
              <%= f.label "Email" %><br>
 
-             <%= f.text_field :email, style: 'width: 100%', value: 'Your e-mail'%><br>
+             <%= f.text_field :email, style: 'width: 100%', placeholder: 'Your e-mail'%><br>
           </div>
         </div>
 
           <div class="row">
             <div class="col-md-12">
                 <%= f.label "Message" %><br>
-                <%= f.text_area :content, style: 'width: 100%', value: 'Feel free and ask a question or give us a hint.', rows: '10'%><br>
+                <%= f.text_area :content, style: 'width: 100%', placeholder: 'Feel free and ask a question or give us a hint.', rows: '10'%><br>
             </div>
           </div>
 
