@@ -11,9 +11,9 @@ class UserMailer < ActionMailer::Base
     mail to: user.email, subject: "Password reset"
   end
 
-  def error_mail(user, error)
+  def success_mail(user, dataset)
     @user = user
-    @error = error
-    mail to: user.email, subject: "Nastala chyba"
+    @dataset = dataset
+    mail to: user.email, subject: "Analysis completed"
   end
 end

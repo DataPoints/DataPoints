@@ -16,4 +16,10 @@ class UserMailerPreview < ActionMailer::Preview
     user.reset_token = User.new_token
     UserMailer.password_reset(user)
   end
+
+  def success_mail
+    user = User.last
+    dataset = user.datasets.last
+    UserMailer.success_mail(user, dataset)
+  end
 end

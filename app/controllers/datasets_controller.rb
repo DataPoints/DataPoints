@@ -18,8 +18,7 @@ class DatasetsController < ApplicationController
     @dataset.status = 'S'
     @dataset.save
 
-
-    WorkFlow.new.delay.start(@dataset)
+    WorkFlow.new.delay.start(@dataset, params[:send_mail])
     flash[:info] = 'Dataset is processing...'
     redirect_to datasets_path
   end

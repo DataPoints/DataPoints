@@ -20,7 +20,7 @@ end
 
 class WorkFlow
 
-  def start(dataset)
+  def start(dataset, send_mail)
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::DEBUG
     @logger.debug "dataset being downloaded"
@@ -35,6 +35,9 @@ class WorkFlow
       r_analyze
       @dataset.status = 'P'
       @dataset.save
+      if send_mail == 'true'
+        @dataset.user.send_success_email(@dataset)
+      end
     rescue Exception => e
       @dataset.status = 'E'
       puts e.to_s
