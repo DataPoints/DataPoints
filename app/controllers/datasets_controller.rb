@@ -26,10 +26,12 @@ class DatasetsController < ApplicationController
 
   def update
     @dataset = Dataset.find(params[:id])
-    if @dataset.update(dataset_params)
+    if @dataset.update_attributes(dataset_params)
+      flash[:success] = 'Dataset changed successfully'
       redirect_to datasets_path
     else
-      render 'edit'
+      flash[:danger] = 'There was an error.'
+      redirect_to datasets_path
     end
   end
 

@@ -6,7 +6,7 @@ class DatasetFactory
     dataset = Dataset.new
     dataset.name = "Demo dataset"
     dataset.description = "Toto je tvoj prvy dataset. Umozni ti vyskusat funkcionalitu nasej apky"
-    dataset.link = "---------"
+    dataset.link = "http://demo.sk"
     dataset.storage = "app/lib/FirstDataset/FirstDataset.csv"
     dataset.user_id = id
     dataset.downloadProgress=100
