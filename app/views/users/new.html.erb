@@ -1,24 +1,42 @@
-<h1 class="title">Registeration Form</h1>
+<h1 class="title">Registration Form</h1>
 
-<div>
-  <div>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 center login">
     <%= form_for(@user) do |f| %>
         <%= render 'shared/error_messages', object: f.object %>
-        <%= f.label :name %><br>
-        <%= f.text_field :name %><br>
 
-        <%= f.label :email %><br>
-        <%= f.text_field :email %><br>
+        <!--<div class="text-input">-->
+            <!--<%= f.label :name %>-->
+        <!--</div>-->
+        <div class="text-input">
+             <%= f.text_field :name, :placeholder => "Name"%>
+        </div>
+        <!--<div class="text-input">-->
+            <!--<%= f.label :email %>-->
+        <!--</div>-->
+        <div class="text-input">
+            <%= f.text_field :email, :placeholder => "Email" %>
+        </div>
+        <!--<div>-->
+            <!--<%= f.label :password %>-->
+        <!--</div>-->
+        <div class="text-input">
+            <%= f.password_field :password, :placeholder => "Password" %>
+        </div>
+        <!--<div>-->
+            <!--<%= f.label :password_confirmation, 'Confirmation' %>-->
+        <!--</div>-->
+        <div style="margin-bottom:20px;" class="text-input">
+            <%= f.password_field :password_confirmation, :placeholder => "Repeat password" %>
+        </div>
 
-        <%= f.label :password %><br>
-        <%= f.password_field :password %><br>
+        <div class="recaptcha-wrapper">
+            <%= recaptcha_tags %>
+        </div>
 
-        <%= f.label :password_confirmation, 'Confirmation' %><br>
-        <%= f.password_field :password_confirmation %><br><br>
-
-        <%= recaptcha_tags %>
-
-        <%= f.submit 'Create my account', class: 'btn btn-default' %>
+        <div style="padding-top:40px;">
+            <%= f.submit 'Create my account', class: 'btn btn-default' %>
+        </div>
     <% end %>
   </div>
 </div>

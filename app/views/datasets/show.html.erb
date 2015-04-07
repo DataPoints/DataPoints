@@ -180,6 +180,7 @@
 <hr />
 
 <div class="row">
+  <a name="type"></a>
   <div class="col-md-12" id="data-table">
     <!-- table of data with changing header type -->
     <table class="table table-striped table-bordered">
@@ -204,7 +205,7 @@
       </tr>
       <!-- generating matrix of data -->
       <% @data.each do |data_row| %>
-          <tr>
+          <tr class="body">
             <% for j in 0...@names_of_data_columns.count %>
                 <td><%= data_row[@names_of_data_columns[j]] %></td>
             <% end %>
@@ -258,6 +259,7 @@
 <hr />
 
 <div clas="row">
+  <a name="change"></a>
   <div class="col-md-12">
     <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
         X
@@ -282,11 +284,11 @@
 </div>
 
 <script>
-    $(function() {
+    function handleJiraOkno() {
         var dataTable = $("#data-table");
         var jiraOkno = $("#jira-okno");
         var closeJiraOkno = $("#close-jira-okno");
-        var header = $("th", dataTable);
+        var header = $("th", dataTable).not('.stats th');
 
         $('.body', jiraOkno).append('<table class="table table-striped table-bordered">');
         header.each(function(){
@@ -301,26 +303,26 @@
         });
         $('.body', jiraOkno).append('</table>');
 
-
         closeJiraOkno.click(function () {
             dataTable.removeClass('col-md-9');
             dataTable.addClass('col-md-12');
             jiraOkno.css({ display: 'none' });
         });
 
-        $("tr", dataTable).click(function () {
+        $("tr.body", dataTable).click(function () {
             dataTable.removeClass('col-md-12');
             dataTable.addClass('col-md-9');
             jiraOkno.css({ display: 'block' });
         });
 
-        $("tr", dataTable).not('.stats').hover(function () {
+        $("tr", dataTable).not('.stats').click(function () {
             data = $("td", this);
 
             data.each(function(index){
-                $('.body tr:nth-child('+ (index+1) +') td:nth-child(2)', jiraOkno).text( $(this).text() );
+                $('.body tr:nth-child('+ (index+2) +') td:nth-child(2)', jiraOkno).text( $(this).text() );
             });
         });
+    };
 
-    });
+    $(document).on('page:load', handleJiraOkno())
 </script>
