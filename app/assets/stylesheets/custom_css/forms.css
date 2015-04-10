@@ -1,47 +1,71 @@
 /*CSS FILE*/
 
-label{
-    disply: inline-block;
-    padding: 4px 10px 4px 10px;
 
-    background: #f46430;
-    color: #fff;
-    border-radius: 3px;
-    cursor: pointer;
-
-    text-align: left;
+div.social-button{
+    display: block !important
 }
 
-label.checkbox{
-    /*DISCUSS WITH TEAM*/
-}
-
-form input:not([type=hidden]), form textarea{
-    margin: 0 0 15px 0;
-
+.social-button button{
     width: 350px;
-    font-family: 'Arial';
+    height: auto;
+    color: #fff;
+    font-family: 'Roboto';
+    font-size: 15px;
+    font-weight: bold;
+    font-style: normal !important;
+    border: 0px solid #d2d2d2 !important;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.social-button .facebook-login  {background-color: #3C539A}
+.social-button .google-login    {background-color: #00B9F8}
+.social-button .twitter-login   {background-color: #FF0000}
 
+.login .text-input input{
+    margin-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 350px;
+    padding-left: 10px;
+    font-family: 'Arial';
     background: #f3f3f3;
-    border: 1px solid #d2d2d2;
     font-size: 14px;
     font-style: italic;
     color: #8b8b8b;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 12px 8px 12px 8px;
     position: relative;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    -ms-border-radius: 0;
-    -o-border-radius: 0;
-    border-radius: 0;
-
-    outline-width: 0;
-    resize: none;
     border-radius: 3px;
 }
+
+.or-label{
+    position: relative;
+    top: -30px;
+    background: #222222;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.or-wrapper{
+    padding-top: 10px;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+/*form input:not([type=hidden]), form textarea{*/
+
+    /*margin-bottom: 10px;*/
+    /*font-family: 'Arial';*/
+
+    /*background: #f3f3f3;*/
+    /*border: 1px solid #d2d2d2;*/
+    /*font-size: 14px;*/
+    /*font-style: italic;*/
+    /*color: #8b8b8b;*/
+    /*-webkit-box-sizing: border-box;*/
+    /*-moz-box-sizing: border-box;*/
+    /*box-sizing: border-box;*/
+    /*padding: 12px 8px 12px 8px;*/
+    /*position: relative;*/
+    /*border-radius: 3px;*/
+/*}*/
 
 form select option{
     padding: 7px;
