@@ -93,13 +93,52 @@ class DatasetsController < ApplicationController
     #data=data.order('"'+"Mesto / Obec"+'"')
     #@yData =data.pluck("Výška pohľadávky")[0..10].collect{|i| i.to_f}
     #@xData =data.pluck("Mesto / Obec")[0..10]
-    if params[:xData].nil?
-      @xData = Array.[](1991,1992,1993,1994,1995)
-      @yData = Array.[](20,74,5,101,36)
-    else
-      @xData=params[:xData]
-      @yData=params[:yData].collect{|i| i.to_f}
+
+    #get all numeric columns
+    numericTypeID = Type.find_by_name("Number").id
+    @numericColumns = Array.new
+    @nonNumericColumns = Array.new
+    @columns.each do |column|
+      if(column.type_id == numericTypeID)
+        @numericColumns.push(column.label)
+      else
+        @nonNumericColumns.push(column.label)
+      end
     end
+
+    if params[:xData].nil?
+      @xData = Array.new
+      @yData = Array.new
+
+      #draw first non-numeric vs first numeric columns into chart
+      @data.each do |row|
+        @xData.push(row[@nonNumericColumns[0]])
+        @yData.push(row[@numericColumns[0]].to_f)
+      end
+      @xType = @nonNumericColumns[0]
+      @yType = @numericColumns[0]
+    else
+      @xData = params[:xData]
+      @yData = params[:yData].collect{|i| i.to_f}
+      @xType = params[:xType]
+      @yType = params[:yType]
+    end
+
+    #get next numeric column
+    if(@numericColumns.include? @yType)
+      @nextNumericColumn = @numericColumns.index(@yType)+1
+      if(@nextNumericColumn >= @numericColumns.count)
+        @nextNumericColumn = 0
+      end
+    else
+      @nextNumericColumn = 0
+    end
+
+    @nextNumericColumn = @numericColumns[@nextNumericColumn]
+    @nextNumericColumn = @columns.find_by_label(@nextNumericColumn).id
+
+    #get actual x column
+    @actualXColumn = @columns.find_by_label(@xType).id
   end
 
   def change_type
@@ -160,10 +199,10 @@ class DatasetsController < ApplicationController
     @xData =data.pluck(@columnX.to_s)[0..20]
 
 
-    puts 'Toto je stlpec'
-    puts @yData.inspect
-    puts @xData.inspect
-    redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xData => @xData,:yData => @yData, :anchor => 'change'
+    #puts 'Toto je stlpec'
+    #puts @yData.inspect
+    #puts @xData.inspect
+    redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xType => @columnX, :yType => @columnY, :xData => @xData,:yData => @yData, :anchor => 'change'
   end
 
   def correct_user
