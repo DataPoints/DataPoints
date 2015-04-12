@@ -125,7 +125,7 @@
             <h4 class="modal-title" id="myModalLabel">Analyze Information</h4>
           </div>
           <div class="modal-body">
-            Analyze can take a lot of time. Go for a cup of coffee and chillax. We will send you a email to let you know, that your dataset is over.
+            Analysis can take a lot of time. Go for a cup of coffee and chillax. We will send you a email to let you know, that your dataset is over.
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -140,13 +140,13 @@
 
 <!--<%= @dataset.status %>-->
 <% if @dataset.status == "S" %>
-    Neanalyzovany
+    Not analyzed
 <% end %>
 <% if @dataset.status == "WA" %>
-    Analyza prave prebieha
+    Analysis is in progress
 <% end %>
 <% if @dataset.status == "EA" %>
-    Analyza uspesne ukoncena
+    Analysis successfully completed
     <%= @dataset.analysis_results[0].result %>
 <% end %>
   </div>

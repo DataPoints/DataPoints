@@ -33,13 +33,13 @@ class NamedEntity
       if value =~ emailREGEX
         type = "Email"
       elsif value.valid_integer? || value.valid_float?
-        type = "Číslo"
+        type = "Number"
       elsif !Geocoder.coordinates(value).nil?
-        type = "Miesto"
+        type = "Location"
       elsif value.valid_date?
-        type = "Dátum"
+        type = "Date"
       elsif value =~ osobaREGEX
-        type = "Osoba"
+        type = "Person"
       else
         type = "N/A"
       end

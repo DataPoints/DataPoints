@@ -160,7 +160,7 @@ class DatasetsController < ApplicationController
     @xData =data.pluck(@columnX.to_s)[0..20]
 
 
-    puts 'Toto je stlpec'
+    puts 'This is column'
     puts @yData.inspect
     puts @xData.inspect
     redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xData => @xData,:yData => @yData, :anchor => 'change'
