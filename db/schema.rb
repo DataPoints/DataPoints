@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150331145218) do
+ActiveRecord::Schema.define(version: 20150411135942) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "1:2", force: true do |t|
+  create_table "1:101", force: true do |t|
     t.string "Obchodné meno"
     t.string "PSČ"
     t.string "Ulica"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20150331145218) do
     t.string "Výška pohľadávky"
   end
 
-  create_table "1:3", force: true do |t|
+  create_table "1:102", force: true do |t|
     t.string "Obchodné meno"
     t.string "PSČ"
     t.string "Ulica"
@@ -34,13 +34,23 @@ ActiveRecord::Schema.define(version: 20150331145218) do
     t.string "Výška pohľadávky"
   end
 
-  create_table "2:5", force: true do |t|
+  create_table "1:103", force: true do |t|
     t.string "Obchodné meno"
     t.string "PSČ"
     t.string "Ulica"
     t.string "Mesto / Obec"
     t.string "IČO"
     t.string "Výška pohľadávky"
+  end
+
+  create_table "1:107", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+    t.string "Typ platiteľa"
   end
 
   create_table "analysis_results", force: true do |t|
@@ -119,8 +129,12 @@ ActiveRecord::Schema.define(version: 20150331145218) do
     t.string "Ulica"
     t.string "Mesto_Obec"
     t.string "ICO"
-    t.string "Vyska_pohladavky"
-    t.string "Typ_platitela"
+    t.string "Vyska_poladavky"
+  end
+
+  create_table "groupings", force: true do |t|
+    t.integer "coordinate_id"
+    t.integer "dataset_id"
   end
 
   create_table "headers", force: true do |t|

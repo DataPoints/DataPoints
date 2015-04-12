@@ -25,16 +25,32 @@ class WorkFlow
     @logger.level = Logger::DEBUG
     @logger.debug "dataset being downloaded"
     @dataset = dataset
+
     begin
       download
+      @logger.debug "Download complete"
+
       remove_semicolon
       r_cleanData
       add_semicolon
+      @logger.debug "Data cleaning complete"
+
       pred_processing
+      @logger.debug "Preprocessing complete"
+
       find_type
+      @logger.debug "Data type guess complete"
+
+      init_map
+      @logger.debug "Map data initialization complete"
+
       r_analyze
+      @logger.debug "Dataset R analysis complete"
+
       @dataset.status = 'P'
-      @dataset.save
+      @dataset.save!
+      @logger.debug "Download info Saved as #{@dataset.status}"
+
       if send_mail == 'true'
         @dataset.user.send_success_email(@dataset)
       end
@@ -163,6 +179,14 @@ class WorkFlow
 
   def r_analyze
     AnalyzeFunction.new.r_analyze_dataset(@dataset)
+  end
+
+  def init_map
+    @dataset.headers.first.columns.each do |column|
+      if column.type_id == 5
+        AnalyzeFunction.new.count_lat_long(@dataset,column)
+      end
+    end
   end
 
   def remove_semicolon
