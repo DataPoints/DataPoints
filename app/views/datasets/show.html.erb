@@ -239,7 +239,7 @@
     <table class="table table-bordered">
       <tr>
         <td>
-          <button class="btn btn-default glyphicon glyphicon-remove pull-right" id="close-jira-okno"> Close </button>
+          <button class="btn btn-default glyphicon glyphicon-remove pull-right" id="close-jira-okno"> Close</button>
           <br class="blear"/>
         </td>
       </tr>
@@ -251,12 +251,12 @@
       </tr>
       <tr>
         <td class="body">
-          <!-- Here JQuery will add data -->
+          <!-- Here will JQuery add data -->
         </td>
       </tr>
       <tr>
         <td class="fin_foaf">
-          <!-- Here JQuery will add data -->
+          <!-- Here will JQuery add Finstat and Foaf buttons -->
         </td>
       </tr>
     </table>
@@ -290,11 +290,6 @@
   </div>
 </div>
 
-<!--
-http://www.finstat.sk/Hladaj?query=
-http://foaf.sk/?q=
--->
-
 <script>
     function handleJiraOkno() {
         var dataTable = $("#data-table");
@@ -302,12 +297,15 @@ http://foaf.sk/?q=
         var closeJiraOkno = $("#close-jira-okno");
         var header = $("th", dataTable).not('.stats th');
         var ico_index = null;
+        var company_index = null;
 
         <!-- Generating TABLE with labels and empty values-->
         table = '<table class="table table-striped">';
         header.each(function (index) {
             if ($(this).text() == "IČO") {
                 ico_index = index;
+            } else if ($(this).text() == "Obchodné meno") {
+                company_index = index;
             }
             row = '<tr>';
             row += '<td class="text-left">';
@@ -321,36 +319,45 @@ http://foaf.sk/?q=
         table += '</table>';
         $('.body', jiraOkno).append(table);
 
-        <!-- Adding Finstat and Foaf buttons to TABLE -->
-        // TODO: podmienka, ak ICO index je null, nezobraz linky
-        fin_foaf= '<table class="table">';
-        fin_foaf += '<tr>';
-        fin_foaf += '<td class="text-left"><a href="#" class="btn btn-default btn-sm" role="button">Finstat.sk ICO'+ico_index+'</a></td>';
-        fin_foaf += '<td class="text-left"><a href="#" class="btn btn-default btn-sm" role="button">Foaf.sk</a></td>';
-        fin_foaf += '</tr>';
-        fin_foaf += '</table>';
-        $('.fin_foaf', jiraOkno).append(fin_foaf);
+        // Adding Finstat and Foaf buttons to TABLE if dataset has ICO or Company name
+        if (ico_index !== null || company_index !== null) {
+            fin_foaf = '<table class="table">';
+            fin_foaf += '<tr>';
+            fin_foaf += '<td class="text-left"></td>';
+            fin_foaf += '<td class="text-left"></td>';
+            fin_foaf += '</tr>';
+            fin_foaf += '</table>';
+            $('.fin_foaf', jiraOkno).append(fin_foaf);
+        }
 
-        <!-- FUNCTION for closing JIRA Window -->
+        // FUNCTION for closing JIRA Window
         closeJiraOkno.click(function () {
             dataTable.removeClass('col-md-9');
             dataTable.addClass('col-md-12');
             jiraOkno.css({display: 'none'});
         });
 
-        <!-- FUNCTION for opening JIRA Window -->
+        // FUNCTION for opening JIRA Window
         $("tr.body", dataTable).click(function () {
             dataTable.removeClass('col-md-12');
             dataTable.addClass('col-md-9');
             jiraOkno.css({display: 'block'});
         });
 
-        <!-- Reading values from actual row -->
+        // Reading values from actual row
         $("tr.body", dataTable).click(function () {
             data = $("td", this);
 
             data.each(function (index) {
-                // TODO: podmienka, ak index je ICO index a nie je null, tak data hod do a href
+                // If ICO or if Company exist, fill button link
+                if (ico_index !== null && ico_index == index) {
+                    $('.fin_foaf tr:nth-child(1) td:nth-child(1)', jiraOkno).html('<a href="http://www.finstat.sk/Hladaj?query=' + $(this).text() + '" class="btn btn-default btn-sm" role="button" target="_blank">Finstat.sk</a>');
+                    $('.fin_foaf tr:nth-child(1) td:nth-child(2)', jiraOkno).html('<a href="http://foaf.sk/?q=' + $(this).text() + '" class="btn btn-default btn-sm" role="button" target="_blank">Foaf.sk</a>');
+                } else if (company_index !== null && company_index == index) {
+                    $('.fin_foaf tr:nth-child(1) td:nth-child(1)', jiraOkno).html('<a href="http://www.finstat.sk/Hladaj?query=' + $(this).text() + '" class="btn btn-default btn-sm" role="button" target="_blank">Finstat.sk</a>');
+                    $('.fin_foaf tr:nth-child(1) td:nth-child(2)', jiraOkno).html('<a href="http://foaf.sk/?q=' + $(this).text() + '" class="btn btn-default btn-sm" role="button" target="_blank">Foaf.sk</a>');
+                }
+
                 $('.body tr:nth-child(' + (index + 1) + ') td:nth-child(2)', jiraOkno).text($(this).text());
             });
         });
