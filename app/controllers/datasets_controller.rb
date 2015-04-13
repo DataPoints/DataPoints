@@ -46,11 +46,11 @@ class DatasetsController < ApplicationController
         header    = dataset.headers.all
         columns   = header.first.columns.all.order(:id)
 
-        # columns.each do |column|
-        #   if !column.type_id.blank?
-        #     @Types[dataset.id] << Type.find(column.type_id).name
-        #   end
-        # end
+        columns.each do |column|
+          if !column.type_id.blank?
+            @Types[dataset.id] << Type.find(column.type_id).name
+          end
+        end
       end
     end
   end
