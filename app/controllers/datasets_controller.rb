@@ -74,7 +74,7 @@ class DatasetsController < ApplicationController
     @dataset = Dataset.find(params[:id])
     @headers = @dataset.headers.all
     @columns = @headers.first.columns.all.order(:id)
-    @coordinates = Coordinate.all
+    @coordinates = @dataset.coordinates
     @types = Type.all
     @summaries = Summary.all
 
@@ -117,29 +117,27 @@ class DatasetsController < ApplicationController
   def start_analyze
     @dataset = Dataset.find(params[:id])
 
+
+    # Toto destroyAll nie je uplne idealne, lepsie by bolo ukladat ku kazdemu zmenemu stlpcu
+    # aj to ze z coho bol zmeneny. Inak sa to neda, analyze priznak je nafigu, lebo je syntetizovany
+    # z rozdielu previousType, currentType :)
+    @dataset.coordinates.destroy_all
+    coordinateColumns = @dataset.headers.first.columns.where(type_id: 5)
+    coordinateColumns.each do |column|
+      AnalyzeFunction.new.delay.count_lat_long(@dataset,column)
+    end
+
+
     changed_columns=@dataset.headers.first.columns.where(analyze: true)
-
     changed_columns.each do |col|
-
       if (col.analyze == true)
         if(col.type_id==4)
           AnalyzeFunction.new.delay.r_analyze_dataset_user(@dataset,col)
-        elsif(col.type_id==5)
-          AnalyzeFunction.new.delay.count_lat_long(@dataset,col)
+          col.analyze = false
+          col.save
         end
-        col.analyze = false
-        col.save
       end
     end
-   # @dataset.status = 'A'
-   # if @dataset.save
-   #  flash[:success] = 'Wohoho the analysis has started!'
-   # end
-
-
-   # sa = SampleAnalyzer.new
-   # sa.delay.analyze(@dataset)
-
 
     redirect_to :back
   end

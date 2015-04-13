@@ -85,21 +85,53 @@ end
 	return new_class,column_names
  end
 
+  public
   def count_lat_long(dataset, column)
+
+    @logger = Logger.new(STDOUT)
+    @logger.level = Logger::DEBUG
 
     name_of_dataset_data_table = dataset.data_table_name
     data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
 
+    datasetGeos = []                                           # povodna snaha o jediny insert, nakoniec zrejme useless
+    maximumSubsequentGoogleGEOSearchFailures = Settings.maximumSubsequentGoogleGEOSearchFailures
+    currentlyFailedGoogleGEOSearchesInRow = 0
+
     for i in 1..data.count do
-      name_of_town = data.find(i)[column.label]
-      if Coordinate.find_by_mesto(name_of_town).nil?
-        sleep(0.25) # kvoli prekroceniu limitu za sekundu requestov na google
-        coordinates = Geocoder.coordinates(name_of_town)
-        coordinate_to_save = Coordinate.new
-        coordinate_to_save.lat=coordinates[0]
-        coordinate_to_save.lng=coordinates[1]
-        coordinate_to_save.mesto=name_of_town
-        coordinate_to_save.save
+      geoName = data.find(i)[column.label]
+      existingGeocordinate = Coordinate.find_by_mesto(geoName) # toto bude velmi neefektivne :-O, select v cykle ftw
+      if existingGeocordinate.nil?
+          sleep(0.5)                                           # kvoli prekroceniu limitu za sekundu requestov na google (alex)
+          coordinates = Geocoder.coordinates(geoName)
+          unless coordinates == nil
+            currentlyFailedGoogleGEOSearchesInRow = 0         # reset pocitadla failnutych requestov
+
+            datasetGeos << Coordinate.create(
+                :lat => coordinates[0],
+                :lng => coordinates[1],
+                :mesto => geoName
+            )
+          else
+              @logger.info "Google has not returned coordinates for Geo:  #{geoName}"
+              currentlyFailedGoogleGEOSearchesInRow += 1
+              if currentlyFailedGoogleGEOSearchesInRow >= maximumSubsequentGoogleGEOSearchFailures
+                @logger.warn "Maximum number of failed subsequent Google search responses reached; Probably wrong column type ???"
+                return
+              end
+          end
+      else
+          datasetGeos << existingGeocordinate
+      end
+    end
+
+    # zabezpecuje insert po failnuti unikatnosti :)
+    datasetGeos.each do |datasetGeo|
+      begin
+        dataset.coordinates << datasetGeo
+      rescue ActiveRecord::RecordInvalid
+        dataset.coordinates.delete datasetGeo
+        @logger.info "Coordinate #{datasetGeo.id}(#{datasetGeo.mesto}) for dataset #{dataset.id} for  already exists"
       end
     end
   end
