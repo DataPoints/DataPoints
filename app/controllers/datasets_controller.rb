@@ -18,20 +18,19 @@ class DatasetsController < ApplicationController
     @dataset.status = 'S'
     @dataset.save
 
-
-    WorkFlow.new.delay.start(@dataset)
+    WorkFlow.new.delay.start(@dataset, params[:send_mail])
     flash[:info] = 'Dataset is processing...'
     redirect_to datasets_path
   end
 
   def update
     @dataset = Dataset.find(params[:id])
-    if @dataset.update(dataset_params)
-      flash[:success] = 'Dataset information updated.'
-      redirect_to :back
+    if @dataset.update_attributes(dataset_params)
+      flash[:success] = 'Dataset changed successfully'
+      redirect_to datasets_path
     else
-      flash[:danger] = 'Dataset information update failed.'
-      redirect_to :back
+      flash[:danger] = 'There was an error.'
+      redirect_to datasets_path
     end
   end
 

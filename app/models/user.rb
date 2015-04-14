@@ -27,8 +27,8 @@ class User < ActiveRecord::Base
     UserMailer.account_activation(self).deliver
   end
 
-  def send_error_email(error)
-    UserMailer.error_mail(self, error).deliver
+  def send_success_email(dataset)
+    UserMailer.success_mail(self, dataset).deliver
   end
 
   def create_reset_digest
