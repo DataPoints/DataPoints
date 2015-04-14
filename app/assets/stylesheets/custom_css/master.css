@@ -149,6 +149,10 @@ main{
     border: 1px solid #ffffff;
 }
 
+.table-transparent {
+    background: transparent !important;
+}
+
 .table th{
     background: #f46430 !important;
     color: #ffffff;
