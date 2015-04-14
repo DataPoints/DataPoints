@@ -175,22 +175,58 @@ select {
     color: #ffffff !important;
     border: 0;
 }
+
 .btn-default:hover {
     background-color: #cccccc;
     color: #333333 !important;
 }
+
 .btn-default:active {
     background-color: #cccccc;
     color: #333333 !important;
 }
-.btn.white{
+
+.btn.white {
     background: #fff;
     color: #f46430;
     border: 1px solid #ffffff;
 }
-.btn.white:hover{
+
+.btn.white:hover {
     background: transparent;
     color: #ffffff;
+}
+
+.btn-finstat {
+    background-color: #3BB377;
+    color: #ffffff !important;
+    border: 0;
+}
+
+.btn-finstat:hover {
+    background-color: #cccccc;
+    color: #333333 !important;
+}
+
+.btn-finstat:active {
+    background-color: #cccccc;
+    color: #333333 !important;
+}
+
+.btn-foaf {
+    background-color: #1C84CB;
+    color: #ffffff !important;
+    border: 0;
+}
+
+.btn-foaf:hover {
+    background-color: #cccccc;
+    color: #333333 !important;
+}
+
+.btn-foaf:active {
+    background-color: #cccccc;
+    color: #333333 !important;
 }
 
 /*links*/
