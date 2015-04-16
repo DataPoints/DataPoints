@@ -15,7 +15,7 @@ Type.create(name: 'Osoba')
 Type.create(name: 'IČO')
 Type.create(name: 'Firma')
 
-file = File.read("app/lib/FirstDataset/FirstDataset.csv")
+file = File.read('app/lib/FirstDataset/FirstDataset.csv')
 csv = CSV.parse(file, :col_sep => ';')
 
 csv.shift
