@@ -11,10 +11,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150316201502) do
+ActiveRecord::Schema.define(version: 20150331145218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "1:2", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+  end
+
+  create_table "1:3", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+  end
+
+  create_table "2:5", force: true do |t|
+    t.string "Obchodné meno"
+    t.string "PSČ"
+    t.string "Ulica"
+    t.string "Mesto / Obec"
+    t.string "IČO"
+    t.string "Výška pohľadávky"
+  end
 
   create_table "analysis_results", force: true do |t|
     t.integer  "dataset_id"
@@ -33,6 +60,7 @@ ActiveRecord::Schema.define(version: 20150316201502) do
     t.string   "datatyp"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "analyze",    default: false
   end
 
   add_index "columns", ["header_id"], name: "index_columns_on_header_id", using: :btree
@@ -92,6 +120,11 @@ ActiveRecord::Schema.define(version: 20150316201502) do
     t.string "Mesto_Obec"
     t.string "ICO"
     t.string "Vyska_poladavky"
+  end
+
+  create_table "groupings", force: true do |t|
+    t.integer "coordinate_id"
+    t.integer "dataset_id"
   end
 
   create_table "headers", force: true do |t|

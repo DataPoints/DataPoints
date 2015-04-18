@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+  before_action 'logged_in_user', except: [:new, :create]
+  before_action :correct_user, except: [:new, :create]
+
   def new
     @user = User.new
   end
@@ -7,7 +10,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     captcha_message = "The data you entered for the CAPTCHA wasn't correct.  Please try again"
 
-    if verify_recaptcha(model: @user, message: captcha_message)
+    if @user.valid? && verify_recaptcha(model: @user, message: captcha_message)
       @user.save
       @user.send_activation_email
       flash[:info] = 'Please check your email to activate your account.'
@@ -40,27 +43,34 @@ class UsersController < ApplicationController
     if params[:user][:psw] == 'true'
       if @user.authenticate(params[:user][:old_password])
         if @user.update(user_params)
-          flash[:success] = 'Profil uspesne zmeneny.'
+          flash[:success] = 'Profile was successfully changed.'
           redirect_to edit_user_path
         else
           render 'edit'
         end
       else
-        @user.errors.add(:base, "Change password zle heslo")
+        @user.errors.add(:base, "Change password- wrong password")
         render 'edit'
       end
     else
       if @user.authenticate(params[:user][:password])
         if @user.update(user_params)
-          flash[:success] = 'Profil uspesne zmeneny.'
+          flash[:success] = 'Profile was successfully changed.'
           redirect_to edit_user_path
         else
           render 'edit'
         end
       else
-        @user.errors.add(:base, "Parametre zle heslo")
+        @user.errors.add(:base, "Parameters - wrong password")
         render 'edit'
       end
+    end
+  end
+
+  def correct_user
+    if User.find(params[:id]) != current_user
+      flash[:danger] = 'Permission denied.'
+      redirect_to root_path
     end
   end
 

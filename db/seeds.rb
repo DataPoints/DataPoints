@@ -6,21 +6,17 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Type.create(name: 'N/A')
-Type.create(name: 'Email')
-Type.create(name: 'Dátum')
-Type.create(name: 'Číslo')
-Type.create(name: 'Miesto')
-Type.create(name: 'Osoba')
+eng = ['N/A', 'E-mail', 'Date', 'Number', 'Location', 'Person', 'Company reg. number', 'Company']
+eng.each do |typeName|
+  Type.create(name: typeName)
+end
 
-
-file = File.read("app/lib/FirstDataset/FirstDataset.csv").force_encoding('Windows-1250').encode('UTF-8')
+file = File.read("app/lib/FirstDataset/FirstDataset.csv")
 csv = CSV.parse(file, :col_sep => ';')
 
 csv.shift
 csv.each do |row|
-
-  FirstDataset.create(Obchodne_meno:row[0], PSC:row[1],Ulica:row[2],Mesto_Obec:row[3],ICO:row[4],Vyska_poladavky:row[5])
+  FirstDataset.create(Obchodne_meno: row[0], PSC: row[1], Ulica: row[2], Mesto_Obec: row[3], ICO: row[4], Vyska_pohladavky: row[5], Typ_platitela: row[6])
 end
 
 User.create(
@@ -34,6 +30,5 @@ User.create(
 users=User.all
 
 users.each do |user|
-
-DatasetFactory.new.firstDataset(user.id)
+  DatasetFactory.new.firstDataset(user.id)
 end

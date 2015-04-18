@@ -3,27 +3,45 @@
 #
 # Description: Vytvorenie a naplnenie generickej tabulky na zaklade csv suboru.
 require 'cmd_interface'
-
+require 'separator_checker'
 class AnalyzeFunction
 
 def r_clean_dataset(dataset)
     path = dataset.storage
-    cmd = "Rscript app/lib/r/cleanData.R #{path}"
+    character = SeparatorChecker.new.find_separator(path)
+    cmd = "Rscript app/lib/r/cleanData.R #{path} '#{character}'"
+    puts cmd
     CMDInterface.new.Exec_command(cmd)
 end
 
 def r_analyze_dataset(dataset)
     dataset_id = dataset.id
-    path = dataset.storage
+    header_id = dataset.headers.first.id
 
     config   = Rails.configuration.database_configuration
     dbName = config[Rails.env]["database"]
     dbUsername = config[Rails.env]["username"]
     dbPassword = config[Rails.env]["password"]
 
-    cmd = "Rscript app/lib/r/analyze.R #{path} #{dataset_id} #{dbName} #{dbUsername} #{dbPassword}"
+    cmd = "Rscript app/lib/r/analyze.R #{dbName} #{dbUsername} #{dbPassword} #{dataset_id} #{header_id} "
     puts cmd
     CMDInterface.new.Exec_command(cmd)
+end
+
+def r_analyze_dataset_user(dataset,column)
+  dataset_id = dataset.id
+  column_id = column.id
+  column_name = column.label
+
+
+  config   = Rails.configuration.database_configuration
+  dbName = config[Rails.env]["database"]
+  dbUsername = config[Rails.env]["username"]
+  dbPassword = config[Rails.env]["password"]
+
+  cmd = "Rscript app/lib/r/analyze.R  #{dbName} #{dbUsername} #{dbPassword} #{dataset_id} #{column_id} #{column_name}"
+  puts cmd
+  CMDInterface.new.Exec_command(cmd)
 end
 
  def analyze_dataset
@@ -44,7 +62,6 @@ end
 		:linit => 1)
 
 		#puts result
-		puts "Hallo"
 	end
  end
 
@@ -67,4 +84,56 @@ end
 	end
 	return new_class,column_names
  end
+
+  public
+  def count_lat_long(dataset, column)
+
+    @logger = Logger.new(STDOUT)
+    @logger.level = Logger::DEBUG
+
+    name_of_dataset_data_table = dataset.data_table_name
+    data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+
+    datasetGeos = []                                           # povodna snaha o jediny insert, nakoniec zrejme useless
+    maximumSubsequentGoogleGEOSearchFailures = Settings.maximumSubsequentGoogleGEOSearchFailures
+    currentlyFailedGoogleGEOSearchesInRow = 0
+
+    for i in 1..data.count do
+      geoName = data.find(i)[column.label]
+      existingGeocordinate = Coordinate.find_by_mesto(geoName) # toto bude velmi neefektivne :-O, select v cykle ftw
+      if existingGeocordinate.nil?
+          sleep(0.5)                                           # kvoli prekroceniu limitu za sekundu requestov na google (alex)
+          coordinates = Geocoder.coordinates(geoName)
+          unless coordinates == nil
+            currentlyFailedGoogleGEOSearchesInRow = 0         # reset pocitadla failnutych requestov
+
+            datasetGeos << Coordinate.create(
+                :lat => coordinates[0],
+                :lng => coordinates[1],
+                :mesto => geoName
+            )
+          else
+              @logger.info "Google has not returned coordinates for Geo:  #{geoName}"
+              currentlyFailedGoogleGEOSearchesInRow += 1
+
+              if currentlyFailedGoogleGEOSearchesInRow >= maximumSubsequentGoogleGEOSearchFailures
+                @logger.warn "Maximum number of failed subsequent Google search responses reached; Probably wrong column type ???"
+                return
+              end
+          end
+      else
+          datasetGeos << existingGeocordinate
+      end
+    end
+
+    # zabezpecuje insert po failnuti unikatnosti :)
+    datasetGeos.each do |datasetGeo|
+      begin
+        dataset.coordinates << datasetGeo
+      rescue ActiveRecord::RecordInvalid
+        dataset.coordinates.delete datasetGeo
+        @logger.info "Coordinate #{datasetGeo.id}(#{datasetGeo.mesto}) for dataset #{dataset.id} for  already exists"
+      end
+    end
+  end
 end

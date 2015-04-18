@@ -1,44 +1,53 @@
 # Name of Author: Peter Uherek, Martin Losak
 # Created at: 17.11. 2014
-# Updated at: 9.3. 2015
+# Updated at: 18.4. 2015
 #
 # Description: Vytvorenie a naplnenie generickej tabulky na zaklade csv suboru.
 
 require 'csv'
 require 'named_entity'
 require 'cmd_interface'
+require 'logger'
+require 'separator_checker'
 
 
 class TableFactory
  def builder(dataset)
-      #Vytvorenie mena noveho datasetu
-      name_of_data_table = "#{dataset.user_id}:#{dataset.id}"
-      #Nahratie dat z datasetu
-      path = dataset.storage
-      #Kontrola ci je subor csv
-      control_file_format(path)
-      #Nahratie a parsovanie datasetu
-      data = parsing_csv(path)
 
-      #Generice vytvorenie tabuliek
-      create_table(name_of_data_table,data[0])
-      #Ulozenie mena datasetu do tabulky datasets
-      upload_dataset_table("data_table_name",name_of_data_table,dataset)
-      #Vytvorenie noveho zaznamu v tabulke headers
-      header_id = fill_header(dataset.id)
-      #Vytvorenie noveho zaznamu v tabulke columns
-      fill_column(header_id,data[0])
-      #Naplnenie vyplnenej tabulky
-      fill_storage(name_of_data_table,data)
-      #Zisti typy columnov
-      # NamedEntity.new.def_types(dataset.id)
+    @logger = Logger.new(STDOUT)
+    @logger.level = Logger::DEBUG
+
+    # Prepare environment
+    tableName = create_name_of_dataset(dataset)
+    check_format_file(dataset.storage)
+    rawData = parsing_csv(dataset.storage)
+    @logger.debug "Environment in Table Factory was successfully created"
+    @logger.debug "Table name is "+tableName
+
+    # Process of creating new table and other dependencies
+    create_new_table(tableName,rawData[0])
+    @logger.debug "Create new table completed"
+
+    insert_table_name_to_datasets_table("data_table_name",tableName,dataset)
+    @logger.debug "Insert data into datasets table completed"
+
+    headerID = insert_data_into_header_table(dataset.id)
+    @logger.debug "Insert data into header table completed"
+
+    insert_data_into_columns_table(headerID,rawData[0])
+    @logger.debug "Insert data into columns table completed"
+
+    insert_data_into_new_created_table(tableName,rawData)
+    @logger.debug "Insert data into new created table completed"
+
+    # Recongize type of columns
+    # NamedEntity.new.def_types(dataset.id)
   end
 
  private
- def control_file_format(path)
+ def check_format_file(path)
    number_of_last_occurence_dots=path.rindex('.')
    format = path[number_of_last_occurence_dots,path.length]
-   puts format
    if format !='.csv'
       cmd = "rm #{path}"
       CMDInterface.new.Exec_command(cmd)
@@ -47,59 +56,76 @@ class TableFactory
  end
 
   private
-  def upload_dataset_table(name,stor,dataset)
+  def insert_table_name_to_datasets_table(name,table_name,dataset)
     begin
-     dataset.update(:"#{name}" => stor)                 
+     dataset.update(:"#{name}" => table_name)
     rescue Exception => e
-      raise "Update chrashed. Error #{$!}"
+      raise "Update crashed. Error #{$!}"
     end
   end
 
   private
   def parsing_csv(path)
     begin
-    file = File.read(path).force_encoding('Windows-1250').encode('UTF-8')
-    csv = CSV.parse(file, :col_sep => ';')
-    header = csv[0]
-    puts header
-    rescue
-      raise "Path to the dataset is wrong. Error: #{$!}"
+      puts path
+      file = File.read(path)
+      character = SeparatorChecker.new.find_separator(path)
+      csv = CSV.parse(file, :col_sep => character)
+    rescue Errno::ENOENT
+        raise "Path to the dataset is wrong. Error: #{$!}"
+    rescue CSV::MalformedCSVError
+        raise "Somtehing is wrong with dataset. Error: #{$!}"
     end
     return csv
   end
 
   private
-  def fill_storage(name_of_dataset,data)
+  def insert_data_into_new_created_table(name_of_dataset,data)
     begin
     new_class = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset } 
     # 'o' is now a wrapper for the row of some_table where 'id = 1'
     cols = new_class.columns.map(&:name)
     data.shift
-    
+
+    check_number =(data.count*10)/100
+    ten_percent = (data.count*10)/100
+    counter = 0
+
     data.each do |row|
       new_record = new_class.new()
       for i in 1..cols.count()-1
         new_record[cols[i]] = row[i-1]
       end
-      new_record.save! 
+      new_record.save!
+      counter += 1
+
+      if(check_number==counter)
+        @logger.debug "Inserted rows #{counter}/#{data.count} in percent #{check_number}%"
+        check_number += ten_percent
+      end
     end
+    @logger.debug "Inserted rows #{counter}/#{data.count} in percent #{check_number}%"
     rescue
       raise "Process crashed during insert new records into #{name_of_dataset}. Error #{$!}"
     end
   end
 
   private
-  def fill_header(id)
+  def insert_data_into_header_table(id)
+    begin
     new_header = Header.new
     new_header.origin = true
     @dataset = Dataset.find(id) 
     new_header.dataset_id = @dataset.id
     new_header.save!
+    rescue
+      raise "Process chrashed during insert new records into Header table.Error #{$!}"
+    end
     return new_header.id
   end
 
   private
-  def fill_column(id,header)
+  def insert_data_into_columns_table(id,header)
     begin
     for i in 0..header.count()-2
       new_column = Column.new
@@ -114,7 +140,7 @@ class TableFactory
   end
 
  private
-  def create_table(name_of_data_table,header)
+  def create_new_table(name_of_data_table,header)
     table_creator(name_of_data_table,method(:column_factory),header)
   end
 
@@ -136,7 +162,18 @@ class TableFactory
     puts "Number of columns #{header.count()-1}"
     for i in 0..header.count()-2
       puts "#{i}:#{header[i]}"
+      if header[i]=='id'
+        header[i]='origin_id'
+        @logger.warn 'Dataset has id column. Origin id column had to be rewritten'
+        puts "#{i}:#{header[i]}"
+      end
       t.string :"#{header[i]}"
     end 
+  end
+
+
+  private
+  def create_name_of_dataset(dataset)
+    return "#{dataset.user_id}:#{dataset.id}"
   end
 end

@@ -2,6 +2,7 @@ require 'net/http'
 require 'digest/md5'
 require 'table_factory.rb'
 require 'analyze_function.rb'
+require 'check_semicolon'
 require 'sample_analyzer'
 require 'logger'
 require 'io/console'
@@ -19,21 +20,45 @@ end
 
 class WorkFlow
 
-  def start(dataset)
+  def start(dataset, send_mail)
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::DEBUG
-    @logger.debug "dataset being downloaded"
+    @logger.debug "Dataset download is going to start"
     @dataset = dataset
+
     begin
       download
-      pred_processing
+      @logger.debug "Download complete"
+
+      remove_semicolon
+      @logger.debug "Remove separator complete"
+      r_cleanData
+      @logger.debug "Data cleaning complete"
+      add_semicolon
+      @logger.debug "Add separator complete"
+
+      create_db_table
+      @logger.debug "Create db table complete"
+
       find_type
-      r_scripts
+      @logger.debug "Data type guess complete"
+
+      init_map
+      @logger.debug "Map data initialization complete"
+
+      r_analyze
+      @logger.debug "Dataset R analysis complete"
+
       @dataset.status = 'P'
-      @dataset.save
+      @dataset.save!
+      @logger.debug "Download info Saved as #{@dataset.status}"
+
+      if send_mail == 'true'
+        @dataset.user.send_success_email(@dataset)
+      end
     rescue Exception => e
       @dataset.status = 'E'
-      puts e.to_s
+      @logger.error e.to_s
       @dataset.save
       # @dataset.user.send_error_email(e.to_s)
     end
@@ -45,6 +70,7 @@ class WorkFlow
 
     #Prepare enviroment variables
     origin_uri = URI(@dataset.link)
+    @logger.debug  origin_uri
     target_file = (0...50).map { ('a'..'z').to_a[rand(26)] }.join
     target_extension = File.extname(origin_uri.path)
     target_uri = Settings.dataset_target_path + target_file + target_extension
@@ -142,7 +168,7 @@ class WorkFlow
     end
   end
 
-  def pred_processing
+  def create_db_table
     TableFactory.new.builder(@dataset)
   end
 
@@ -150,8 +176,27 @@ class WorkFlow
     NamedEntity.new.def_types(@dataset.id)
   end
 
-  def r_scripts
+  def r_cleanData
     AnalyzeFunction.new.r_clean_dataset(@dataset)
+  end
+
+  def r_analyze
     AnalyzeFunction.new.r_analyze_dataset(@dataset)
+  end
+
+  def init_map
+    @dataset.headers.first.columns.each do |column|
+      if column.type_id == 5
+        AnalyzeFunction.new.count_lat_long(@dataset,column)
+      end
+    end
+  end
+
+  def remove_semicolon
+    CheckSemicolon.new.remove_semicolon(@dataset.storage)
+  end
+
+  def add_semicolon
+    CheckSemicolon.new.add_semicolon(@dataset.storage)
   end
 end

@@ -1,7 +1,11 @@
 <h1 class="title">Upload your Dataset</h1>
 
 <div class="center">
-  <p>Tip: http://student.fiit.stuba.sk/~losak11/test1.csv</p>
+  <p>We would like to inform you that we accept only csv file</p>
+  <p>Tip 1: http://student.fiit.stuba.sk/~losak11/test1.csv</p>
+  <p>Tip 2: http://student.fiit.stuba.sk/~uherek11/test3.csv</p>
+  <p>Tip 3: http://student.fiit.stuba.sk/~uherek11/test5.csv</p>
+  <p>Tip 4: http://pro-media.sk/facts.csv</p>
 </div>
 
 <div>
@@ -16,7 +20,10 @@
         <%= f.text_field :description %><br>
 
         <%= f.label :link %><br>
-        <%= f.text_field :link, placeholder: 'http://' %><br><br>
+        <%= f.text_field :link, placeholder: 'http://' %><br>
+
+        <%= label_tag :send_mail, 'Send email after analysis is complete.' %>
+        <%= check_box_tag :send_mail, true, false, {style: 'width: 10px;'} %><br><br>
 
         <%= f.submit 'Analyze!', class: 'btn btn-primary' %>
     <% end %>

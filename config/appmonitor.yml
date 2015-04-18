@@ -3,4 +3,4 @@ project_id: '24'
 monitoring:
   development: false
   staging: false
-  production: false
+  production: true
