@@ -49,7 +49,7 @@ class UsersController < ApplicationController
           render 'edit'
         end
       else
-        @user.errors.add(:base, "Change password- zle heslo")
+        @user.errors.add(:base, "Change password- wrong password")
         render 'edit'
       end
     else
@@ -61,7 +61,7 @@ class UsersController < ApplicationController
           render 'edit'
         end
       else
-        @user.errors.add(:base, "Parametre zle heslo")
+        @user.errors.add(:base, "Parameters - wrong password")
         render 'edit'
       end
     end

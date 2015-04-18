@@ -6,7 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-eng = ['N/A', 'E-mail', 'Date', 'Number', 'Location', 'Person']
+eng = ['N/A', 'E-mail', 'Date', 'Number', 'Location', 'Person', 'Company reg. number', 'Company']
 eng.each do |typeName|
   Type.create(name: typeName)
 end

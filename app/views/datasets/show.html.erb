@@ -320,20 +320,14 @@
   </div>
 </div>
 
-<br />
-<br />
-<br />
-
-<div class="row">
+<div class="row" style="margin: 315px 0 0 0">
   <div class="col-md-12">
-    X: <%= @xType %><br />
-    Y: <%= @yType %><br />
     <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
         <%= hidden_field_tag :column_x, @actualXColumn %>
         <%= hidden_field_tag :column_y, @nextNumericColumn %>
         <%= hidden_field_tag :id, @dataset.id %>
 
-        <%= submit_tag 'Switch to next numeric column', class: 'btn btn-default', style: 'margin: 0' %>
+        <%= submit_tag 'Switch Y to "'+@nextNumericColumnName+'" column', class: 'btn btn-default', style: 'margin: 0' %>
     <% end %>
   </div>
 </div>

@@ -135,6 +135,7 @@ class DatasetsController < ApplicationController
     end
 
     @nextNumericColumn = @numericColumns[@nextNumericColumn]
+    @nextNumericColumnName = @columns.find_by_label(@nextNumericColumn).label
     @nextNumericColumn = @columns.find_by_label(@nextNumericColumn).id
 
     #get actual x column
