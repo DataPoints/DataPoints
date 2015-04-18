@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get 'datasets/change_type' => 'datasets#change_type'
   get 'datasets/start_analyze' => 'datasets#start_analyze'
   get 'datasets/change_X_Y' => 'datasets#change_X_Y'
+  get 'datasets/change_H' => 'datasets#change_H'
   get 'datasets/show' =>'datasets#show'
   get 'home/index'
   get 'signup' => 'users#new'
