@@ -3,12 +3,13 @@
 #
 # Description: Vytvorenie a naplnenie generickej tabulky na zaklade csv suboru.
 require 'cmd_interface'
-
+require 'separator_checker'
 class AnalyzeFunction
 
 def r_clean_dataset(dataset)
     path = dataset.storage
-    cmd = "Rscript app/lib/r/cleanData.R #{path}"
+    character = SeparatorChecker.new.find_separator(path)
+    cmd = "Rscript app/lib/r/cleanData.R #{path} '#{character}'"
     puts cmd
     CMDInterface.new.Exec_command(cmd)
 end
@@ -61,7 +62,6 @@ end
 		:linit => 1)
 
 		#puts result
-		puts "Hallo"
 	end
  end
 
@@ -115,6 +115,7 @@ end
           else
               @logger.info "Google has not returned coordinates for Geo:  #{geoName}"
               currentlyFailedGoogleGEOSearchesInRow += 1
+
               if currentlyFailedGoogleGEOSearchesInRow >= maximumSubsequentGoogleGEOSearchFailures
                 @logger.warn "Maximum number of failed subsequent Google search responses reached; Probably wrong column type ???"
                 return

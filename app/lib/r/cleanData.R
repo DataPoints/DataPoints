@@ -1,7 +1,7 @@
 args <- commandArgs(trailingOnly = TRUE)
 path <- args[1]
 
-data <- read.csv(file=path, sep=';', stringsAsFactors=FALSE, check.names=FALSE, fileEncoding="windows-1250")
+data <- read.csv(file=path, sep=args[2], stringsAsFactors=FALSE, check.names=FALSE, fileEncoding="windows-1250")
 
 cleanData <- function(cell){
   #replace commas by dots
@@ -19,4 +19,4 @@ cleanData <- function(cell){
 }
 
 data[] <- apply(data, c(1,2), cleanData)
-write.table(data, file=path, row.names=FALSE, na="NULL", col.names=TRUE, sep=";")
+write.table(data, file=path, row.names=FALSE, na="NULL", col.names=TRUE, sep=args[2])
