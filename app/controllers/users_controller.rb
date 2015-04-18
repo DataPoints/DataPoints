@@ -43,19 +43,19 @@ class UsersController < ApplicationController
     if params[:user][:psw] == 'true'
       if @user.authenticate(params[:user][:old_password])
         if @user.update(user_params)
-          flash[:success] = 'Profil uspesne zmeneny.'
+          flash[:success] = 'Profile was successfully changed.'
           redirect_to edit_user_path
         else
           render 'edit'
         end
       else
-        @user.errors.add(:base, "Change password zle heslo")
+        @user.errors.add(:base, "Change password- zle heslo")
         render 'edit'
       end
     else
       if @user.authenticate(params[:user][:password])
         if @user.update(user_params)
-          flash[:success] = 'Profil uspesne zmeneny.'
+          flash[:success] = 'Profile was successfully changed.'
           redirect_to edit_user_path
         else
           render 'edit'

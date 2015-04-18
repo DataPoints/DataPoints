@@ -6,16 +6,12 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Type.create(name: 'N/A')
-Type.create(name: 'Email')
-Type.create(name: 'Dátum')
-Type.create(name: 'Číslo')
-Type.create(name: 'Miesto')
-Type.create(name: 'Osoba')
-Type.create(name: 'IČO')
-Type.create(name: 'Firma')
+eng = ['N/A', 'E-mail', 'Date', 'Number', 'Location', 'Person']
+eng.each do |typeName|
+  Type.create(name: typeName)
+end
 
-file = File.read('app/lib/FirstDataset/FirstDataset.csv')
+file = File.read("app/lib/FirstDataset/FirstDataset.csv")
 csv = CSV.parse(file, :col_sep => ';')
 
 csv.shift

@@ -197,9 +197,9 @@ class DatasetsController < ApplicationController
     @xData =data.pluck(@columnX.to_s)[0..20]
 
 
-    #puts 'Toto je stlpec'
-    #puts @yData.inspect
-    #puts @xData.inspect
+    puts 'This is column'
+    puts @yData.inspect
+    puts @xData.inspect
     redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xType => @columnX, :yType => @columnY, :xData => @xData,:yData => @yData, :anchor => 'change'
   end
 

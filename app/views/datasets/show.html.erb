@@ -139,6 +139,7 @@
             <h4 class="modal-title" id="myModalLabel">Analyze Information</h4>
           </div>
           <div class="modal-body">
+            Analysis can take a lot of time. Go for a cup of coffee and chillax. We will send you a email to let you know, that your dataset is over.
             Analyze can take a lot of time. Go for a cup of coffee and chillax. We will send you a email to let you
             know, that your dataset is over.
           </div>
@@ -153,6 +154,17 @@
       </div>
     </div>
 
+<!--<%= @dataset.status %>-->
+<% if @dataset.status == "S" %>
+    Not analyzed
+<% end %>
+<% if @dataset.status == "WA" %>
+    Analysis is in progress
+<% end %>
+<% if @dataset.status == "EA" %>
+    Analysis successfully completed
+    <%= @dataset.analysis_results[0].result %>
+<% end %>
     <!--<%= @dataset.status %>-->
     <% if @dataset.status == "S" %>
         Neanalyzovany
@@ -323,6 +335,7 @@
 
         <%= submit_tag 'Switch to next numeric column', class: 'btn btn-default', style: 'margin: 0' %>
     <% end %>
+  </div>
 </div>
 
 <script>

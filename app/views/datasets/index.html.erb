@@ -28,7 +28,7 @@
           <td type="edit"><%= dataset.description %></td>
           <td>
             <% case dataset.status
-                 when 'P' %><span class="label label-success">Success downloaded</span>
+                 when 'P' %><span class="label label-success">Successfully downloaded</span>
                 <% when 'A' %><span class="label label-primary">Analyzed</span>
                 <% when 'S' %><span class="label label-info">In process</span>
                 <% when 'E' %> <span class="label label-danger">Error</span>
@@ -71,7 +71,7 @@
             <% if dataset.status == 'P' or dataset.status == 'A'%>
                 <%= link_to 'Detail', dataset %>
             <% else %>
-                Detail nie je k dispozicii
+                Detail not available
             <% end %>
           </td>
       </tr>
