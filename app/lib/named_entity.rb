@@ -31,15 +31,15 @@ class NamedEntity
 
       #regex for email - upraveny standard z RFC 5322
       if value =~ emailREGEX
-        type = "Email"
+        type = "E-mail"
       elsif value.valid_integer? || value.valid_float?
-        type = "Číslo"
+        type = "Number"
       elsif !Geocoder.coordinates(value).nil?
-        type = "Miesto"
+        type = "Location"
       elsif value.valid_date?
-        type = "Dátum"
+        type = "Date"
       elsif value =~ osobaREGEX
-        type = "Osoba"
+        type = "Person"
       else
         type = "N/A"
       end
