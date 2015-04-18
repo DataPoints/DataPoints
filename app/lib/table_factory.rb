@@ -100,11 +100,11 @@ class TableFactory
       counter += 1
 
       if(check_number==counter)
-        @logger.debug "Inserted rows #{counter}/#{data.count} in percent #{check_number}"
+        @logger.debug "Inserted rows #{counter}/#{data.count} in percent #{check_number}%"
         check_number += ten_percent
       end
     end
-    @logger.debug "Inserted rows #{counter}/#{data.count} in percent #{check_number}"
+    @logger.debug "Inserted rows #{counter}/#{data.count} in percent #{check_number}%"
     rescue
       raise "Process crashed during insert new records into #{name_of_dataset}. Error #{$!}"
     end
@@ -162,6 +162,11 @@ class TableFactory
     puts "Number of columns #{header.count()-1}"
     for i in 0..header.count()-2
       puts "#{i}:#{header[i]}"
+      if header[i]=='id'
+        header[i]='origin_id'
+        @logger.warn 'Dataset has id column. Origin id column had to be rewritten'
+        puts "#{i}:#{header[i]}"
+      end
       t.string :"#{header[i]}"
     end 
   end
