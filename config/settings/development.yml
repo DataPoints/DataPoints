@@ -1,4 +1,7 @@
-dataset_target_path : "/Users/alexostrovsky/Downloads"
+dataset_target_path : "/home/jkmetko/RubymineProjects/"
 numberOfDownloadAttemptsBeforeFailure : 3
 delayBetweenAnotherDownloadAttempt : 10
 fileMaxSizeInBytes : 1000000
+
+
+maximumSubsequentGoogleGEOSearchFailures : 5
