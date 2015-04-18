@@ -100,11 +100,11 @@ class TableFactory
       counter += 1
 
       if(check_number==counter)
-        @logger.debug "Inserted rows #{counter}/#{data.count} in percent #{check_number}%"
+        @logger.debug "Inserted rows #{counter}/#{data.count} in percent #{check_number*100/data.count}%"
         check_number += ten_percent
       end
     end
-    @logger.debug "Inserted rows #{counter}/#{data.count} in percent #{check_number}%"
+    @logger.debug "Inserted rows #{counter}/#{data.count} in percent 100%"
     rescue
       raise "Process crashed during insert new records into #{name_of_dataset}. Error #{$!}"
     end
