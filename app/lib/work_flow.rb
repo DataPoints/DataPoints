@@ -23,7 +23,7 @@ class WorkFlow
   def start(dataset, send_mail)
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::DEBUG
-    @logger.debug "dataset being downloaded"
+    @logger.debug "Dataset download is going to start"
     @dataset = dataset
 
     begin
@@ -31,12 +31,14 @@ class WorkFlow
       @logger.debug "Download complete"
 
       remove_semicolon
+      @logger.debug "Remove separator complete"
       r_cleanData
-      add_semicolon
       @logger.debug "Data cleaning complete"
+      add_semicolon
+      @logger.debug "Add separator complete"
 
-      pred_processing
-      @logger.debug "Preprocessing complete"
+      create_db_table
+      @logger.debug "Create db table complete"
 
       find_type
       @logger.debug "Data type guess complete"
@@ -56,7 +58,7 @@ class WorkFlow
       end
     rescue Exception => e
       @dataset.status = 'E'
-      puts e.to_s
+      @logger.error e.to_s
       @dataset.save
       # @dataset.user.send_error_email(e.to_s)
     end
@@ -68,6 +70,7 @@ class WorkFlow
 
     #Prepare enviroment variables
     origin_uri = URI(@dataset.link)
+    @logger.debug  origin_uri
     target_file = (0...50).map { ('a'..'z').to_a[rand(26)] }.join
     target_extension = File.extname(origin_uri.path)
     target_uri = Settings.dataset_target_path + target_file + target_extension
@@ -165,7 +168,7 @@ class WorkFlow
     end
   end
 
-  def pred_processing
+  def create_db_table
     TableFactory.new.builder(@dataset)
   end
 
