@@ -7,4 +7,7 @@ class Dataset < ActiveRecord::Base
   validates :description, length: {maximum: 150}
   VALID_URL_REGEX = /\Ahttps?:\/\/[\S]+\z/i
   validates :link, presence: true, format: {with: VALID_URL_REGEX}
+
+  has_many :groupings, :dependent => :destroy
+  has_many :coordinates, :through => :groupings
 end
