@@ -100,7 +100,7 @@ class TableFactory
       counter += 1
 
       if(check_number==counter)
-        @logger.debug "Inserted rows #{counter}/#{data.count} in percent #{check_number*100/data.count}%"
+        @logger.debug "Inserted rows #{counter}/#{data.count} in percent #{(check_number*100)/data.count}%"
         check_number += ten_percent
       end
     end
