@@ -5,13 +5,14 @@ Rails.application.routes.draw do
   get 'datasets/change_type' => 'datasets#change_type'
   get 'datasets/start_analyze' => 'datasets#start_analyze'
   get 'datasets/change_X_Y' => 'datasets#change_X_Y'
+  get 'datasets/change_H' => 'datasets#change_H'
   get 'datasets/show' =>'datasets#show'
   get 'home/index'
   get 'signup' => 'users#new'
   get 'login' => 'sessions#new'
   get 'datasets/detail' => 'datasets#detail'
-  get 'contact_us/index'
-  get 'contact/index'
+  get 'contact_us/' => 'contact_us#new'
+  get 'contact/new'
   get 'about_us/index'
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
@@ -25,7 +26,7 @@ Rails.application.routes.draw do
   resources :datasets
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
-  resources :contact_us
+  resources :contact_us, only: [:new, :create]
   resources :about_us
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -9,7 +9,7 @@ ActionMailer::Base.smtp_settings = {
     :domain => "gmail.com",
     :authentication => "plain",
     :user_name => "tp3fiit@gmail.com",
-    :password => "fiitkari2014"
+    :password => ""
 }
 
 class Notifier < ActionMailer::Base

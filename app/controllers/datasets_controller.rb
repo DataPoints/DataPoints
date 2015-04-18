@@ -5,7 +5,8 @@ require 'analyze_function.rb'
 require 'sample_analyzer'
 
 class DatasetsController < ApplicationController
-  before_action :logged_in_user, only: [:create, :destroy]
+  before_action :logged_in_user
+  before_action :correct_user, except: [:index, :new, :create]
 
   def new
     @dataset = Dataset.new
@@ -17,24 +18,25 @@ class DatasetsController < ApplicationController
     @dataset.status = 'S'
     @dataset.save
 
-
-    WorkFlow.new.delay.start(@dataset)
-    flash[:info] = 'Dataset sa spracovava...'
+    WorkFlow.new.delay.start(@dataset, params[:send_mail])
+    flash[:info] = 'Dataset is processing...'
     redirect_to datasets_path
   end
 
   def update
     @dataset = Dataset.find(params[:id])
-    if @dataset.update(dataset_params)
+    if @dataset.update_attributes(dataset_params)
+      flash[:success] = 'Dataset changed successfully'
       redirect_to datasets_path
     else
-      render 'edit'
+      flash[:danger] = 'There was an error.'
+      redirect_to datasets_path
     end
   end
 
   def index
     # @dataset = Dataset.find(params[:id])
-    @Datasets = Dataset.where(user_id: current_user.id, deleted: false).first(10)
+    @Datasets = Dataset.where(user_id: current_user.id, deleted: false).page(params[:page]).per(25)
 
     @Types = { }
     @Datasets.each do |dataset|
@@ -60,9 +62,11 @@ class DatasetsController < ApplicationController
   def destroy
     @dataset = Dataset.find(params[:id])
     if @dataset.update(deleted: true)
-      redirect_to datasets_path
+      flash[:success] = 'Dataset was deleted.'
+      redirect_to :back
     else
-      render 'edit'
+      flash[:danger] = 'Dataset deletion failed.'
+      redirect_to :back
     end
   end
 
@@ -70,17 +74,18 @@ class DatasetsController < ApplicationController
     @dataset = Dataset.find(params[:id])
     @headers = @dataset.headers.all
     @columns = @headers.first.columns.all.order(:id)
-    @coordinates = Coordinate.all
+    @coordinates = @dataset.coordinates
     @types = Type.all
     @summaries = Summary.all
 
     name_of_dataset_data_table = @dataset.data_table_name
-    @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+    @data = Class.new(ActiveRecord::Base){self.table_name = name_of_dataset_data_table }
+    @data = @data.page(params[:page]).per(25)
 
     @number_of_data_rows = @data.count
-    if @number_of_data_rows > 15
-      @number_of_data_rows = 15
-    end
+    # if @number_of_data_rows > 15
+    #   @number_of_data_rows = 15
+    # end
 
     @names_of_data_columns = @data.column_names
 
@@ -88,56 +93,99 @@ class DatasetsController < ApplicationController
     #data=data.order('"'+"Mesto / Obec"+'"')
     #@yData =data.pluck("Výška pohľadávky")[0..10].collect{|i| i.to_f}
     #@xData =data.pluck("Mesto / Obec")[0..10]
-    if params[:xData].nil?
-      @xData = Array.[](1991,1992,1993,1994,1995)
-      @yData = Array.[](20,74,5,101,36)
-    else
-      @xData=params[:xData]
-      @yData=params[:yData].collect{|i| i.to_f}
+
+    #get all numeric columns
+    numericTypeID = Type.find_by_name("Number").id
+    @numericColumns = Array.new
+    @nonNumericColumns = Array.new
+    @columns.each do |column|
+      if(column.type_id == numericTypeID)
+        @numericColumns.push(column.label)
+      else
+        @nonNumericColumns.push(column.label)
+      end
     end
+
+    if params[:xData].nil?
+      @xData = Array.new
+      @yData = Array.new
+
+      #draw first non-numeric vs first numeric columns into chart
+      @data.each do |row|
+        @xData.push(row[@nonNumericColumns[0]])
+        @yData.push(row[@numericColumns[0]].to_f)
+      end
+      @xType = @nonNumericColumns[0]
+      @yType = @numericColumns[0]
+    else
+      @xData = params[:xData]
+      @yData = params[:yData].collect{|i| i.to_f}
+      @xType = params[:xType]
+      @yType = params[:yType]
+    end
+
+    if params[:hData].nil? && @hData.nil?
+      @hData = "['Shanghai', 23.7],
+                    ['Lagos', 16.1],
+                    ['Instanbul', 14.2]"
+    else
+      @hData=params[:hData]
+    end
+
+    #get next numeric column
+    if(@numericColumns.include? @yType)
+      @nextNumericColumn = @numericColumns.index(@yType)+1
+      if(@nextNumericColumn >= @numericColumns.count)
+        @nextNumericColumn = 0
+      end
+    else
+      @nextNumericColumn = 0
+    end
+
+    @nextNumericColumn = @numericColumns[@nextNumericColumn]
+    @nextNumericColumn = @columns.find_by_label(@nextNumericColumn).id
+
+    #get actual x column
+    @actualXColumn = @columns.find_by_label(@xType).id
   end
 
   def change_type
     @dataset = Dataset.find(params[:id])
-    name_of_dataset_data_table = @dataset.data_table_name
-    @data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
 
     column_to_change_type = @dataset.headers.first.columns.find(params[:column_id])
     column_to_change_type.type_id = params[:type_id]
+    column_to_change_type.analyze = true
     column_to_change_type.save
 
-    if params[:type_id] == '5'
-      for i in 1..@data.count do
-        name_of_town = @data.find(i)[Column.find(params[:column_id]).label]
-        if Coordinate.find_by_mesto(name_of_town).nil?
-          sleep(0.25) # kvoli prekroceniu limitu za sekundu requestov na google
-          coordinates = Geocoder.coordinates(name_of_town)
-          coordinate_to_save = Coordinate.new
-          coordinate_to_save.lat=coordinates[0]
-          coordinate_to_save.lng=coordinates[1]
-          coordinate_to_save.mesto=name_of_town
-          coordinate_to_save.save
-        end
-      end
-    end
-
-    flash[:success] = 'Changes saved!'
-    redirect_to :back
+    redirect_to dataset_path(@dataset, :anchor => 'type')
   end
 
 
   def start_analyze
     @dataset = Dataset.find(params[:id])
 
-    @dataset.status = 'A'
-    if @dataset.save
-      flash[:success] = 'Wohoho the analysis has started!'
+
+    # Toto destroyAll nie je uplne idealne, lepsie by bolo ukladat ku kazdemu zmenemu stlpcu
+    # aj to ze z coho bol zmeneny. Inak sa to neda, analyze priznak je nafigu, lebo je syntetizovany
+    # z rozdielu previousType, currentType :)
+    @dataset.coordinates.destroy_all
+    coordinateColumns = @dataset.headers.first.columns.where(type_id: 5)
+    coordinateColumns.each do |column|
+      AnalyzeFunction.new.delay.count_lat_long(@dataset,column)
     end
 
 
-    sa = SampleAnalyzer.new
-    sa.delay.analyze(@dataset)
-    
+    changed_columns=@dataset.headers.first.columns.where(analyze: true)
+    changed_columns.each do |col|
+      if (col.analyze == true)
+        if(col.type_id==4)
+          AnalyzeFunction.new.delay.r_analyze_dataset_user(@dataset,col)
+          col.analyze = false
+          col.save
+        end
+      end
+    end
+
     redirect_to :back
   end
 
@@ -157,13 +205,61 @@ class DatasetsController < ApplicationController
     @xData =data.pluck(@columnX.to_s)[0..20]
 
 
-    puts 'Toto je stlpec'
+    puts 'This is column'
     puts @yData.inspect
     puts @xData.inspect
-    flash[:success] = 'values changed !'
-    redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xData => @xData,:yData => @yData
+    redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xType => @columnX, :yType => @columnY, :xData => @xData,:yData => @yData, :anchor => 'change'
   end
 
+  def change_H
+
+    dataset = Dataset.find(params[:id])
+    @columnH=dataset.headers.first.columns.find(params[:column_h]).label
+
+    name_of_dataset_data_table = dataset.data_table_name
+    data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+
+    data=data.order('"'+@columnH.to_s+'"')
+
+    hString = ""
+
+    hDataraw = data.pluck(@columnH.to_s)
+    if (hDataraw.length() != hDataraw.uniq.length())
+      hDataraw =  Hash[*hDataraw.group_by{ |v| v }.flat_map{ |k, v| [k, v.size] }]
+      hDataraw = hDataraw.sort_by {|k,v| v}.reverse
+
+      poslednyZaznam = 0
+      hDataraw.each do |key, array|
+        poslednyZaznam = poslednyZaznam + 1
+        hString = hString + "['#{key}',#{array}]"
+
+        if (poslednyZaznam != 10)
+          hString = hString + ","
+        else
+          break
+        end
+
+      end
+
+      @hData = hString
+      puts hString
+      puts 'Toto je stlpec'
+      puts @hData.inspect
+
+      redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :hData => @hData, :anchor => 'change'
+    else
+      flash[:danger] = 'Each value in selected column is uniq.'
+      redirect_to :back
+    end
+  end
+
+  def correct_user
+    dataset = Dataset.find(params[:id])
+    if dataset.user != current_user
+      flash[:danger] = 'Permission denied.'
+      redirect_to root_path
+    end
+  end
 
   private
   def dataset_params

@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_many :datasets, dependent: :destroy
+  has_many :datasets, :dependent => :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save   :downcase_email
   before_create :create_activation_digest
@@ -27,8 +27,8 @@ class User < ActiveRecord::Base
     UserMailer.account_activation(self).deliver
   end
 
-  def send_error_email(error)
-    UserMailer.error_mail(self, error).deliver
+  def send_success_email(dataset)
+    UserMailer.success_mail(self, dataset).deliver
   end
 
   def create_reset_digest

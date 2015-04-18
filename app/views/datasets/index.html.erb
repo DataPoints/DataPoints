@@ -1,11 +1,12 @@
 
+
 <div class="panel panel-default wrapper">
   <!-- Default panel contents -->
 
   <div class="panel-heading title">Your Datasets</div>
   <table border="0" class="table">
     <tr>
-      <th scope="col">N</th>
+      <!--<th scope="col">N</th>-->
       <th scope="col">Name </th>
       <th scope="col">Description </th>
       <th scope="col">Status </th>
@@ -15,18 +16,19 @@
       <th></th>
       <th></th>
       <th></th>
+      <th></th>
     </tr>
 
     <%i=0%>
     <% @Datasets.each do |dataset| %>
         <tr>
           <%i=i+1%>
-          <td><%=i%></td>
+          <!--<td><%=i%></td>-->
           <td type="edit"><%= dataset.name %></td>
           <td type="edit"><%= dataset.description %></td>
           <td>
             <% case dataset.status
-                 when 'P' %><span class="label label-success">Success downloaded</span>
+                 when 'P' %><span class="label label-success">Successfully downloaded</span>
                 <% when 'A' %><span class="label label-primary">Analyzed</span>
                 <% when 'S' %><span class="label label-info">In process</span>
                 <% when 'E' %> <span class="label label-danger">Error</span>
@@ -55,7 +57,7 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal fade"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                   <h4 class="modal-title" id="myModalLabel">Edit</h4>
                 </div>
                 <div class="modal-body">
@@ -69,10 +71,13 @@
             <% if dataset.status == 'P' or dataset.status == 'A'%>
                 <%= link_to 'Detail', dataset %>
             <% else %>
-                Detail
+                Detail not available
             <% end %>
           </td>
       </tr>
     <%end%>
   </table>
+  <div>
+    <%= paginate @Datasets %>
+  </div>
 </div>

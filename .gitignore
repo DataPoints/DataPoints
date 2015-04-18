@@ -15,10 +15,12 @@
 /log/*.log
 /tmp
 
+
 # Ignore rubymine config files
 /.idea
 /.idea/*
 
-config/environments/*.rb
-config/settings/*.yml
-config/database.yml
+# Application credentials and configuration files
+/config/environments/*.rb
+/config/settings/*.yml
+/config/database.yml
