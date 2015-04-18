@@ -201,10 +201,6 @@ class DatasetsController < ApplicationController
     puts @yData.inspect
     puts @xData.inspect
     redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xType => @columnX, :yType => @columnY, :xData => @xData,:yData => @yData, :anchor => 'change'
-    puts 'This is column'
-    puts @yData.inspect
-    puts @xData.inspect
-    redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xData => @xData,:yData => @yData, :anchor => 'change'
   end
 
   def correct_user

@@ -300,9 +300,9 @@
   <div class="col-md-12">
     <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
         <label>X</label>
-        <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
+        <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] }, @xType)) %>
         <label>Y</label>
-        <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
+        <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] }, @yType)) %>
         <%= hidden_field_tag :id, @dataset.id %>
 
         <%= submit_tag 'Choose', class: 'btn btn-default', style: 'margin: 0' %>
@@ -316,8 +316,25 @@
 
 <div clas="row">
   <div class="col-md-12">
-    <div id='test_chart' style=" width: 100%; height: 300px;margin: auto ;"></div>
+    <div id='test_chart' style=" width: 100%; height: 300px;margin: 0 ;"></div>
   </div>
+</div>
+
+<br />
+<br />
+<br />
+
+<div class="row">
+  <div class="col-md-12">
+    X: <%= @xType %><br />
+    Y: <%= @yType %><br />
+    <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
+        <%= hidden_field_tag :column_x, @actualXColumn %>
+        <%= hidden_field_tag :column_y, @nextNumericColumn %>
+        <%= hidden_field_tag :id, @dataset.id %>
+
+        <%= submit_tag 'Switch to next numeric column', class: 'btn btn-default', style: 'margin: 0' %>
+    <% end %>
 </div>
 
 <script>
