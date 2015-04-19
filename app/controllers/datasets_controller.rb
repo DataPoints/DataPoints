@@ -124,6 +124,14 @@ class DatasetsController < ApplicationController
       @yType = params[:yType]
     end
 
+    if params[:hData].nil? && @hData.nil?
+      @hData = "['Shanghai', 23.7],
+                    ['Lagos', 16.1],
+                    ['Instanbul', 14.2]"
+    else
+      @hData=params[:hData]
+    end
+
     #get next numeric column
     if(@numericColumns.include? @yType)
       @nextNumericColumn = @numericColumns.index(@yType)+1
@@ -202,6 +210,48 @@ class DatasetsController < ApplicationController
     puts @yData.inspect
     puts @xData.inspect
     redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xType => @columnX, :yType => @columnY, :xData => @xData,:yData => @yData, :anchor => 'change'
+  end
+
+  def change_H
+
+    dataset = Dataset.find(params[:id])
+    @columnH=dataset.headers.first.columns.find(params[:column_h]).label
+
+    name_of_dataset_data_table = dataset.data_table_name
+    data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+
+    data=data.order('"'+@columnH.to_s+'"')
+
+    hString = ""
+
+    hDataraw = data.pluck(@columnH.to_s)
+    if (hDataraw.length() != hDataraw.uniq.length())
+      hDataraw =  Hash[*hDataraw.group_by{ |v| v }.flat_map{ |k, v| [k, v.size] }]
+      hDataraw = hDataraw.sort_by {|k,v| v}.reverse
+
+      poslednyZaznam = 0
+      hDataraw.each do |key, array|
+        poslednyZaznam = poslednyZaznam + 1
+        hString = hString + "['#{key}',#{array}]"
+
+        if (poslednyZaznam != 10)
+          hString = hString + ","
+        else
+          break
+        end
+
+      end
+
+      @hData = hString
+      puts hString
+      puts 'Toto je stlpec'
+      puts @hData.inspect
+
+      redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :hData => @hData, :anchor => 'change'
+    else
+      flash[:danger] = 'Each value in selected column is uniq.'
+      redirect_to :back
+    end
   end
 
   def correct_user
