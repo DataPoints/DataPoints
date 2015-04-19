@@ -327,7 +327,9 @@
         <%= hidden_field_tag :column_y, @nextNumericColumn %>
         <%= hidden_field_tag :id, @dataset.id %>
 
-        <%= submit_tag 'Switch Y to "'+@nextNumericColumnName+'" column', class: 'btn btn-default', style: 'margin: 0' %>
+        <% if(@nextNumericColumnName != nil) %>
+            <%= submit_tag 'Switch Y to "'+@nextNumericColumnName+'" column', class: 'btn btn-default', style: 'margin: 0' %>
+        <% end %>
     <% end %>
   </div>
 </div>

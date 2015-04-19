@@ -134,12 +134,16 @@ class DatasetsController < ApplicationController
       @nextNumericColumn = 0
     end
 
-    @nextNumericColumn = @numericColumns[@nextNumericColumn]
-    @nextNumericColumnName = @columns.find_by_label(@nextNumericColumn).label
-    @nextNumericColumn = @columns.find_by_label(@nextNumericColumn).id
+    if(@numericColumns[@nextNumericColumn] != nil)
+      @nextNumericColumn = @numericColumns[@nextNumericColumn]
+      @nextNumericColumnName = @columns.find_by_label(@nextNumericColumn).label
+      @nextNumericColumn = @columns.find_by_label(@nextNumericColumn).id
+    end
 
     #get actual x column
-    @actualXColumn = @columns.find_by_label(@xType).id
+    if(@columns.find_by_label(@xType) != nil)
+      @actualXColumn = @columns.find_by_label(@xType).id
+    end
   end
 
   def change_type
