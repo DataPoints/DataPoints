@@ -122,7 +122,10 @@
 
 <div class="row">
   <div class="col-md-6">
-    <%= link_to content_tag(:span, ' Back', class: 'glyphicon glyphicon-chevron-left'), datasets_path, class: 'btn btn-default pull-left' %>
+    <%= link_to datasets_path, class: 'btn btn-default pull-left' do %>
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        Back
+    <% end %>
     <br/><br/><br/>
     <table class="table table-striped">
       <tr>
@@ -159,11 +162,11 @@
         </div>
         <br/>
         <button type="button" class="btn btn-default" onclick="ShowMap()">
-          <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+          <span class="glyphicon glyphicon-map-marker"></span>
           Show map
         </button>
         <button type="button" class="btn btn-default" onclick="HideMap()">
-          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          <span class="glyphicon glyphicon-remove"></span>
           Hide map
         </button>
         </div>
@@ -179,7 +182,7 @@
   <div class="col-md-12">
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#myModal">
-      <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+      <span class="glyphicon glyphicon-stats"></span>
       Start Analysis
     </button>
     <br/>
@@ -367,7 +370,7 @@
         <% end %>
 
         <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
-            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon-refresh"></span>
             Choose
         <% end %>
     <% end %>
@@ -415,7 +418,7 @@
         <%= hidden_field_tag :id, @dataset.id %>
 
         <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
-            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon-refresh"></span>
             Choose
         <% end %>
     <% end %>
