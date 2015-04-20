@@ -157,10 +157,16 @@
         <div id="MapWrapper" style='width: 100%; margin: auto; border: solid; box-shadow: 4px; padding: 1px; display: block;'>
           <div id="map" style='width: 100%; height: 400px;'></div>
         </div>
-        <br />
-        <button type="button" class="btn btn-default glyphicon glyphicon-map-marker" onclick="ShowMap()">Show map</button>
-        <button type="button" class="btn btn-default glyphicon glyphicon-remove" onclick="HideMap()">Hide map</button>
-         </div>
+        <br/>
+        <button type="button" class="btn btn-default" onclick="ShowMap()">
+          <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+          Show map
+        </button>
+        <button type="button" class="btn btn-default" onclick="HideMap()">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          Hide map
+        </button>
+        </div>
     <% end %>
 
 </div>
@@ -172,7 +178,8 @@
 <div class="row">
   <div class="col-md-12">
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-default btn-lg glyphicon glyphicon-stats" data-toggle="modal" data-target="#myModal">
+    <button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#myModal">
+      <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
       Start Analysis
     </button>
     <br/>
@@ -315,7 +322,8 @@
       <tr>
         <td>
           <button class="btn btn-default pull-right" id="close-jira-okno">
-            <span class='glyphicon glyphicon-remove'></span> Close
+            <span class='glyphicon glyphicon-remove'></span>
+            Close
           </button>
           <br class="blear"/>
         </td>
