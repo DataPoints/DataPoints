@@ -353,7 +353,7 @@
         <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] }, @yType)) %>
 
         <%= hidden_field_tag :id, @dataset.id %>
-        
+
         <% if !params[:column_h].nil? %>
             <%= hidden_field_tag :column_h,params[:column_h] %>
         <% end %>
