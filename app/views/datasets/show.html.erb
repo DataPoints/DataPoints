@@ -351,7 +351,12 @@
         <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] }, @xType)) %>
         <label>Y</label>
         <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] }, @yType)) %>
+
         <%= hidden_field_tag :id, @dataset.id %>
+        
+        <% if !params[:column_h].nil? %>
+            <%= hidden_field_tag :column_h,params[:column_h] %>
+        <% end %>
 
         <%= submit_tag 'Choose', class: 'btn btn-default', style: 'margin: 0' %>
     <% end %>
@@ -375,6 +380,9 @@
         <%= hidden_field_tag :column_y, @nextNumericColumn %>
         <%= hidden_field_tag :id, @dataset.id %>
 
+        <% if !params[:column_h].nil? %>
+        <%= hidden_field_tag :column_h,params[:column_h] %>
+        <% end %>
         <% if(@nextNumericColumnName != nil) %>
             <%= submit_tag 'Switch Y to "'+@nextNumericColumnName+'" column', class: 'btn btn-default', style: 'margin: 0' %>
         <% end %>
@@ -389,8 +397,8 @@
 <div clas="row">
   <a name="change"></a>
   <div class="col-md-12">
-    <%= form_tag({controller: 'datasets', action: 'change_H'}, method: 'get') do %>
-        H
+    <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get') do %>
+        <label>H</label>
         <%= select_tag(:column_h, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
 
         <%= hidden_field_tag :id, @dataset.id %>

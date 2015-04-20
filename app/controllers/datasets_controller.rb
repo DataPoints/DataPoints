@@ -124,12 +124,12 @@ class DatasetsController < ApplicationController
       @yType = params[:yType]
     end
 
-    if params[:hData].nil? && @hData.nil?
+    if params[:column_h].nil?
       @hData = "['Shanghai', 23.7],
                     ['Lagos', 16.1],
                     ['Instanbul', 14.2]"
     else
-      @hData=params[:hData]
+      @hData= change_H(params[:id],params[:column_h])
     end
 
     #get next numeric column
@@ -213,13 +213,13 @@ class DatasetsController < ApplicationController
     puts 'This is column'
     puts @yData.inspect
     puts @xData.inspect
-    redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :xType => @columnX, :yType => @columnY, :xData => @xData,:yData => @yData, :anchor => 'change'
+    redirect_to :controller => 'datasets', :action => 'show',:column_h => params[:column_h], :id => params[:id],:xType => @columnX, :yType => @columnY, :xData => @xData,:yData => @yData, :anchor => 'change'
   end
 
-  def change_H
+  def change_H(id,columH)
 
-    dataset = Dataset.find(params[:id])
-    @columnH=dataset.headers.first.columns.find(params[:column_h]).label
+    dataset = Dataset.find(id)
+    @columnH=dataset.headers.first.columns.find(columH).label
 
     name_of_dataset_data_table = dataset.data_table_name
     data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
@@ -251,7 +251,7 @@ class DatasetsController < ApplicationController
       puts 'Toto je stlpec'
       puts @hData.inspect
 
-      redirect_to :controller => 'datasets', :action => 'show',:id => params[:id], :hData => @hData, :anchor => 'change'
+      return @hData
     else
       flash[:danger] = 'Each value in selected column is uniq.'
       redirect_to :back
