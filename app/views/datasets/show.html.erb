@@ -13,7 +13,7 @@
 
             yAxis: {
                 title: {
-                    text: "<%= @yType %>"
+                    text: "<%= @columnYName %>"
                 },
 
                 plotLines: [{
@@ -31,7 +31,7 @@
             },
 
             series: [{
-                name: "<%= @yType %>",
+                name: "<%= @columnYName %>",
                 data: <%=raw @yData %>
             }]
         });
@@ -346,11 +346,11 @@
   <a name="change"></a>
 
   <div class="col-md-12">
-    <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
+    <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get') do %>
         <label>X</label>
-        <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] }, @xType)) %>
+        <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnX)) %>
         <label>Y</label>
-        <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] }, @yType)) %>
+        <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnY)) %>
 
         <%= hidden_field_tag :id, @dataset.id %>
 
@@ -375,29 +375,29 @@
 
 <div class="row" style="margin: 315px 0 0 0">
   <div class="col-md-6 text-right">
-    <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
-        <%= hidden_field_tag :column_x, @actualXColumn %>
+    <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get') do %>
+        <%= hidden_field_tag :column_x, @columnX %>
         <%= hidden_field_tag :column_y, @previousNumericColumn %>
         <%= hidden_field_tag :id, @dataset.id %>
 
         <% if !params[:column_h].nil? %>
             <%= hidden_field_tag :column_h,params[:column_h] %>
         <% end %>
-        <% if(@previousNumericColumnName != nil) %>
+        <% if(@previousNumericColumn != nil) %>
             <%= submit_tag 'previous value', class: 'btn btn-default', style: 'margin: 0; width: auto' %>
         <% end %>
     <% end %>
   </div>
   <div class="col-md-6 text-left">
-    <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
-        <%= hidden_field_tag :column_x, @actualXColumn %>
+    <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get') do %>
+        <%= hidden_field_tag :column_x, @columnX %>
         <%= hidden_field_tag :column_y, @nextNumericColumn %>
         <%= hidden_field_tag :id, @dataset.id %>
 
         <% if !params[:column_h].nil? %>
             <%= hidden_field_tag :column_h,params[:column_h] %>
         <% end %>
-        <% if(@nextNumericColumnName != nil) %>
+        <% if(@nextNumericColumn != nil) %>
             <%= submit_tag 'next value', class: 'btn btn-default', style: 'margin: 0; width: auto' %>
         <% end %>
     <% end %>
@@ -414,8 +414,9 @@
     <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get') do %>
         <label>H</label>
         <%= select_tag(:column_h, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
-
         <%= hidden_field_tag :id, @dataset.id %>
+        <%= hidden_field_tag :column_x, @columnX %>
+        <%= hidden_field_tag :column_y, @columnY %>
 
         <%= submit_tag 'Choose', class: 'btn btn-default', style: 'margin: 0' %>
     <% end %>
