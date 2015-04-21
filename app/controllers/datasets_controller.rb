@@ -216,24 +216,28 @@ class DatasetsController < ApplicationController
   def draw_graph
     dataset = Dataset.find(params[:id])
 
-    @columnXName = dataset.headers.first.columns.find(@columnX).label
-    @columnYName = dataset.headers.first.columns.find(@columnY).label
+    if(@numericColumns.count != 0)
+      @columnXName = dataset.headers.first.columns.find(@columnX).label
+      @columnYName = dataset.headers.first.columns.find(@columnY).label
 
-    puts "X name: "+@columnXName.to_s
-    puts "Y name: "+@columnYName.to_s
+      puts "X name: "+@columnXName.to_s
+      puts "Y name: "+@columnYName.to_s
 
-    name_of_dataset_data_table = dataset.data_table_name
-    data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
-
-
-    data=data.order('"'+@columnXName.to_s+'"')
-    @yData =data.pluck(@columnYName.to_s)[0..20].collect{|i| i.gsub(/\s/, '').to_f}
-    @xData =data.pluck(@columnXName.to_s)[0..20]
+      name_of_dataset_data_table = dataset.data_table_name
+      data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
 
 
-    puts 'This is column:'
-    puts @xData.inspect
-    puts @yData.inspect
+      data=data.order('"'+@columnXName.to_s+'"')
+      @yData =data.pluck(@columnYName.to_s)[0..20].collect{|i| i.gsub(/\s/, '').to_f}
+      @xData =data.pluck(@columnXName.to_s)[0..20]
+
+      puts 'This is column:'
+      puts @xData.inspect
+      puts @yData.inspect
+      @drawGraph = true;
+    else
+      @drawGraph = false;
+    end
   end
 
   def change_H(id,columH)
