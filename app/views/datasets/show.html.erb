@@ -13,7 +13,7 @@
 
             yAxis: {
                 title: {
-                    text: 'Selected Column'
+                    text: "<%= @yType %>"
                 },
 
                 plotLines: [{
@@ -31,7 +31,7 @@
             },
 
             series: [{
-                name: 'Y axis',
+                name: "<%= @yType %>",
                 data: <%=raw @yData %>
             }]
         });
@@ -374,24 +374,38 @@
 </div>
 
 <div class="row" style="margin: 315px 0 0 0">
-  <div class="col-md-12">
+  <div class="col-md-6 text-right">
+    <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
+        <%= hidden_field_tag :column_x, @actualXColumn %>
+        <%= hidden_field_tag :column_y, @previousNumericColumn %>
+        <%= hidden_field_tag :id, @dataset.id %>
+
+        <% if !params[:column_h].nil? %>
+            <%= hidden_field_tag :column_h,params[:column_h] %>
+        <% end %>
+        <% if(@previousNumericColumnName != nil) %>
+            <%= submit_tag 'previous value', class: 'btn btn-default', style: 'margin: 0; width: auto' %>
+        <% end %>
+    <% end %>
+  </div>
+  <div class="col-md-6 text-left">
     <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
         <%= hidden_field_tag :column_x, @actualXColumn %>
         <%= hidden_field_tag :column_y, @nextNumericColumn %>
         <%= hidden_field_tag :id, @dataset.id %>
 
         <% if !params[:column_h].nil? %>
-        <%= hidden_field_tag :column_h,params[:column_h] %>
+            <%= hidden_field_tag :column_h,params[:column_h] %>
         <% end %>
         <% if(@nextNumericColumnName != nil) %>
-            <%= submit_tag 'Switch Y to "'+@nextNumericColumnName+'" column', class: 'btn btn-default', style: 'margin: 0' %>
+            <%= submit_tag 'next value', class: 'btn btn-default', style: 'margin: 0; width: auto' %>
         <% end %>
     <% end %>
   </div>
 </div>
 
 <br />
-<br />
+<hr />
 <br />
 
 <div clas="row">

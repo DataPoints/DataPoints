@@ -132,20 +132,38 @@ class DatasetsController < ApplicationController
       @hData= change_H(params[:id],params[:column_h])
     end
 
-    #get next numeric column
+    #get next & previous numeric column index
     if(@numericColumns.include? @yType)
+      #next
       @nextNumericColumn = @numericColumns.index(@yType)+1
       if(@nextNumericColumn >= @numericColumns.count)
         @nextNumericColumn = 0
       end
+      puts "NEXT COLUMN INDEX: "+@nextNumericColumn.to_s
+      #previous
+      @previousNumericColumn = @numericColumns.index(@yType)-1
+      if(@previousNumericColumn <= 0)
+        @previousNumericColumn = @numericColumns.count-1
+      end
+      puts "PREVIOUS COLUMN INDEX: "+@previousNumericColumn.to_s
+      puts "Y TYPE: "+@yType.to_s
     else
       @nextNumericColumn = 0
+      @previousNumericColumn = @numericColumns.count-1
     end
 
+    #set next numeric column
     if(@numericColumns[@nextNumericColumn] != nil)
       @nextNumericColumn = @numericColumns[@nextNumericColumn]
       @nextNumericColumnName = @columns.find_by_label(@nextNumericColumn).label
       @nextNumericColumn = @columns.find_by_label(@nextNumericColumn).id
+    end
+
+    #set previous numeric column
+    if(@numericColumns[@previousNumericColumn] != nil)
+      @previousNumericColumn = @numericColumns[@previousNumericColumn]
+      @previousNumericColumnName = @columns.find_by_label(@previousNumericColumn).label
+      @previousNumericColumn = @columns.find_by_label(@previousNumericColumn).id
     end
 
     #get actual x column
