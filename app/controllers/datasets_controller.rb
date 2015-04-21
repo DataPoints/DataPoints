@@ -142,7 +142,7 @@ class DatasetsController < ApplicationController
       puts "NEXT COLUMN INDEX: "+@nextNumericColumn.to_s
       #previous
       @previousNumericColumn = @numericColumns.index(@yType)-1
-      if(@previousNumericColumn <= 0)
+      if(@previousNumericColumn < 0)
         @previousNumericColumn = @numericColumns.count-1
       end
       puts "PREVIOUS COLUMN INDEX: "+@previousNumericColumn.to_s
