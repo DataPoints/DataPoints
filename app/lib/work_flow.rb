@@ -27,8 +27,12 @@ class WorkFlow
     @dataset = dataset
 
     begin
+      upload_progress(5)
+
       download
       @logger.debug "Download complete"
+
+      upload_progress(33)
 
       remove_semicolon
       @logger.debug "Remove separator complete"
@@ -40,6 +44,8 @@ class WorkFlow
       create_db_table
       @logger.debug "Create db table complete"
 
+      upload_progress(66)
+
       find_type
       @logger.debug "Data type guess complete"
 
@@ -48,6 +54,8 @@ class WorkFlow
 
       r_analyze
       @logger.debug "Dataset R analysis complete"
+
+      upload_progress(100)
 
       @dataset.status = 'P'
       @dataset.save!
@@ -199,4 +207,10 @@ class WorkFlow
   def add_semicolon
     CheckSemicolon.new.add_semicolon(@dataset.storage)
   end
+
+  def upload_progress(percent)
+    @dataset.analyzed_progress = percent
+    @dataset.save
+  end
+
 end

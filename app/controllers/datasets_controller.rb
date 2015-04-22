@@ -15,12 +15,18 @@ class DatasetsController < ApplicationController
   def create
     #Bind dataset variable with values from form data
     @dataset = current_user.datasets.build(dataset_params)
-    @dataset.status = 'S'
-    @dataset.save
+    if @dataset.valid?
 
-    WorkFlow.new.delay.start(@dataset, params[:send_mail])
-    flash[:info] = 'Dataset is processing...'
-    redirect_to datasets_path
+      @dataset.status = 'S'
+      @dataset.save
+
+      WorkFlow.new.delay.start(@dataset, params[:send_mail])
+      flash[:info] = 'Dataset is processing...'
+      redirect_to datasets_path
+    else
+    #flash[:danger] = 'Invalid activation link'
+      render 'new'
+    end
   end
 
   def update
@@ -80,9 +86,8 @@ class DatasetsController < ApplicationController
 
     name_of_dataset_data_table = @dataset.data_table_name
     @data = Class.new(ActiveRecord::Base){self.table_name = name_of_dataset_data_table }
+    @number_of_data_rows = @data.all.count
     @data = @data.page(params[:page]).per(25)
-
-    @number_of_data_rows = @data.count
     # if @number_of_data_rows > 15
     #   @number_of_data_rows = 15
     # end

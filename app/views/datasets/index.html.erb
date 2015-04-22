@@ -9,11 +9,8 @@
       <!--<th scope="col">N</th>-->
       <th scope="col">Name </th>
       <th scope="col">Description </th>
-      <th scope="col">Status </th>
+      <th scope="col">Status</th>
       <th scope="col">Created </th>
-      <th scope="col">Updated </th>
-      <th scope="col">Types </th>
-      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -26,29 +23,26 @@
           <!--<td><%=i%></td>-->
           <td type="edit"><%= dataset.name %></td>
           <td type="edit"><%= dataset.description %></td>
-          <td>
-            <% case dataset.status
-                 when 'P' %><span class="label label-success">Successfully downloaded</span>
-                <% when 'A' %><span class="label label-primary">Analyzed</span>
-                <% when 'S' %><span class="label label-info">In process</span>
-                <% when 'E' %> <span class="label label-danger">Error</span>
-            <% end %>
+          <td width="130px" >
+            <div class="progress">
+              <% case dataset.status
+                   when 'P' %><div class="progress-bar progress-bar-success" style="width: 100%">Success</div></div>
+                <% when 'A' %><div class="progress-bar progress-bar-info" style="width: 100%"> Analyzed</div></div>
+                <% when 'S' %><div class="progress-bar progress-bar-info" style="width:<%=dataset.analyzed_progress.to_s%>%">
+                    <% if dataset.analyzed_progress > 65 %>
+                        <span>In Process</span></div></div>
+                    <%else%>
+                        </div><span>In Process</span></div>
+                    <% end %>
+                <% when 'E' %> <div class="progress-bar progress-bar-danger" style="width:<%=dataset.analyzed_progress.to_s%>%">
+                    <% if dataset.analyzed_progress > 65 %>
+                        <span>Error</span></div></div>
+                     <%else%>
+                        </div><span>Error</span></div>
+                    <% end %>
+              <% end %>
           </td>
           <td><%= dataset.created_at.strftime("%d %b %H:%M") %></td>
-          <td><%= dataset.updated_at.strftime("%d %b %H:%M") %></td>
-          <td>
-            <% types = @Types[dataset.id] %>
-            <% if types.any? %>
-              <% types.each do |type| %>
-                <%= type %>,
-              <% end %>
-            <% else %>
-                There are no types defined for this dataset
-            <% end %>
-          </td>
-          <td>
-            <%= dataset.analyzed_progress.to_s + "%"%>
-          </td>
           <td><%= link_to 'Destroy', dataset_path(dataset),
                           method: :delete, data: { confirm: 'Are you sure?' } %></td>
           <td><%= link_to 'Edit',  '#', 'data-target' => "#myModal_#{dataset.id}", 'data-toggle' => 'modal' %>
