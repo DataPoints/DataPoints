@@ -15,12 +15,18 @@ class DatasetsController < ApplicationController
   def create
     #Bind dataset variable with values from form data
     @dataset = current_user.datasets.build(dataset_params)
-    @dataset.status = 'S'
-    @dataset.save
+    if @dataset.valid?
 
-    WorkFlow.new.delay.start(@dataset, params[:send_mail])
-    flash[:info] = 'Dataset is processing...'
-    redirect_to datasets_path
+      @dataset.status = 'S'
+      @dataset.save
+
+      WorkFlow.new.delay.start(@dataset, params[:send_mail])
+      flash[:info] = 'Dataset is processing...'
+      redirect_to datasets_path
+    else
+    #flash[:danger] = 'Invalid activation link'
+      render 'new'
+    end
   end
 
   def update
@@ -80,9 +86,8 @@ class DatasetsController < ApplicationController
 
     name_of_dataset_data_table = @dataset.data_table_name
     @data = Class.new(ActiveRecord::Base){self.table_name = name_of_dataset_data_table }
+    @number_of_data_rows = @data.all.count
     @data = @data.page(params[:page]).per(25)
-
-    @number_of_data_rows = @data.count
     # if @number_of_data_rows > 15
     #   @number_of_data_rows = 15
     # end
@@ -100,29 +105,32 @@ class DatasetsController < ApplicationController
     @nonNumericColumns = Array.new
     @columns.each do |column|
       if(column.type_id == numericTypeID)
-        @numericColumns.push(column.label)
+        @numericColumns.push(column.id)
       else
-        @nonNumericColumns.push(column.label)
+        @nonNumericColumns.push(column.id)
       end
     end
 
-    if params[:xData].nil?
+    #handle graph for non selected data on X or Y axis
+    if params[:column_x].nil?
       @xData = Array.new
       @yData = Array.new
 
-      #draw first non-numeric vs first numeric columns into chart
+      #set first non-numeric vs first numeric columns into chart's data base
       @data.each do |row|
         @xData.push(row[@nonNumericColumns[0]])
         @yData.push(row[@numericColumns[0]].to_f)
       end
-      @xType = @nonNumericColumns[0]
-      @yType = @numericColumns[0]
+      @columnX = @nonNumericColumns[0]
+      @columnY = @numericColumns[0]
     else
-      @xData = params[:xData]
-      @yData = params[:yData].collect{|i| i.to_f}
-      @xType = params[:xType]
-      @yType = params[:yType]
+      @columnX = params[:column_x].to_i
+      @columnY = params[:column_y].to_i
     end
+    #prepare variables for the show view buttons - previous and next
+    puts "--------------------------------"
+    prepare_switch_to_other_column
+    draw_graph
 
     if params[:column_h].nil?
       @hData = "['Shanghai', 23.7],
@@ -130,27 +138,6 @@ class DatasetsController < ApplicationController
                     ['Instanbul', 14.2]"
     else
       @hData= change_H(params[:id],params[:column_h])
-    end
-
-    #get next numeric column
-    if(@numericColumns.include? @yType)
-      @nextNumericColumn = @numericColumns.index(@yType)+1
-      if(@nextNumericColumn >= @numericColumns.count)
-        @nextNumericColumn = 0
-      end
-    else
-      @nextNumericColumn = 0
-    end
-
-    if(@numericColumns[@nextNumericColumn] != nil)
-      @nextNumericColumn = @numericColumns[@nextNumericColumn]
-      @nextNumericColumnName = @columns.find_by_label(@nextNumericColumn).label
-      @nextNumericColumn = @columns.find_by_label(@nextNumericColumn).id
-    end
-
-    #get actual x column
-    if(@columns.find_by_label(@xType) != nil)
-      @actualXColumn = @columns.find_by_label(@xType).id
     end
   end
 
@@ -194,26 +181,68 @@ class DatasetsController < ApplicationController
     redirect_to :back
   end
 
-  def change_X_Y
+  def prepare_switch_to_other_column
+    puts "ACTUAL X COLUMN: "+@columnX.to_s
+    puts "ACTUAL Y COLUMN: "+@columnY.to_s
+    puts "NUM COLUMNS: "+@numericColumns.inspect
 
+    #get next & previous numeric column index
+    if(@numericColumns.include? @columnY)
+      #next
+      @nextNumericColumn = @numericColumns.index(@columnY)+1
+      if(@nextNumericColumn >= @numericColumns.count)
+        @nextNumericColumn = 0
+      end
+      puts "INDEX: "+@nextNumericColumn.to_s
+
+      #previous
+      @previousNumericColumn = @numericColumns.index(@columnY)-1
+      if(@previousNumericColumn < 0)
+        @previousNumericColumn = @numericColumns.count-1
+      end
+    else
+      @nextNumericColumn = 0
+      @previousNumericColumn = @numericColumns.count-1
+    end
+
+    #set next numeric column
+    if(@numericColumns[@nextNumericColumn] != nil)
+      @nextNumericColumn = @numericColumns[@nextNumericColumn]
+    end
+    puts "NEXT Y COLUMN: "+@nextNumericColumn.to_s
+
+    #set previous numeric column
+    if(@numericColumns[@previousNumericColumn] != nil)
+      @previousNumericColumn = @numericColumns[@previousNumericColumn]
+    end
+    puts "PREV Y COLUMN: "+@previousNumericColumn.to_s
+  end
+
+  def draw_graph
     dataset = Dataset.find(params[:id])
-    @columnX=dataset.headers.first.columns.find(params[:column_x]).label
-    @columnY=dataset.headers.first.columns.find(params[:column_y]).label
+
+    if(@numericColumns.count != 0)
+      @columnXName = dataset.headers.first.columns.find(@columnX).label
+      @columnYName = dataset.headers.first.columns.find(@columnY).label
+
+      puts "X name: "+@columnXName.to_s
+      puts "Y name: "+@columnYName.to_s
+
+      name_of_dataset_data_table = dataset.data_table_name
+      data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
 
 
-    name_of_dataset_data_table = dataset.data_table_name
-    data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+      data=data.order('"'+@columnXName.to_s+'"')
+      @yData =data.pluck(@columnYName.to_s)[0..20].collect{|i| i.gsub(/\s/, '').to_f}
+      @xData =data.pluck(@columnXName.to_s)[0..20]
 
-
-    data=data.order('"'+@columnX.to_s+'"')
-    @yData =data.pluck(@columnY.to_s)[0..20].collect{|i| i.gsub(/\s/, '').to_f}
-    @xData =data.pluck(@columnX.to_s)[0..20]
-
-
-    puts 'This is column'
-    puts @yData.inspect
-    puts @xData.inspect
-    redirect_to :controller => 'datasets', :action => 'show',:column_h => params[:column_h], :id => params[:id],:xType => @columnX, :yType => @columnY, :xData => @xData,:yData => @yData, :anchor => 'change'
+      puts 'This is column:'
+      puts @xData.inspect
+      puts @yData.inspect
+      @drawGraph = true;
+    else
+      @drawGraph = false;
+    end
   end
 
   def change_H(id,columH)
