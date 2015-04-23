@@ -7,6 +7,7 @@ require 'sample_analyzer'
 class DatasetsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user, except: [:index, :new, :create]
+  before_action :analyzing?, only: [:show]
 
   def new
     @dataset = Dataset.new
@@ -169,6 +170,8 @@ class DatasetsController < ApplicationController
   def start_analyze
     @dataset = Dataset.find(params[:id])
 
+    @dataset.status = 'S'
+
 
     # Toto destroyAll nie je uplne idealne, lepsie by bolo ukladat ku kazdemu zmenemu stlpcu
     # aj to ze z coho bol zmeneny. Inak sa to neda, analyze priznak je nafigu, lebo je syntetizovany
@@ -180,18 +183,12 @@ class DatasetsController < ApplicationController
     end
 
 
-    changed_columns=@dataset.headers.first.columns.where(analyze: true)
-    changed_columns.each do |col|
-      if (col.analyze == true)
-        if(col.type_id==4)
-          AnalyzeFunction.new.delay.r_analyze_dataset_user(@dataset,col)
-          col.analyze = false
-          col.save
-        end
-      end
-    end
+    AnalyzeFunction.new.delay.reanalyze(@dataset)
 
-    redirect_to :back
+
+    @dataset.save
+
+    redirect_to datasets_path
   end
 
   def change_X_Y
@@ -263,6 +260,14 @@ class DatasetsController < ApplicationController
     if dataset.user != current_user
       flash[:danger] = 'Permission denied.'
       redirect_to root_path
+    end
+  end
+
+  def analyzing?
+    dataset = Dataset.find(params[:id])
+    if dataset.status == 'S'
+      flash[:danger] = "Dataset is being processed now."
+      redirect_to datasets_path
     end
   end
 
