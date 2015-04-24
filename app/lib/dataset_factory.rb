@@ -25,7 +25,7 @@ class DatasetFactory
     Column.create(header_id: "#{new_header.id}", label: 'PSC', type_id: '1',datatyp: 'string')
     Column.create(header_id: "#{new_header.id}", label: 'Ulica', type_id: '5',datatyp: 'string')
     Column.create(header_id: "#{new_header.id}", label: 'Mesto_Obec', type_id: '5',datatyp: 'string')
-    Column.create(header_id: "#{new_header.id}", label: 'ICO', type_id: '1',datatyp: 'string')
+    Column.create(header_id: "#{new_header.id}", label: 'ICO', type_id: '7',datatyp: 'string')
     Column.create(header_id: "#{new_header.id}", label: 'Vyska_pohladavky', type_id: '4',datatyp: 'string')
     Column.create(header_id: "#{new_header.id}", label: 'Typ_platitela', type_id: '4',datatyp: 'string')
 

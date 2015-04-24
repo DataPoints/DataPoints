@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150331145218) do
+ActiveRecord::Schema.define(version: 20150412130338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,7 +92,8 @@ ActiveRecord::Schema.define(version: 20150331145218) do
     t.string "Ulica"
     t.string "Mesto_Obec"
     t.string "ICO"
-    t.string "Vyska_poladavky"
+    t.string "Vyska_pohladavky"
+    t.string "Typ_platitela"
   end
 
   create_table "groupings", force: true do |t|
