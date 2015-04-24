@@ -77,10 +77,10 @@ class DatasetTest < ActiveSupport::TestCase
     d = Dataset.new
     d.link = "fjdsakj"
     d.valid?
-    assert_match /invalid/, d.errors[:link].join, "Error presence of name not found"
+    assert_match /invalid/, d.errors[:link].join, "Error format of link not found"
     d.link = "http:dsjfkda"
     d.valid?
-    assert_match /invalid/, d.errors[:link].join, "Error presence of name not found"
+    assert_match /invalid/, d.errors[:link].join, "Error format of link not found"
   end
 
   test "should respond to groupings" do

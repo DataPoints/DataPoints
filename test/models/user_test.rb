@@ -80,7 +80,7 @@ class UserTest < ActiveSupport::TestCase
     u.name = users(:one).name
     u.email = users(:one).email
     u.password = "aaaaaa"
-    u.password_confirmation = "bbbbbb"
+    u.password_confirmation = "aaaaaa"
     u.save
     assert_not_equal u.password, u.password_digest, "Secure password error not found"
   end
@@ -88,38 +88,38 @@ class UserTest < ActiveSupport::TestCase
   test "activation" do
     u = users(:one)
     u.activate
-    assert u.activated, "Activation error not found"
+    assert u.activated, "Account not activating"
   end
 
   test "create reset digest" do
     u = users(:one)
     u.create_reset_digest
-    assert u.reset_digest.present? && u.reset_sent_at.present?, "Reset digest errors not found"
+    assert u.reset_digest.present? && u.reset_sent_at.present?, "Reset digest not created"
   end
 
   test "remember" do
     u = users(:one)
     u.remember
-    assert u.remember_digest.present?, "Remember error not found"
+    assert u.remember_digest.present?, "Remember error"
   end
 
   test "forget" do
     u = users(:one)
     u.remember
     u.forget
-    assert u.remember_digest.nil?, "Forget error not found"
+    assert u.remember_digest.nil?, "Forget error"
   end
 
   test "downcase email" do
     u = users(:one)
     u.email = "TEST@EXAMPLE.COM"
-    assert_equal "test@example.com", u.instance_eval{ downcase_email }, "Downcase error not found"
+    assert_equal "test@example.com", u.instance_eval{ downcase_email }, "Downcase email error"
   end
 
   test "create activation digest" do
     u = users(:one)
     u.instance_eval{ create_activation_digest }
-    assert u.activation_token.present? && u.activation_digest.present?, "Activation digest error not found"
+    assert u.activation_token.present? && u.activation_digest.present?, "Activation digest not created"
   end
 
   test "should respond to datasets" do

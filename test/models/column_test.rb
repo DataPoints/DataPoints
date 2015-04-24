@@ -15,6 +15,6 @@ class ColumnTest < ActiveSupport::TestCase
     c = Column.new
     c.header_id = nil
     c.valid?
-    assert_match /can't be blank/, c.errors[:header_id].join, "Presence of header_id not found"
+    assert_match /can't be blank/, c.errors[:header_id].join, "Presence of header_id error not found"
   end
 end
