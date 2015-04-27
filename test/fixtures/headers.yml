@@ -2,10 +2,8 @@
 
 one:
   origin: false
-  dataset: 
-  column_id: 
+  dataset: one
 
 two:
   origin: false
-  dataset: 
-  column_id: 
+  dataset: one

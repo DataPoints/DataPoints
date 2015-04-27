@@ -7,6 +7,7 @@ require 'sample_analyzer'
 class DatasetsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user, except: [:index, :new, :create]
+  before_action :analyzing?, only: [:show]
 
   def new
     @dataset = Dataset.new
@@ -15,12 +16,18 @@ class DatasetsController < ApplicationController
   def create
     #Bind dataset variable with values from form data
     @dataset = current_user.datasets.build(dataset_params)
-    @dataset.status = 'S'
-    @dataset.save
+    if @dataset.valid?
 
-    WorkFlow.new.delay.start(@dataset, params[:send_mail])
-    flash[:info] = 'Dataset is processing...'
-    redirect_to datasets_path
+      @dataset.status = 'S'
+      @dataset.save
+
+      WorkFlow.new.delay.start(@dataset, params[:send_mail])
+      flash[:info] = 'Dataset is processing...'
+      redirect_to datasets_path
+    else
+    #flash[:danger] = 'Invalid activation link'
+      render 'new'
+    end
   end
 
   def update
@@ -80,9 +87,8 @@ class DatasetsController < ApplicationController
 
     name_of_dataset_data_table = @dataset.data_table_name
     @data = Class.new(ActiveRecord::Base){self.table_name = name_of_dataset_data_table }
+    @number_of_data_rows = @data.all.count
     @data = @data.page(params[:page]).per(25)
-
-    @number_of_data_rows = @data.count
     # if @number_of_data_rows > 15
     #   @number_of_data_rows = 15
     # end
@@ -151,6 +157,8 @@ class DatasetsController < ApplicationController
   def start_analyze
     @dataset = Dataset.find(params[:id])
 
+    @dataset.status = 'S'
+
 
     # Toto destroyAll nie je uplne idealne, lepsie by bolo ukladat ku kazdemu zmenemu stlpcu
     # aj to ze z coho bol zmeneny. Inak sa to neda, analyze priznak je nafigu, lebo je syntetizovany
@@ -162,18 +170,12 @@ class DatasetsController < ApplicationController
     end
 
 
-    changed_columns=@dataset.headers.first.columns.where(analyze: true)
-    changed_columns.each do |col|
-      if (col.analyze == true)
-        if(col.type_id==4)
-          AnalyzeFunction.new.delay.r_analyze_dataset_user(@dataset,col)
-          col.analyze = false
-          col.save
-        end
-      end
-    end
+    AnalyzeFunction.new.delay.reanalyze(@dataset)
 
-    redirect_to :back
+
+    @dataset.save
+
+    redirect_to datasets_path
   end
 
   def prepare_switch_to_other_column
@@ -287,6 +289,14 @@ class DatasetsController < ApplicationController
     if dataset.user != current_user
       flash[:danger] = 'Permission denied.'
       redirect_to root_path
+    end
+  end
+
+  def analyzing?
+    dataset = Dataset.find(params[:id])
+    if dataset.status == 'S'
+      flash[:danger] = "Dataset is being processed now."
+      redirect_to datasets_path
     end
   end
 
