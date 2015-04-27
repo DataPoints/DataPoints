@@ -1,42 +1,44 @@
-<script>
-    $(function () {
-        $('#test_chart').highcharts({
-            title: {
-                text: 'Users graph',
-                x: -20 //center
-            },
-
-            xAxis: {
-
-                categories: <%=raw @xData %>
-            },
-
-            yAxis: {
+<% if(@drawGraph) %>
+    <script>
+        $(function () {
+            $('#test_chart').highcharts({
                 title: {
-                    text: 'Selected Column'
+                    text: 'Users graph',
+                    x: -20 //center
                 },
 
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
+                xAxis: {
+
+                    categories: <%=raw @xData %>
+                },
+
+                yAxis: {
+                    title: {
+                        text: "<%= @columnYName %>"
+                    },
+
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+
+                series: [{
+                    name: "<%= @columnYName %>",
+                    data: <%=raw @yData %>
                 }]
-            },
-
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle',
-                borderWidth: 0
-            },
-
-            series: [{
-                name: 'Y axis',
-                data: <%=raw @yData %>
-            }]
+            });
         });
-    });
-</script>
+    </script>
+<% end %>
 
 <script>
     $(function () {
@@ -353,64 +355,73 @@
 
 <hr/>
 
-<div clas="row">
-  <a name="change"></a>
+<% if(@drawGraph) %>
+    <div clas="row">
+      <a name="change"></a>
 
-  <div class="col-md-12">
-    <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
-        <label>X</label>
-        <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] }, @xType)) %>
-        <label>Y</label>
-        <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] }, @yType)) %>
+      <div class="col-md-12">
+        <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get') do %>
+            <label>X</label>
+            <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnX)) %>
+            <label>Y</label>
+            <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnY)) %>
 
-        <%= hidden_field_tag :id, @dataset.id %>
+            <%= hidden_field_tag :id, @dataset.id %>
 
-        <% if !params[:column_h].nil? %>
-            <%= hidden_field_tag :column_h,params[:column_h] %>
-        <% end %>
-
-        <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
-            <span class="glyphicon glyphicon-refresh"></span>
-            Choose
-        <% end %>
-    <% end %>
-  </div>
-</div>
-
-<br/>
-<br/>
-<br/>
-
-<div clas="row">
-  <div class="col-md-12">
-    <div id='test_chart' style=" width: 100%; height: 300px;margin: 0 ;"></div>
-  </div>
-</div>
-
-<div class="row" style="margin: 315px 0 0 0">
-  <div class="col-md-12">
-    <%= form_tag({controller: 'datasets', action: 'change_X_Y'}, method: 'get') do %>
-        <%= hidden_field_tag :column_x, @actualXColumn %>
-        <%= hidden_field_tag :column_y, @nextNumericColumn %>
-        <%= hidden_field_tag :id, @dataset.id %>
-
-        <% if !params[:column_h].nil? %>
-        <%= hidden_field_tag :column_h,params[:column_h] %>
-        <% end %>
-        <% if(@nextNumericColumnName != nil) %>
-            <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
-                <span class="glyphicon glyphicon-random"></span>&nbsp;
-                Switch Y-Axis to "<%= @nextNumericColumnName %>" column
+            <% if !params[:column_h].nil? %>
+                <%= hidden_field_tag :column_h,params[:column_h] %>
             <% end %>
 
+            <%= submit_tag 'Choose', class: 'btn btn-default', style: 'margin: 0' %>
         <% end %>
-    <% end %>
-  </div>
-</div>
+      </div>
+    </div>
 
-<br />
-<br />
-<br />
+    <br/>
+    <br/>
+    <br/>
+
+    <div clas="row">
+      <div class="col-md-12">
+        <div id='test_chart' style=" width: 100%; height: 300px;margin: 0 ;"></div>
+      </div>
+    </div>
+
+    <div class="row" style="margin: 315px 0 0 0">
+      <div class="col-md-6 text-right">
+        <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get') do %>
+            <%= hidden_field_tag :column_x, @columnX %>
+            <%= hidden_field_tag :column_y, @previousNumericColumn %>
+            <%= hidden_field_tag :id, @dataset.id %>
+
+            <% if !params[:column_h].nil? %>
+                <%= hidden_field_tag :column_h,params[:column_h] %>
+            <% end %>
+            <% if(@previousNumericColumn != nil) %>
+                <%= submit_tag 'previous value', class: 'btn btn-default', style: 'margin: 0; width: auto' %>
+            <% end %>
+        <% end %>
+      </div>
+      <div class="col-md-6 text-left">
+        <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get') do %>
+            <%= hidden_field_tag :column_x, @columnX %>
+            <%= hidden_field_tag :column_y, @nextNumericColumn %>
+            <%= hidden_field_tag :id, @dataset.id %>
+
+            <% if !params[:column_h].nil? %>
+                <%= hidden_field_tag :column_h,params[:column_h] %>
+            <% end %>
+            <% if(@nextNumericColumn != nil) %>
+                <%= submit_tag 'next value', class: 'btn btn-default', style: 'margin: 0; width: auto' %>
+            <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <br />
+    <hr />
+    <br />
+<% end %>
 
 <div clas="row">
   <a name="change"></a>
@@ -418,8 +429,9 @@
     <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get') do %>
         <label>H</label>
         <%= select_tag(:column_h, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
-
         <%= hidden_field_tag :id, @dataset.id %>
+        <%= hidden_field_tag :column_x, @columnX %>
+        <%= hidden_field_tag :column_y, @columnY %>
 
         <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
             <span class="glyphicon glyphicon-refresh"></span>
