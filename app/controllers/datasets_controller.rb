@@ -155,7 +155,13 @@ class DatasetsController < ApplicationController
 
   def header_selection
     @dataset = Dataset.find(params[:id])
+    # all columns.show set to FALSE
+    @dataset.headers.first.columns.all.order(:id).each do |uncheck|
+      uncheck.show = false
+      uncheck.save
+    end
 
+    # checked columns.show set to TRUE
     params[:columns_checkbox].each do |check|
       column_to_select = @dataset.headers.first.columns.find(check)
       column_to_select.show = true
