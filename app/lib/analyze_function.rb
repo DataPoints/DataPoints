@@ -6,6 +6,33 @@ require 'cmd_interface'
 require 'separator_checker'
 class AnalyzeFunction
 
+  def reanalyze(dataset)
+
+    changed_columns=dataset.headers.first.columns.where(analyze: true)
+    changed_columns.each do |col|
+      if (col.analyze == true)
+        # puts "looking for gropings with columnid: #{col.id}"
+        columnGeos = dataset.groupings.where(columnid: col.id)
+        columnGeos.destroy_all
+
+        if(col.type_id == 5)
+          AnalyzeFunction.new.delay.count_lat_long(dataset,col)
+        end
+        if(col.type_id==4)
+          AnalyzeFunction.new.delay.r_analyze_dataset_user(dataset,col)
+        end
+        col.analyze = false
+        col.save
+      end
+    end
+
+
+
+    dataset.status = 'P'
+
+    dataset.save
+  end
+
 def r_clean_dataset(dataset)
     path = dataset.storage
     character = SeparatorChecker.new.find_separator(path)

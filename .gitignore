@@ -21,6 +21,7 @@
 /.idea/*
 
 # Application credentials and configuration files
-/config/environments/*.rb
+/config/environments/development.rb
+/config/environments/production.rb
 /config/settings/*.yml
 /config/database.yml

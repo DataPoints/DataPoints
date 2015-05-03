@@ -1,4 +1,4 @@
-<% if(@drawGraph) %>
+<% if (@drawGraph) %>
     <script>
         $(function () {
             $('#test_chart').highcharts({
@@ -89,7 +89,7 @@
 </script>
 
 <% if @coordinates.size > 0 %>
-<script>
+    <script>
         google.maps.event.addDomListener(window, 'load', initMap);
 
         $(document).ready(initMap());
@@ -124,7 +124,10 @@
 
 <div class="row">
   <div class="col-md-6">
-    <%= link_to 'Back', datasets_path, class: 'btn btn-default glyphicon glyphicon-chevron-left pull-left' %>
+    <%= link_to datasets_path, class: 'btn btn-default pull-left' do %>
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        Back
+    <% end %>
     <br/><br/><br/>
     <table class="table table-striped">
       <tr>
@@ -152,29 +155,58 @@
         <td class="text-left"><%= @number_of_data_rows %></td>
       </tr>
     </table>
-  </div>
+
+    <table class="table table-striped">
+      <%= form_tag({controller: 'datasets', action: 'header_selection'}, method: 'get') do %>
+          <%= hidden_field_tag :id, @dataset.id %>
+          <% @columns.each do |column| %>
+              <tr>
+                <% if column.show == true %>
+                    <td class="text-left"><strong><%= column.label %></strong></td>
+                    <td class="text-left"><%= check_box_tag 'columns_checkbox[]', column.id, true %></td>
+                <% else %>
+                    <td class="text-left"><strong><%= column.label %></strong></td>
+                    <td class="text-left"><%= check_box_tag 'columns_checkbox[]', column.id %></td>
+                <% end %>
+              </tr>
+          <% end %>
+          </table>
+          <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
+              <span class="glyphicon glyphicon-eye-open"></span>
+              Show/hide columns
+          <% end %>
+      <% end %>
+      </div>
+
   <div class="col-md-6">
 
     <% if @coordinates.size > 0 %>
         <div id="MapWrapper" style='width: 100%; margin: auto; border: solid; box-shadow: 4px; padding: 1px; display: block;'>
           <div id="map" style='width: 100%; height: 400px;'></div>
         </div>
-        <br />
-        <button type="button" class="btn btn-default glyphicon glyphicon-map-marker" onclick="ShowMap()">Show map</button>
-        <button type="button" class="btn btn-default glyphicon glyphicon-remove" onclick="HideMap()">Hide map</button>
-         </div>
+        <br/>
+        <button type="button" class="btn btn-default" onclick="ShowMap()">
+          <span class="glyphicon glyphicon-map-marker"></span>
+          Show map
+        </button>
+        <button type="button" class="btn btn-default" onclick="HideMap()">
+          <span class="glyphicon glyphicon-remove"></span>
+          Hide map
+        </button>
+        </div>
     <% end %>
 
-</div>
+    </div>
 
 <div class="col-sm-12">
-    <hr />
+  <hr/>
 </div>
 
 <div class="row">
   <div class="col-md-12">
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-default btn-lg glyphicon glyphicon-stats" data-toggle="modal" data-target="#myModal">
+    <button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#myModal">
+      <span class="glyphicon glyphicon-stats"></span>
       Start Analysis
     </button>
     <br/>
@@ -189,7 +221,8 @@
             <h4 class="modal-title" id="myModalLabel">Analyze Information</h4>
           </div>
           <div class="modal-body">
-            Analysis can take a lot of time. Go for a cup of coffee and chillax. We will send you a email to let you know, that your dataset is over.
+            Analysis can take a lot of time. Go for a cup of coffee and chillax. We will send you a email to let you
+            know, that your dataset is over.
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -202,17 +235,17 @@
       </div>
     </div>
 
-<!--<%= @dataset.status %>-->
-<% if @dataset.status == "S" %>
-    Not analyzed
-<% end %>
-<% if @dataset.status == "WA" %>
-    Analysis is in progress
-<% end %>
-<% if @dataset.status == "EA" %>
-    Analysis successfully completed
-    <%= @dataset.analysis_results[0].result %>
-<% end %>
+    <!--<%= @dataset.status %>-->
+    <% if @dataset.status == "S" %>
+        Not analyzed
+    <% end %>
+    <% if @dataset.status == "WA" %>
+        Analysis is in progress
+    <% end %>
+    <% if @dataset.status == "EA" %>
+        Analysis successfully completed
+        <%= @dataset.analysis_results[0].result %>
+    <% end %>
     <!--<%= @dataset.status %>-->
     <% if @dataset.status == "S" %>
         Neanalyzovany
@@ -227,7 +260,7 @@
   </div>
 </div>
 
-<%if @dataset.analysis_results.count != 0 %>
+<% if @dataset.analysis_results.count != 0 %>
     <div class="row">
       <div class="col-md-12">
         <table class="table table-striped table-bordered">
@@ -252,7 +285,7 @@
         </table>
       </div>
     </div>
-<%end%>
+<% end %>
 
 <hr/>
 
@@ -261,63 +294,70 @@
 
   <div class="col-md-12" id="data-table">
     <!-- table of data with changing header type -->
-    <table class="table table-striped table-bordered">
-      <!-- changing header type -->
-      <tr class="change-type">
-        <td></td>
-        <% @columns.each do |column| %>
-            <td>
-              <%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
-                  <%= hidden_field_tag :id, @dataset.id %>
-                  <%= hidden_field_tag :column_id, column.id %>
-                  <%= select_tag(:type_id, options_for_select(@types.collect { |type| [type.name, type.id] }, column.type_id), :onchange => ("$(this).parent('form').submit();")) %>
-              <% end %>
-            </td>
-        <% end %>
-      </tr>
-      <!-- header line -->
-      <tr class="header">
-        <% for i in 0...@names_of_data_columns.count %>
-            <th><%= @names_of_data_columns[i] %></th>
-        <% end %>
-      </tr>
-      <!-- generating matrix of data -->
-      <% @data.each do |data_row| %>
-          <tr class="body">
-            <% for j in 0...@names_of_data_columns.count %>
-                <td><%= data_row[@names_of_data_columns[j]] %></td>
+    <div class="table-responsive">
+        <table id="data-table-table" class="table table-striped table-bordered">
+          <!-- changing header type -->
+          <tr class="change-type">
+            <td></td>
+            <% @columns.where(show: true).each do |column| %>
+                <td>
+                  <%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
+                      <%= hidden_field_tag :id, @dataset.id %>
+                      <%= hidden_field_tag :column_id, column.id %>
+                      <%= select_tag(:type_id, options_for_select(@types.collect { |type| [type.name, type.id] }, column.type_id), :onchange => ("$(this).parent('form').submit();")) %>
+                  <% end %>
+                </td>
             <% end %>
           </tr>
-      <% end %>
-      <!-- summary for each column -->
-      <tr class="stats">
-        <th>MIN<br>MAX<br>MEAN<br>MEDIAN</th>
-        <% @columns.each do |column| %>
-            <th>
-              <% @summaries.each do |summary| %>
-                  <% if (summary.dataset_id == @dataset.id) and (summary.header == column.label) %>
-                      <%= summary.min %><br>
-                      <%= summary.max %><br>
-                      <%= summary.mean %><br>
-                      <%= summary.median %><br>
+
+          <!-- header line -->
+          <tr class="header">
+            <th>id</th>
+            <% @columns.where(show: true).each do |selected_header| %>
+                <th><%= selected_header[:label] %></th>
+            <% end %>
+          </tr>
+
+          <!-- generating matrix of data -->
+          <% @data.each do |data_row| %>
+              <tr class="body">
+                <td><%= data_row[:id] %></td>
+                <% @columns.where(show: true).each do |selected_header| %>
+                    <td><%= data_row[selected_header[:label]] %></td>
+                <% end %>
+              </tr>
+          <% end %>
+
+          <!-- summary for each column -->
+          <tr class="stats">
+            <th>MIN<br>MAX<br>MEAN<br>MEDIAN</th>
+            <% @columns.where(show: true).each do |column| %>
+                <th>
+                  <% @summaries.each do |summary| %>
+                      <% if (summary.dataset_id == @dataset.id) and (summary.header == column.label) %>
+                          <%= summary.min %><br>
+                          <%= summary.max %><br>
+                          <%= summary.mean %><br>
+                          <%= summary.median %><br>
+                      <% end %>
                   <% end %>
-              <% end %>
-            </th>
-        <% end %>
-      </tr>
-    </table>
+                </th>
+            <% end %>
+          </tr>
+        </table>
+    </div>
     <div>
       <%= paginate @data %>
     </div>
-
-
   </div>
+
   <div class="col-md-3" id="jira-okno">
     <table class="table table-condensed">
       <tr>
         <td>
           <button class="btn btn-default pull-right" id="close-jira-okno">
-            <span class='glyphicon glyphicon-remove'></span> Close
+            <span class='glyphicon glyphicon-remove'></span>
+            Close
           </button>
           <br class="blear"/>
         </td>
@@ -344,7 +384,7 @@
 
 <hr/>
 
-<% if(@drawGraph) %>
+<% if (@drawGraph) %>
     <div clas="row">
       <a name="change"></a>
 
@@ -358,10 +398,13 @@
             <%= hidden_field_tag :id, @dataset.id %>
 
             <% if !params[:column_h].nil? %>
-                <%= hidden_field_tag :column_h,params[:column_h] %>
+                <%= hidden_field_tag :column_h, params[:column_h] %>
             <% end %>
 
-            <%= submit_tag 'Choose', class: 'btn btn-default', style: 'margin: 0' %>
+            <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
+                <span class="glyphicon glyphicon-refresh"></span>
+                Choose
+            <% end %>
         <% end %>
       </div>
     </div>
@@ -384,10 +427,13 @@
             <%= hidden_field_tag :id, @dataset.id %>
 
             <% if !params[:column_h].nil? %>
-                <%= hidden_field_tag :column_h,params[:column_h] %>
+                <%= hidden_field_tag :column_h, params[:column_h] %>
             <% end %>
-            <% if(@previousNumericColumn != nil) %>
-                <%= submit_tag 'previous value', class: 'btn btn-default', style: 'margin: 0; width: auto' %>
+            <% if (@previousNumericColumn != nil) %>
+                <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    previous value
+                <% end %>
             <% end %>
         <% end %>
       </div>
@@ -398,22 +444,26 @@
             <%= hidden_field_tag :id, @dataset.id %>
 
             <% if !params[:column_h].nil? %>
-                <%= hidden_field_tag :column_h,params[:column_h] %>
+                <%= hidden_field_tag :column_h, params[:column_h] %>
             <% end %>
-            <% if(@nextNumericColumn != nil) %>
-                <%= submit_tag 'next value', class: 'btn btn-default', style: 'margin: 0; width: auto' %>
+            <% if (@nextNumericColumn != nil) %>
+                <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
+                    next value
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                <% end %>
             <% end %>
         <% end %>
       </div>
     </div>
 
-    <br />
-    <hr />
-    <br />
+    <br/>
+    <hr/>
+    <br/>
 <% end %>
 
 <div clas="row">
   <a name="change"></a>
+
   <div class="col-md-12">
     <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get') do %>
         <label>H</label>
@@ -422,7 +472,10 @@
         <%= hidden_field_tag :column_x, @columnX %>
         <%= hidden_field_tag :column_y, @columnY %>
 
-        <%= submit_tag 'Choose', class: 'btn btn-default', style: 'margin: 0' %>
+        <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
+            <span class="glyphicon glyphicon-refresh"></span>
+            Choose
+        <% end %>
     <% end %>
   </div>
 </div>
@@ -432,83 +485,3 @@
     <div id='histogram' style=" width: 100%; height: 300px;margin: auto ;"></div>
   </div>
 </div>
-
-<script>
-    function handleJiraOkno() {
-        var dataTable = $("#data-table");
-        var jiraOkno = $("#jira-okno");
-        var closeJiraOkno = $("#close-jira-okno");
-        var header = $("th", dataTable).not('.stats th');
-        var ico_index = null;
-        var company_index = null;
-
-        var selects = document.getElementsByName("type_id");
-
-        for (i = 0; i < selects.length; i++) {
-            if (selects[i].value == 7) {
-                ico_index = i + 1;
-            } else if (selects[i].value == 8) {
-                company_index = i + 1;
-            }
-        }
-
-        <!-- Generating TABLE with labels and empty values-->
-        table = '<table class="table table-striped">';
-        header.each(function (index) {
-
-            row = '<tr>';
-            row += '<td class="text-left">';
-            row += '<strong>' + $(this).text() + ':</strong>';
-            row += '</td>';
-            row += '<td class="text-left"></td>';
-            row += '</tr>';
-            table += row;
-        });
-
-        table += '</table>';
-        $('.body', jiraOkno).append(table);
-
-        // Adding Finstat and Foaf buttons to TABLE if dataset has ICO or Company name
-        if (ico_index !== null || company_index !== null) {
-            fin_foaf = '<table class="table table-transparent">';
-            fin_foaf += '<tr><td></td><td></td></tr>';
-            fin_foaf += '</table>';
-            $('.fin_foaf', jiraOkno).append(fin_foaf);
-        }
-
-        // FUNCTION for closing JIRA Window
-        closeJiraOkno.click(function () {
-            dataTable.removeClass('col-md-9');
-            dataTable.addClass('col-md-12');
-            jiraOkno.css({display: 'none'});
-        });
-
-        // FUNCTION for opening JIRA Window
-        $("tr.body", dataTable).click(function () {
-            dataTable.removeClass('col-md-12');
-            dataTable.addClass('col-md-9');
-            jiraOkno.css({display: 'block'});
-        });
-
-        // Reading values from actual row
-        $("tr.body", dataTable).click(function () {
-            data = $("td", this);
-
-            data.each(function (index) {
-                // If ICO or if Company exist, fill button link
-                if (ico_index !== null && ico_index == index) {
-                    $('.fin_foaf tr:nth-child(1) td:nth-child(1)', jiraOkno).html('<a href="http://www.finstat.sk/Hladaj?query=' + $(this).text() + '" class="btn btn-finstat" role="button" target="_blank"><span class="glyphicon glyphicon-stats"></span> Finstat.sk</a>');
-                    $('.fin_foaf tr:nth-child(1) td:nth-child(2)', jiraOkno).html('<a href="http://foaf.sk/?q=' + $(this).text() + '" class="btn btn-foaf" role="button" target="_blank"><span class="glyphicon glyphicon-stats"></span> Foaf.sk</a>');
-                } else if (company_index !== null && company_index == index) {
-                    $('.fin_foaf tr:nth-child(1) td:nth-child(1)', jiraOkno).html('<a href="http://www.finstat.sk/Hladaj?query=' + $(this).text() + '" class="btn btn-finstat" role="button" target="_blank"><span class="glyphicon glyphicon-stats"></span> Finstat.sk</a>');
-                    $('.fin_foaf tr:nth-child(1) td:nth-child(2)', jiraOkno).html('<a href="http://foaf.sk/?q=' + $(this).text() + '" class="btn btn-foaf" role="button" target="_blank"><span class="glyphicon glyphicon-stats"></span> Foaf.sk</a>');
-                }
-
-                $('.body tr:nth-child(' + (index + 1) + ') td:nth-child(2)', jiraOkno).text($(this).text());
-            });
-        });
-    }
-    ;
-
-    $(document).on('page:load', handleJiraOkno())
-</script>

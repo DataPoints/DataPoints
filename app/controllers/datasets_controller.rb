@@ -7,6 +7,7 @@ require 'sample_analyzer'
 class DatasetsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user, except: [:index, :new, :create]
+  before_action :analyzing?, only: [:show]
 
   def new
     @dataset = Dataset.new
@@ -87,7 +88,7 @@ class DatasetsController < ApplicationController
     name_of_dataset_data_table = @dataset.data_table_name
     @data = Class.new(ActiveRecord::Base){self.table_name = name_of_dataset_data_table }
     @number_of_data_rows = @data.all.count
-    @data = @data.page(params[:page]).per(25)
+    @data = @data.page(params[:page]).per(15)
     # if @number_of_data_rows > 15
     #   @number_of_data_rows = 15
     # end
@@ -152,9 +153,28 @@ class DatasetsController < ApplicationController
     redirect_to dataset_path(@dataset, :anchor => 'type')
   end
 
+  def header_selection
+    @dataset = Dataset.find(params[:id])
+    # all columns.show set to FALSE
+    @dataset.headers.first.columns.all.order(:id).each do |uncheck|
+      uncheck.show = false
+      uncheck.save
+    end
+
+    # checked columns.show set to TRUE
+    params[:columns_checkbox].each do |check|
+      column_to_select = @dataset.headers.first.columns.find(check)
+      column_to_select.show = true
+      column_to_select.save
+    end
+
+    redirect_to dataset_path(@dataset)
+  end
 
   def start_analyze
     @dataset = Dataset.find(params[:id])
+
+    @dataset.status = 'S'
 
 
     # Toto destroyAll nie je uplne idealne, lepsie by bolo ukladat ku kazdemu zmenemu stlpcu
@@ -167,26 +187,12 @@ class DatasetsController < ApplicationController
     #   AnalyzeFunction.new.delay.count_lat_long(@dataset,column)
     # end
 
+    AnalyzeFunction.new.delay.reanalyze(@dataset)
 
-    changed_columns=@dataset.headers.first.columns.where(analyze: true)
-    changed_columns.each do |col|
-      if (col.analyze == true)
-        # puts "looking for gropings with columnid: #{col.id}"
-        columnGeos = @dataset.groupings.where(columnid: col.id)
-        columnGeos.destroy_all
 
-        if(col.type_id == 5)
-          AnalyzeFunction.new.delay.count_lat_long(@dataset,col)
-        end
-        if(col.type_id==4)
-          AnalyzeFunction.new.delay.r_analyze_dataset_user(@dataset,col)
-        end
-        col.analyze = false
-        col.save
-      end
-    end
+    @dataset.save
 
-    redirect_to :back
+    redirect_to datasets_path
   end
 
   def prepare_switch_to_other_column
@@ -300,6 +306,14 @@ class DatasetsController < ApplicationController
     if dataset.user != current_user
       flash[:danger] = 'Permission denied.'
       redirect_to root_path
+    end
+  end
+
+  def analyzing?
+    dataset = Dataset.find(params[:id])
+    if dataset.status == 'S'
+      flash[:danger] = "Dataset is being processed now."
+      redirect_to datasets_path
     end
   end
 

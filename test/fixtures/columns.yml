@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  header: 
-  label: MyString
-  type: 
+  header: one
+  label: LavelOne
+  type: one
   datatyp: MyString
 
 two:
-  header: 
+  header: one
   label: MyString
-  type: 
+  type: one
   datatyp: MyString
