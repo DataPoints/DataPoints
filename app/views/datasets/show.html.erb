@@ -294,62 +294,63 @@
 
   <div class="col-md-12" id="data-table">
     <!-- table of data with changing header type -->
-    <table class="table table-striped table-bordered">
-      <!-- changing header type -->
-      <tr class="change-type">
-        <td></td>
-        <% @columns.where(show: true).each do |column| %>
-            <td>
-              <%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
-                  <%= hidden_field_tag :id, @dataset.id %>
-                  <%= hidden_field_tag :column_id, column.id %>
-                  <%= select_tag(:type_id, options_for_select(@types.collect { |type| [type.name, type.id] }, column.type_id), :onchange => ("$(this).parent('form').submit();")) %>
-              <% end %>
-            </td>
-        <% end %>
-      </tr>
-
-      <!-- header line -->
-      <tr class="header">
-        <th>id</th>
-        <% @columns.where(show: true).each do |selected_header| %>
-            <th><%= selected_header[:label] %></th>
-        <% end %>
-      </tr>
-
-      <!-- generating matrix of data -->
-      <% @data.each do |data_row| %>
-          <tr class="body">
-            <td><%= data_row[:id] %></td>
-            <% @columns.where(show: true).each do |selected_header| %>
-                <td><%= data_row[selected_header[:label]] %></td>
+    <div class="table-responsive">
+        <table id="data-table-table" class="table table-striped table-bordered">
+          <!-- changing header type -->
+          <tr class="change-type">
+            <td></td>
+            <% @columns.where(show: true).each do |column| %>
+                <td>
+                  <%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
+                      <%= hidden_field_tag :id, @dataset.id %>
+                      <%= hidden_field_tag :column_id, column.id %>
+                      <%= select_tag(:type_id, options_for_select(@types.collect { |type| [type.name, type.id] }, column.type_id), :onchange => ("$(this).parent('form').submit();")) %>
+                  <% end %>
+                </td>
             <% end %>
           </tr>
-      <% end %>
 
-      <!-- summary for each column -->
-      <tr class="stats">
-        <th>MIN<br>MAX<br>MEAN<br>MEDIAN</th>
-        <% @columns.where(show: true).each do |column| %>
-            <th>
-              <% @summaries.each do |summary| %>
-                  <% if (summary.dataset_id == @dataset.id) and (summary.header == column.label) %>
-                      <%= summary.min %><br>
-                      <%= summary.max %><br>
-                      <%= summary.mean %><br>
-                      <%= summary.median %><br>
+          <!-- header line -->
+          <tr class="header">
+            <th>id</th>
+            <% @columns.where(show: true).each do |selected_header| %>
+                <th><%= selected_header[:label] %></th>
+            <% end %>
+          </tr>
+
+          <!-- generating matrix of data -->
+          <% @data.each do |data_row| %>
+              <tr class="body">
+                <td><%= data_row[:id] %></td>
+                <% @columns.where(show: true).each do |selected_header| %>
+                    <td><%= data_row[selected_header[:label]] %></td>
+                <% end %>
+              </tr>
+          <% end %>
+
+          <!-- summary for each column -->
+          <tr class="stats">
+            <th>MIN<br>MAX<br>MEAN<br>MEDIAN</th>
+            <% @columns.where(show: true).each do |column| %>
+                <th>
+                  <% @summaries.each do |summary| %>
+                      <% if (summary.dataset_id == @dataset.id) and (summary.header == column.label) %>
+                          <%= summary.min %><br>
+                          <%= summary.max %><br>
+                          <%= summary.mean %><br>
+                          <%= summary.median %><br>
+                      <% end %>
                   <% end %>
-              <% end %>
-            </th>
-        <% end %>
-      </tr>
-    </table>
+                </th>
+            <% end %>
+          </tr>
+        </table>
+    </div>
     <div>
       <%= paginate @data %>
     </div>
-
-
   </div>
+
   <div class="col-md-3" id="jira-okno">
     <table class="table table-condensed">
       <tr>
@@ -484,83 +485,3 @@
     <div id='histogram' style=" width: 100%; height: 300px;margin: auto ;"></div>
   </div>
 </div>
-
-<script>
-    function handleJiraOkno() {
-        var dataTable = $("#data-table");
-        var jiraOkno = $("#jira-okno");
-        var closeJiraOkno = $("#close-jira-okno");
-        var header = $("th", dataTable).not('.stats th');
-        var ico_index = null;
-        var company_index = null;
-
-        var selects = document.getElementsByName("type_id");
-
-        for (i = 0; i < selects.length; i++) {
-            if (selects[i].value == 7) {
-                ico_index = i + 1;
-            } else if (selects[i].value == 8) {
-                company_index = i + 1;
-            }
-        }
-
-        <!-- Generating TABLE with labels and empty values-->
-        table = '<table class="table table-striped">';
-        header.each(function (index) {
-
-            row = '<tr>';
-            row += '<td class="text-left">';
-            row += '<strong>' + $(this).text() + ':</strong>';
-            row += '</td>';
-            row += '<td class="text-left"></td>';
-            row += '</tr>';
-            table += row;
-        });
-
-        table += '</table>';
-        $('.body', jiraOkno).append(table);
-
-        // Adding Finstat and Foaf buttons to TABLE if dataset has ICO or Company name
-        if (ico_index !== null || company_index !== null) {
-            fin_foaf = '<table class="table table-transparent">';
-            fin_foaf += '<tr><td></td><td></td></tr>';
-            fin_foaf += '</table>';
-            $('.fin_foaf', jiraOkno).append(fin_foaf);
-        }
-
-        // FUNCTION for closing JIRA Window
-        closeJiraOkno.click(function () {
-            dataTable.removeClass('col-md-9');
-            dataTable.addClass('col-md-12');
-            jiraOkno.css({display: 'none'});
-        });
-
-        // FUNCTION for opening JIRA Window
-        $("tr.body", dataTable).click(function () {
-            dataTable.removeClass('col-md-12');
-            dataTable.addClass('col-md-9');
-            jiraOkno.css({display: 'block'});
-        });
-
-        // Reading values from actual row
-        $("tr.body", dataTable).click(function () {
-            data = $("td", this);
-
-            data.each(function (index) {
-                // If ICO or if Company exist, fill button link
-                if (ico_index !== null && ico_index == index) {
-                    $('.fin_foaf tr:nth-child(1) td:nth-child(1)', jiraOkno).html('<a href="http://www.finstat.sk/Hladaj?query=' + $(this).text() + '" class="btn btn-finstat" role="button" target="_blank"><span class="glyphicon glyphicon-stats"></span> Finstat.sk</a>');
-                    $('.fin_foaf tr:nth-child(1) td:nth-child(2)', jiraOkno).html('<a href="http://foaf.sk/?q=' + $(this).text() + '" class="btn btn-foaf" role="button" target="_blank"><span class="glyphicon glyphicon-stats"></span> Foaf.sk</a>');
-                } else if (company_index !== null && company_index == index) {
-                    $('.fin_foaf tr:nth-child(1) td:nth-child(1)', jiraOkno).html('<a href="http://www.finstat.sk/Hladaj?query=' + $(this).text() + '" class="btn btn-finstat" role="button" target="_blank"><span class="glyphicon glyphicon-stats"></span> Finstat.sk</a>');
-                    $('.fin_foaf tr:nth-child(1) td:nth-child(2)', jiraOkno).html('<a href="http://foaf.sk/?q=' + $(this).text() + '" class="btn btn-foaf" role="button" target="_blank"><span class="glyphicon glyphicon-stats"></span> Foaf.sk</a>');
-                }
-
-                $('.body tr:nth-child(' + (index + 1) + ') td:nth-child(2)', jiraOkno).text($(this).text());
-            });
-        });
-    }
-    ;
-
-    $(document).on('page:load', handleJiraOkno())
-</script>

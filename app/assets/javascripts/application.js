@@ -18,3 +18,4 @@
 //= require datasets
 //= require underscore
 //= require gmaps/google
+//= require jira-okno

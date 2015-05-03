@@ -16,8 +16,13 @@
   @media (min-width: $screen-md-min) {
     width: $container-md;
   }
+  /*// BOOSTRAT DIDN'T RESPOND TO CHANGE OF $screen-lg IN _variables.scss
+  //- RESULTING IN FORCE CHANGED VALUES IN PIXELS
   @media (min-width: $screen-lg-min) {
     width: $container-lg;
+  }*/
+  @media (min-width: 1500px) {
+    width: 1500px;
   }
 }
 
