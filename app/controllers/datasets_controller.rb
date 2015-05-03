@@ -160,21 +160,29 @@ class DatasetsController < ApplicationController
     # Toto destroyAll nie je uplne idealne, lepsie by bolo ukladat ku kazdemu zmenemu stlpcu
     # aj to ze z coho bol zmeneny. Inak sa to neda, analyze priznak je nafigu, lebo je syntetizovany
     # z rozdielu previousType, currentType :)
-    @dataset.coordinates.destroy_all
-    coordinateColumns = @dataset.headers.first.columns.where(type_id: 5)
-    coordinateColumns.each do |column|
-      AnalyzeFunction.new.delay.count_lat_long(@dataset,column)
-    end
+
+    # @dataset.coordinates.destroy_all
+    # coordinateColumns = @dataset.headers.first.columns.where(type_id: 5)
+    # coordinateColumns.each do |column|
+    #   AnalyzeFunction.new.delay.count_lat_long(@dataset,column)
+    # end
 
 
     changed_columns=@dataset.headers.first.columns.where(analyze: true)
     changed_columns.each do |col|
       if (col.analyze == true)
+        # puts "looking for gropings with columnid: #{col.id}"
+        columnGeos = @dataset.groupings.where(columnid: col.id)
+        columnGeos.destroy_all
+
+        if(col.type_id == 5)
+          AnalyzeFunction.new.delay.count_lat_long(@dataset,col)
+        end
         if(col.type_id==4)
           AnalyzeFunction.new.delay.r_analyze_dataset_user(@dataset,col)
-          col.analyze = false
-          col.save
         end
+        col.analyze = false
+        col.save
       end
     end
 

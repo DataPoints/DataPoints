@@ -135,5 +135,16 @@ end
         @logger.info "Coordinate #{datasetGeo.id}(#{datasetGeo.mesto}) for dataset #{dataset.id} for  already exists"
       end
     end
+
+    datasetGeos.each do |datasetGeo|
+      dataset.groupings.each do |grouping|
+        if(grouping.coordinate_id == datasetGeo.id)
+          grouping.columnid = column.id
+          grouping.save
+        end
+
+      end
+    end
+
   end
 end

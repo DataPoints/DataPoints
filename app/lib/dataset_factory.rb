@@ -31,5 +31,12 @@ class DatasetFactory
 
     Summary.create( dataset_id:"#{dataset.id}", header:"Vyska_pohladavky", min:10.38, max:41926.7, median:715.28, mean:715.28 )
 
+    dataset.headers.first.columns.each do |column|
+      if column.type_id == 5
+        AnalyzeFunction.new.delay.count_lat_long(dataset,column)
+      end
+    end
+
+
   end
 end
