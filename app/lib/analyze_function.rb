@@ -8,17 +8,25 @@ class AnalyzeFunction
 
   def reanalyze(dataset)
 
-    changed_columns = dataset.headers.first.columns.where(analyze: true)
-
+    changed_columns=dataset.headers.first.columns.where(analyze: true)
     changed_columns.each do |col|
       if (col.analyze == true)
-        if(col.type_id==4)
-          r_analyze_dataset_user(dataset,col)
-          col.analyze = false
-          col.save
+        # puts "looking for gropings with columnid: #{col.id}"
+        columnGeos = dataset.groupings.where(columnid: col.id)
+        columnGeos.destroy_all
+
+        if(col.type_id == 5)
+          AnalyzeFunction.new.delay.count_lat_long(dataset,col)
         end
+        if(col.type_id==4)
+          AnalyzeFunction.new.delay.r_analyze_dataset_user(dataset,col)
+        end
+        col.analyze = false
+        col.save
       end
     end
+
+
 
     dataset.status = 'P'
 
@@ -154,5 +162,16 @@ end
         @logger.info "Coordinate #{datasetGeo.id}(#{datasetGeo.mesto}) for dataset #{dataset.id} for  already exists"
       end
     end
+
+    datasetGeos.each do |datasetGeo|
+      dataset.groupings.each do |grouping|
+        if(grouping.coordinate_id == datasetGeo.id)
+          grouping.columnid = column.id
+          grouping.save
+        end
+
+      end
+    end
+
   end
 end

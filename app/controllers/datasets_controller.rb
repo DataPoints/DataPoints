@@ -180,12 +180,12 @@ class DatasetsController < ApplicationController
     # Toto destroyAll nie je uplne idealne, lepsie by bolo ukladat ku kazdemu zmenemu stlpcu
     # aj to ze z coho bol zmeneny. Inak sa to neda, analyze priznak je nafigu, lebo je syntetizovany
     # z rozdielu previousType, currentType :)
-    @dataset.coordinates.destroy_all
-    coordinateColumns = @dataset.headers.first.columns.where(type_id: 5)
-    coordinateColumns.each do |column|
-      AnalyzeFunction.new.delay.count_lat_long(@dataset,column)
-    end
 
+    # @dataset.coordinates.destroy_all
+    # coordinateColumns = @dataset.headers.first.columns.where(type_id: 5)
+    # coordinateColumns.each do |column|
+    #   AnalyzeFunction.new.delay.count_lat_long(@dataset,column)
+    # end
 
     AnalyzeFunction.new.delay.reanalyze(@dataset)
 
