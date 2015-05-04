@@ -234,7 +234,7 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             <%= form_tag({controller: 'datasets', action: 'start_analyze'}, method: 'get', class: 'jahoda', data: {status: @dataset.status}) do %>
                 <%= hidden_field_tag :id, @dataset.id %>
-                <%= submit_tag 'Start Analyze', class: 'btn btn-default' %>
+                <%= submit_tag 'Start analysis', class: 'btn btn-default' %>
             <% end %>
           </div>
         </div>
