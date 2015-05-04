@@ -161,6 +161,11 @@ class DatasetsController < ApplicationController
       uncheck.save
     end
 
+    if params[:columns_checkbox].nil?
+      redirect_to dataset_path(@dataset)
+      return
+    end
+
     # checked columns.show set to TRUE
     params[:columns_checkbox].each do |check|
       column_to_select = @dataset.headers.first.columns.find(check)

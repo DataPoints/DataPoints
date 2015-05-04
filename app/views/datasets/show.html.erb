@@ -124,11 +124,14 @@
 
 <div class="row">
   <div class="col-md-6">
+    <!-- Back button -->
     <%= link_to datasets_path, class: 'btn btn-default pull-left' do %>
         <span class="glyphicon glyphicon-chevron-left"></span>
         Back
     <% end %>
     <br/><br/><br/>
+
+    <!-- Details table -->
     <table class="table table-striped">
       <tr>
         <td class="text-left"><strong>Dataset name: </strong></td>
@@ -156,27 +159,30 @@
       </tr>
     </table>
 
-    <table class="table table-striped">
-      <%= form_tag({controller: 'datasets', action: 'header_selection'}, method: 'get') do %>
-          <%= hidden_field_tag :id, @dataset.id %>
+    <!-- Show columns list -->
+    <%= form_tag({controller: 'datasets', action: 'header_selection'}, method: 'get') do %>
+        <%= hidden_field_tag :id, @dataset.id %>
+        <ul style="list-style-type:none">
           <% @columns.each do |column| %>
-              <tr>
-                <% if column.show == true %>
-                    <td class="text-left"><strong><%= column.label %></strong></td>
-                    <td class="text-left"><%= check_box_tag 'columns_checkbox[]', column.id, true %></td>
-                <% else %>
-                    <td class="text-left"><strong><%= column.label %></strong></td>
-                    <td class="text-left"><%= check_box_tag 'columns_checkbox[]', column.id %></td>
-                <% end %>
-              </tr>
+              <% if column.show == true %>
+                  <li style="float: left">
+                    <%= check_box_tag 'columns_checkbox[]', column.id, true %>
+                    <%= column.label %>
+                  </li>
+              <% else %>
+                  <li style="float: left; color:grey;">
+                    <%= check_box_tag 'columns_checkbox[]', column.id %>
+                    <strike><%= column.label %></strike>
+                  </li>
+              <% end %>
           <% end %>
-          </table>
-          <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
-              <span class="glyphicon glyphicon-eye-open"></span>
-              Show/hide columns
-          <% end %>
-      <% end %>
-      </div>
+        </ul>
+        <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
+            <span class="glyphicon glyphicon-eye-open"></span>
+            Show/hide columns
+        <% end %>
+    <% end %>
+  </div>
 
   <div class="col-md-6">
 
@@ -207,7 +213,7 @@
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#myModal">
       <span class="glyphicon glyphicon-stats"></span>
-      Start Analysis
+      Start analysis
     </button>
     <br/>
     <br/>
@@ -432,7 +438,7 @@
             <% if (@previousNumericColumn != nil) %>
                 <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
                     <span class="glyphicon glyphicon-chevron-left"></span>
-                    previous value
+                    Previous value
                 <% end %>
             <% end %>
         <% end %>
@@ -448,7 +454,7 @@
             <% end %>
             <% if (@nextNumericColumn != nil) %>
                 <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
-                    next value
+                    Next value
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 <% end %>
             <% end %>
