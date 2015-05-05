@@ -8,6 +8,7 @@ class DatasetsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user, except: [:index, :new, :create]
   before_action :analyzing?, only: [:show]
+  before_action :deleted?, except: [:index, :new, :create]
 
   def new
     @dataset = Dataset.new
@@ -192,7 +193,7 @@ class DatasetsController < ApplicationController
     #   AnalyzeFunction.new.delay.count_lat_long(@dataset,column)
     # end
 
-    AnalyzeFunction.new.delay.reanalyze(@dataset)
+    AnalyzeFunction.new.delay.reanalyze(@dataset, params[:send_mail])
 
 
     @dataset.save
@@ -318,6 +319,14 @@ class DatasetsController < ApplicationController
     dataset = Dataset.find(params[:id])
     if dataset.status == 'S'
       flash[:danger] = "Dataset is being processed now."
+      redirect_to datasets_path
+    end
+  end
+
+  def deleted?
+    dataset = Dataset.find(params[:id])
+    if dataset.deleted
+      flash[:danger] = "Sorry dataset was deleted."
       redirect_to datasets_path
     end
   end
