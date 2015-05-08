@@ -6,7 +6,7 @@ require 'cmd_interface'
 require 'separator_checker'
 class AnalyzeFunction
 
-  def reanalyze(dataset)
+  def reanalyze(dataset, send_mail)
 
     changed_columns=dataset.headers.first.columns.where(analyze: true)
     changed_columns.each do |col|
@@ -26,7 +26,9 @@ class AnalyzeFunction
       end
     end
 
-
+    if send_mail == 'true'
+      dataset.user.send_success_email(dataset)
+    end
 
     dataset.status = 'P'
 

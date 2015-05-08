@@ -234,6 +234,10 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             <%= form_tag({controller: 'datasets', action: 'start_analyze'}, method: 'get', class: 'jahoda', data: {status: @dataset.status}) do %>
                 <%= hidden_field_tag :id, @dataset.id %>
+
+                <%= label_tag :send_mail, 'Send email after analysis is complete.' %>
+                <%= check_box_tag :send_mail, true, false, {style: 'width: 10px;'} %>
+
                 <%= submit_tag 'Start analysis', class: 'btn btn-default' %>
             <% end %>
           </div>
@@ -310,7 +314,7 @@
                   <%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
                       <%= hidden_field_tag :id, @dataset.id %>
                       <%= hidden_field_tag :column_id, column.id %>
-                      <%= select_tag(:type_id, options_for_select(@types.collect { |type| [type.name, type.id] }, column.type_id), :onchange => ("$(this).parent('form').submit();")) %>
+                      <%= select_tag(:type_id, options_for_select(@types.collect { |type| [type.name, type.id] }, column.type_id), {:onchange => ("$(this).parent('form').submit();"), class: 'form-control', style: 'min-width: 100px;'}) %>
                   <% end %>
                 </td>
             <% end %>
@@ -395,11 +399,11 @@
       <a name="change"></a>
 
       <div class="col-md-12">
-        <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get') do %>
-            <label>X</label>
-            <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnX)) %>
-            <label>Y</label>
-            <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnY)) %>
+        <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get', class: 'form-inline') do %>
+            <%= label_tag :column_x, 'X' %>
+            <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnX), {class: 'form-control', style: 'width: 200px;'}) %>
+            <%= label_tag :column_y, 'Y' %>
+            <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnY), {class: 'form-control', style: 'width: 200px;'}) %>
 
             <%= hidden_field_tag :id, @dataset.id %>
 
@@ -471,9 +475,9 @@
   <a name="change"></a>
 
   <div class="col-md-12">
-    <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get') do %>
-        <label>H</label>
-        <%= select_tag(:column_h, options_for_select(@columns.collect { |column| [column.label, column.id] })) %>
+    <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get', class: 'form-inline') do %>
+        <%= label_tag :column_h, 'H' %>
+        <%= select_tag(:column_h, options_for_select(@columns.collect { |column| [column.label, column.id] }), {class: 'form-control', style: 'width: 200px;'}) %>
         <%= hidden_field_tag :id, @dataset.id %>
         <%= hidden_field_tag :column_x, @columnX %>
         <%= hidden_field_tag :column_y, @columnY %>
