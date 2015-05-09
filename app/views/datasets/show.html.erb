@@ -160,19 +160,20 @@
     </table>
 
     <!-- Show columns list -->
+    <div class="well" style="background-color: #272727">
     <%= form_tag({controller: 'datasets', action: 'header_selection'}, method: 'get') do %>
         <%= hidden_field_tag :id, @dataset.id %>
-        <ul style="list-style-type:none">
+        <ul style="list-style-type: none; padding: 0">
           <% @columns.each do |column| %>
               <% if column.show == true %>
-                  <li style="float: left">
-                    <%= check_box_tag 'columns_checkbox[]', column.id, true %>
+                  <li style="text-align: left">
+                    <%= check_box_tag 'columns_checkbox[]', column.id, true, :style => 'width: 15px' %>
                     <%= column.label %>
                   </li>
               <% else %>
-                  <li style="float: left; color:grey;">
-                    <%= check_box_tag 'columns_checkbox[]', column.id %>
-                    <strike><%= column.label %></strike>
+                  <li style="text-align: left; color:grey">
+                    <%= check_box_tag 'columns_checkbox[]', column.id, false, :style => 'width: 15px' %>
+                    <%= column.label %>
                   </li>
               <% end %>
           <% end %>
@@ -182,6 +183,7 @@
             Show/hide columns
         <% end %>
     <% end %>
+</div>
   </div>
 
   <div class="col-md-6">
