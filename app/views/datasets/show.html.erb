@@ -3,7 +3,7 @@
         $(function () {
             $('#test_chart').highcharts({
                 title: {
-                    text: 'Users graph',
+                    text: '',
                     x: -20 //center
                 },
 
@@ -47,7 +47,7 @@
                 type: 'column'
             },
             title: {
-                text: 'Users Histogram'
+                text: 'Histogram'
             },
             xAxis: {
                 type: 'category',
@@ -305,56 +305,56 @@
   <div class="col-md-12" id="data-table">
     <!-- table of data with changing header type -->
     <div class="table-responsive">
-        <table id="data-table-table" class="table table-striped table-bordered">
-          <!-- changing header type -->
-          <tr class="change-type">
-            <td></td>
-            <% @columns.where(show: true).each do |column| %>
-                <td>
-                  <%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
-                      <%= hidden_field_tag :id, @dataset.id %>
-                      <%= hidden_field_tag :column_id, column.id %>
-                      <%= select_tag(:type_id, options_for_select(@types.collect { |type| [type.name, type.id] }, column.type_id), {:onchange => ("$(this).parent('form').submit();"), class: 'form-control', style: 'min-width: 100px;'}) %>
-                  <% end %>
-                </td>
-            <% end %>
-          </tr>
-
-          <!-- header line -->
-          <tr class="header">
-            <th>id</th>
-            <% @columns.where(show: true).each do |selected_header| %>
-                <th><%= selected_header[:label] %></th>
-            <% end %>
-          </tr>
-
-          <!-- generating matrix of data -->
-          <% @data.each do |data_row| %>
-              <tr class="body">
-                <td><%= data_row[:id] %></td>
-                <% @columns.where(show: true).each do |selected_header| %>
-                    <td><%= data_row[selected_header[:label]] %></td>
+      <table id="data-table-table" class="table table-striped table-bordered">
+        <!-- changing header type -->
+        <tr class="change-type">
+          <td></td>
+          <% @columns.where(show: true).each do |column| %>
+              <td>
+                <%= form_tag({controller: 'datasets', action: 'change_type'}, method: 'get') do %>
+                    <%= hidden_field_tag :id, @dataset.id %>
+                    <%= hidden_field_tag :column_id, column.id %>
+                    <%= select_tag(:type_id, options_for_select(@types.collect { |type| [type.name, type.id] }, column.type_id), {:onchange => ("$(this).parent('form').submit();"), class: 'form-control', style: 'min-width: 100px;'}) %>
                 <% end %>
-              </tr>
+              </td>
           <% end %>
+        </tr>
 
-          <!-- summary for each column -->
-          <tr class="stats">
-            <th>MIN<br>MAX<br>MEAN<br>MEDIAN</th>
-            <% @columns.where(show: true).each do |column| %>
-                <th>
-                  <% @summaries.each do |summary| %>
-                      <% if (summary.dataset_id == @dataset.id) and (summary.header == column.label) %>
-                          <%= summary.min %><br>
-                          <%= summary.max %><br>
-                          <%= summary.mean %><br>
-                          <%= summary.median %><br>
-                      <% end %>
-                  <% end %>
-                </th>
-            <% end %>
-          </tr>
-        </table>
+        <!-- header line -->
+        <tr class="header">
+          <th>id</th>
+          <% @columns.where(show: true).each do |selected_header| %>
+              <th><%= selected_header[:label] %></th>
+          <% end %>
+        </tr>
+
+        <!-- generating matrix of data -->
+        <% @data.each do |data_row| %>
+            <tr class="body">
+              <td><%= data_row[:id] %></td>
+              <% @columns.where(show: true).each do |selected_header| %>
+                  <td><%= data_row[selected_header[:label]] %></td>
+              <% end %>
+            </tr>
+        <% end %>
+
+        <!-- summary for each column -->
+        <tr class="stats">
+          <th>MIN<br>MAX<br>MEAN<br>MEDIAN</th>
+          <% @columns.where(show: true).each do |column| %>
+              <th>
+                <% @summaries.each do |summary| %>
+                    <% if (summary.dataset_id == @dataset.id) and (summary.header == column.label) %>
+                        <%= summary.min %><br>
+                        <%= summary.max %><br>
+                        <%= summary.mean %><br>
+                        <%= summary.median %><br>
+                    <% end %>
+                <% end %>
+              </th>
+          <% end %>
+        </tr>
+      </table>
     </div>
     <div>
       <%= paginate @data %>
@@ -476,7 +476,7 @@
 
   <div class="col-md-12">
     <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get', class: 'form-inline') do %>
-        <%= label_tag :column_h, 'H' %>
+        <%= label_tag :column_h, 'Attribute' %>
         <%= select_tag(:column_h, options_for_select(@columns.collect { |column| [column.label, column.id] }), {class: 'form-control', style: 'width: 200px;'}) %>
         <%= hidden_field_tag :id, @dataset.id %>
         <%= hidden_field_tag :column_x, @columnX %>
@@ -489,6 +489,10 @@
     <% end %>
   </div>
 </div>
+
+<br/>
+<br/>
+<br/>
 
 <div clas="row">
   <div class="col-md-12">

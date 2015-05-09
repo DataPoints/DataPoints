@@ -190,6 +190,11 @@ select {
     color: #333333 !important;
 }
 
+.btn-default:focus {
+    background-color: #cccccc;
+    color: #333333 !important;
+}
+
 .btn.white {
     background: #fff;
     color: #f46430;
