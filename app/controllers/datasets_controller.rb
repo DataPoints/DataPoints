@@ -96,6 +96,14 @@ class DatasetsController < ApplicationController
 
     @names_of_data_columns = @data.column_names
 
+    #scrollTo
+    if !params[:anchor].nil?
+      @scrollTo = true
+      @anchor = params[:anchor]
+    else
+      @scrollTo = false
+    end
+
     #data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
     #data=data.order('"'+"Mesto / Obec"+'"')
     #@yData =data.pluck("Výška pohľadávky")[0..10].collect{|i| i.to_f}
@@ -303,6 +311,7 @@ class DatasetsController < ApplicationController
       return @hData
     else
       flash[:danger] = 'Each value in selected column is uniq.'
+      @scrollTo = false
       redirect_to :back
     end
   end
