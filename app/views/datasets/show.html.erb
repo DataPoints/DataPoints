@@ -408,6 +408,7 @@
             <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnY), {class: 'form-control', style: 'width: 200px;'}) %>
 
             <%= hidden_field_tag :id, @dataset.id %>
+            <%= hidden_field_tag :anchor, 'test_chart' %>
 
             <% if !params[:column_h].nil? %>
                 <%= hidden_field_tag :column_h, params[:column_h] %>
@@ -437,6 +438,7 @@
             <%= hidden_field_tag :column_x, @columnX %>
             <%= hidden_field_tag :column_y, @previousNumericColumn %>
             <%= hidden_field_tag :id, @dataset.id %>
+            <%= hidden_field_tag :anchor, 'test_chart' %>
 
             <% if !params[:column_h].nil? %>
                 <%= hidden_field_tag :column_h, params[:column_h] %>
@@ -454,6 +456,7 @@
             <%= hidden_field_tag :column_x, @columnX %>
             <%= hidden_field_tag :column_y, @nextNumericColumn %>
             <%= hidden_field_tag :id, @dataset.id %>
+            <%= hidden_field_tag :anchor, 'test_chart' %>
 
             <% if !params[:column_h].nil? %>
                 <%= hidden_field_tag :column_h, params[:column_h] %>
@@ -483,6 +486,7 @@
         <%= hidden_field_tag :id, @dataset.id %>
         <%= hidden_field_tag :column_x, @columnX %>
         <%= hidden_field_tag :column_y, @columnY %>
+        <%= hidden_field_tag :anchor, 'histogram' %>
 
         <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
             <span class="glyphicon glyphicon-refresh"></span>
@@ -501,3 +505,9 @@
     <div id='histogram' style=" width: 100%; height: 300px;margin: auto ;"></div>
   </div>
 </div>
+
+<% if(@scrollTo) %>
+    <script>
+      scrollTo( <%= @anchor %> );
+    </script>
+<% end %>
