@@ -7,6 +7,8 @@ require 'sample_analyzer'
 class DatasetsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user, except: [:index, :new, :create]
+  before_action :analyzing?, only: [:show]
+  before_action :deleted?, except: [:index, :new, :create]
 
   def new
     @dataset = Dataset.new
@@ -15,12 +17,18 @@ class DatasetsController < ApplicationController
   def create
     #Bind dataset variable with values from form data
     @dataset = current_user.datasets.build(dataset_params)
-    @dataset.status = 'S'
-    @dataset.save
+    if @dataset.valid?
 
-    WorkFlow.new.delay.start(@dataset, params[:send_mail])
-    flash[:info] = 'Dataset is processing...'
-    redirect_to datasets_path
+      @dataset.status = 'S'
+      @dataset.save
+
+      WorkFlow.new.delay.start(@dataset, params[:send_mail])
+      flash[:info] = 'Dataset is processing...'
+      redirect_to datasets_path
+    else
+    #flash[:danger] = 'Invalid activation link'
+      render 'new'
+    end
   end
 
   def update
@@ -80,14 +88,21 @@ class DatasetsController < ApplicationController
 
     name_of_dataset_data_table = @dataset.data_table_name
     @data = Class.new(ActiveRecord::Base){self.table_name = name_of_dataset_data_table }
-    @data = @data.page(params[:page]).per(25)
-
-    @number_of_data_rows = @data.count
+    @number_of_data_rows = @data.all.count
+    @data = @data.page(params[:page]).per(15)
     # if @number_of_data_rows > 15
     #   @number_of_data_rows = 15
     # end
 
     @names_of_data_columns = @data.column_names
+
+    #scrollTo
+    if !params[:anchor].nil?
+      @scrollTo = true
+      @anchor = params[:anchor]
+    else
+      @scrollTo = false
+    end
 
     #data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
     #data=data.order('"'+"Mesto / Obec"+'"')
@@ -100,29 +115,32 @@ class DatasetsController < ApplicationController
     @nonNumericColumns = Array.new
     @columns.each do |column|
       if(column.type_id == numericTypeID)
-        @numericColumns.push(column.label)
+        @numericColumns.push(column.id)
       else
-        @nonNumericColumns.push(column.label)
+        @nonNumericColumns.push(column.id)
       end
     end
 
-    if params[:xData].nil?
+    #handle graph for non selected data on X or Y axis
+    if params[:column_x].nil?
       @xData = Array.new
       @yData = Array.new
 
-      #draw first non-numeric vs first numeric columns into chart
+      #set first non-numeric vs first numeric columns into chart's data base
       @data.each do |row|
         @xData.push(row[@nonNumericColumns[0]])
         @yData.push(row[@numericColumns[0]].to_f)
       end
-      @xType = @nonNumericColumns[0]
-      @yType = @numericColumns[0]
+      @columnX = @nonNumericColumns[0]
+      @columnY = @numericColumns[0]
     else
-      @xData = params[:xData]
-      @yData = params[:yData].collect{|i| i.to_f}
-      @xType = params[:xType]
-      @yType = params[:yType]
+      @columnX = params[:column_x].to_i
+      @columnY = params[:column_y].to_i
     end
+    #prepare variables for the show view buttons - previous and next
+    puts "--------------------------------"
+    prepare_switch_to_other_column
+    draw_graph
 
     if params[:column_h].nil?
       @hData = "['Shanghai', 23.7],
@@ -130,27 +148,6 @@ class DatasetsController < ApplicationController
                     ['Instanbul', 14.2]"
     else
       @hData= change_H(params[:id],params[:column_h])
-    end
-
-    #get next numeric column
-    if(@numericColumns.include? @yType)
-      @nextNumericColumn = @numericColumns.index(@yType)+1
-      if(@nextNumericColumn >= @numericColumns.count)
-        @nextNumericColumn = 0
-      end
-    else
-      @nextNumericColumn = 0
-    end
-
-    if(@numericColumns[@nextNumericColumn] != nil)
-      @nextNumericColumn = @numericColumns[@nextNumericColumn]
-      @nextNumericColumnName = @columns.find_by_label(@nextNumericColumn).label
-      @nextNumericColumn = @columns.find_by_label(@nextNumericColumn).id
-    end
-
-    #get actual x column
-    if(@columns.find_by_label(@xType) != nil)
-      @actualXColumn = @columns.find_by_label(@xType).id
     end
   end
 
@@ -165,55 +162,115 @@ class DatasetsController < ApplicationController
     redirect_to dataset_path(@dataset, :anchor => 'type')
   end
 
+  def header_selection
+    @dataset = Dataset.find(params[:id])
+    # all columns.show set to FALSE
+    @dataset.headers.first.columns.all.order(:id).each do |uncheck|
+      uncheck.show = false
+      uncheck.save
+    end
+
+    if params[:columns_checkbox].nil?
+      redirect_to dataset_path(@dataset)
+      return
+    end
+
+    # checked columns.show set to TRUE
+    params[:columns_checkbox].each do |check|
+      column_to_select = @dataset.headers.first.columns.find(check)
+      column_to_select.show = true
+      column_to_select.save
+    end
+
+    redirect_to dataset_path(@dataset)
+  end
 
   def start_analyze
     @dataset = Dataset.find(params[:id])
+
+    @dataset.status = 'S'
 
 
     # Toto destroyAll nie je uplne idealne, lepsie by bolo ukladat ku kazdemu zmenemu stlpcu
     # aj to ze z coho bol zmeneny. Inak sa to neda, analyze priznak je nafigu, lebo je syntetizovany
     # z rozdielu previousType, currentType :)
-    @dataset.coordinates.destroy_all
-    coordinateColumns = @dataset.headers.first.columns.where(type_id: 5)
-    coordinateColumns.each do |column|
-      AnalyzeFunction.new.delay.count_lat_long(@dataset,column)
-    end
+
+    # @dataset.coordinates.destroy_all
+    # coordinateColumns = @dataset.headers.first.columns.where(type_id: 5)
+    # coordinateColumns.each do |column|
+    #   AnalyzeFunction.new.delay.count_lat_long(@dataset,column)
+    # end
+
+    AnalyzeFunction.new.delay.reanalyze(@dataset, params[:send_mail])
 
 
-    changed_columns=@dataset.headers.first.columns.where(analyze: true)
-    changed_columns.each do |col|
-      if (col.analyze == true)
-        if(col.type_id==4)
-          AnalyzeFunction.new.delay.r_analyze_dataset_user(@dataset,col)
-          col.analyze = false
-          col.save
-        end
-      end
-    end
+    @dataset.save
 
-    redirect_to :back
+    redirect_to datasets_path
   end
 
-  def change_X_Y
+  def prepare_switch_to_other_column
+    puts "ACTUAL X COLUMN: "+@columnX.to_s
+    puts "ACTUAL Y COLUMN: "+@columnY.to_s
+    puts "NUM COLUMNS: "+@numericColumns.inspect
 
+    #get next & previous numeric column index
+    if(@numericColumns.include? @columnY)
+      #next
+      @nextNumericColumn = @numericColumns.index(@columnY)+1
+      if(@nextNumericColumn >= @numericColumns.count)
+        @nextNumericColumn = 0
+      end
+      puts "INDEX: "+@nextNumericColumn.to_s
+
+      #previous
+      @previousNumericColumn = @numericColumns.index(@columnY)-1
+      if(@previousNumericColumn < 0)
+        @previousNumericColumn = @numericColumns.count-1
+      end
+    else
+      @nextNumericColumn = 0
+      @previousNumericColumn = @numericColumns.count-1
+    end
+
+    #set next numeric column
+    if(@numericColumns[@nextNumericColumn] != nil)
+      @nextNumericColumn = @numericColumns[@nextNumericColumn]
+    end
+    puts "NEXT Y COLUMN: "+@nextNumericColumn.to_s
+
+    #set previous numeric column
+    if(@numericColumns[@previousNumericColumn] != nil)
+      @previousNumericColumn = @numericColumns[@previousNumericColumn]
+    end
+    puts "PREV Y COLUMN: "+@previousNumericColumn.to_s
+  end
+
+  def draw_graph
     dataset = Dataset.find(params[:id])
-    @columnX=dataset.headers.first.columns.find(params[:column_x]).label
-    @columnY=dataset.headers.first.columns.find(params[:column_y]).label
+
+    if(@numericColumns.count != 0)
+      @columnXName = dataset.headers.first.columns.find(@columnX).label
+      @columnYName = dataset.headers.first.columns.find(@columnY).label
+
+      puts "X name: "+@columnXName.to_s
+      puts "Y name: "+@columnYName.to_s
+
+      name_of_dataset_data_table = dataset.data_table_name
+      data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
 
 
-    name_of_dataset_data_table = dataset.data_table_name
-    data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
+      data=data.order('"'+@columnXName.to_s+'"')
+      @yData =data.pluck(@columnYName.to_s)[0..20].collect{|i| i.gsub(/\s/, '').to_f}
+      @xData =data.pluck(@columnXName.to_s)[0..20]
 
-
-    data=data.order('"'+@columnX.to_s+'"')
-    @yData =data.pluck(@columnY.to_s)[0..20].collect{|i| i.gsub(/\s/, '').to_f}
-    @xData =data.pluck(@columnX.to_s)[0..20]
-
-
-    puts 'This is column'
-    puts @yData.inspect
-    puts @xData.inspect
-    redirect_to :controller => 'datasets', :action => 'show',:column_h => params[:column_h], :id => params[:id],:xType => @columnX, :yType => @columnY, :xData => @xData,:yData => @yData, :anchor => 'change'
+      puts 'This is column:'
+      puts @xData.inspect
+      puts @yData.inspect
+      @drawGraph = true;
+    else
+      @drawGraph = false;
+    end
   end
 
   def change_H(id,columH)
@@ -254,6 +311,7 @@ class DatasetsController < ApplicationController
       return @hData
     else
       flash[:danger] = 'Each value in selected column is uniq.'
+      @scrollTo = false
       redirect_to :back
     end
   end
@@ -263,6 +321,22 @@ class DatasetsController < ApplicationController
     if dataset.user != current_user
       flash[:danger] = 'Permission denied.'
       redirect_to root_path
+    end
+  end
+
+  def analyzing?
+    dataset = Dataset.find(params[:id])
+    if dataset.status == 'S'
+      flash[:danger] = "Dataset is being processed now."
+      redirect_to datasets_path
+    end
+  end
+
+  def deleted?
+    dataset = Dataset.find(params[:id])
+    if dataset.deleted
+      flash[:danger] = "Sorry dataset was deleted."
+      redirect_to datasets_path
     end
   end
 

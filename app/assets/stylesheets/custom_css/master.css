@@ -190,6 +190,11 @@ select {
     color: #333333 !important;
 }
 
+.btn-default:focus {
+    background-color: #cccccc;
+    color: #333333 !important;
+}
+
 .btn.white {
     background: #fff;
     color: #f46430;
@@ -307,6 +312,14 @@ footer .fiit{
 
 }
 
+#jira-okno-table td{
+    text-align: left;
+}
+
+#jira-okno-table td{
+    text-align: left;
+}
+
 
 .login{
     padding-top: 20px;
@@ -347,7 +360,7 @@ label{
 }
 
 .page.current{
-    color: coral;
+    color: #0CF;
     font-weight: bold;
 }
 

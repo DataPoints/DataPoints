@@ -2,9 +2,9 @@
 <html>
 <head>
   <title>DATA-POINTS</title>
-  <meta charset="utf-8" />
+  <meta charset="utf-8"/>
 
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'highcharts' %>
 
@@ -12,15 +12,15 @@
   <%= favicon_link_tag "fav-icon.png" %>
 
   <!-- OG -->
-  <meta property="og:title" content="Sofistikované spracovanie dát" />
+  <meta property="og:title" content="Sofistikované spracovanie dát"/>
   <meta property="og:site_name" content="datapoints.eu"/>
-  <meta property="og:description" content="STU FIIT - tímový projekt - Tím číslo 3. - Téma: Sofistikované spracovanie dát" />
-  <meta property="og:image" content="http://www.pro-media.sk/dataPoints/images/og-image.jpg" />
-  <link REL="SHORTCUT ICON" href="images/fav-icon.png" />
+  <meta property="og:description" content="STU FIIT - tímový projekt - Tím číslo 3. - Téma: Sofistikované spracovanie dát"/>
+  <meta property="og:image" content="http://www.pro-media.sk/dataPoints/images/og-image.jpg"/>
+  <link REL="SHORTCUT ICON" href="images/fav-icon.png"/>
 
   <!-- GOOGLE FONTS -->
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700,300' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'/>
   <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700' rel='stylesheet' type='text/css'>
 
@@ -32,96 +32,95 @@
 
 <div id="wrap">
 
-    <!-- NAVIGATION -->
-    <nav class="navbar navbar-default" role="navigation">
-      <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsed-nav">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <%= link_to image_tag('logo.png', :size => '220, 80'), root_path, :id => "header-logo" %>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="collapsed-nav">
-          <ul class="nav navbar-nav navbar-right">
-            <li><%= link_to'Home', root_path %></li>
-            <!--<li><%= link_to'About Us', about_us_path %></li>-->
-            <% if logged_in? %>
-                <li><%= link_to'Add Dataset', datasets_new_path %></li>
-                <li><%= link_to 'Your datasets', datasets_path %></li>
-                <li><%= link_to "Profile", edit_user_path(current_user) %></li>
-
-                <% if @current_user.isAdmin %>
-                    <li>
-                        <%= link_to 'Admin',
-                                    url_for(:controller => 'admin/dashboard', :action => 'index'),
-                                    method: :get
-                        %>
-                    </li>
-                <% end %>
-
-                <li><%= link_to'Log out', logout_url, method: 'delete' %></li>
-            <% else %>
-                <li><%= link_to 'Register', signup_path, method: :get %></li>
-                <li><%= link_to 'Log in', login_path %></li>
-            <% end %>
-            <!--<li><%= link_to'Contact', contact_us_path %></li>-->
-          </ul>
-        </div>
+  <!-- NAVIGATION -->
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsed-nav">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <%= link_to image_tag('logo.png', :size => '220, 80'), root_path, :id => "header-logo" %>
       </div>
-    </nav>
 
-    <!-- MAIN CONTENT -->
-    <main class="container text-center">
-      <% flash.each do |message_type, message| %>
-          <div class="flash alert alert-<%= message_type %>"><%= message %></div>
-      <% end %>
-      <%= yield %>
-    </main>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="collapsed-nav">
+        <ul class="nav navbar-nav navbar-right">
+          <li><%= link_to 'Home', root_path %></li>
+          <!--<li><%= link_to 'About us', about_us_path %></li>-->
+          <% if logged_in? %>
+              <li><%= link_to 'Add dataset', datasets_new_path %></li>
+              <li><%= link_to 'Your datasets', datasets_path %></li>
+              <li><%= link_to 'Profile', edit_user_path(current_user) %></li>
 
-    <br /><br />
+              <% if @current_user.isAdmin %>
+                  <li>
+                    <%= link_to 'Admin',
+                                url_for(:controller => 'admin/dashboard', :action => 'index'),
+                                method: :get
+                    %>
+                  </li>
+              <% end %>
 
-    <div id="push"></div>
+              <li><%= link_to 'Log out', logout_url, method: 'delete' %></li>
+          <% else %>
+              <li><%= link_to 'Register', signup_path, method: :get %></li>
+              <li><%= link_to 'Log in', login_path %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="container text-center">
+    <% flash.each do |message_type, message| %>
+        <div class="flash alert alert-<%= message_type %>"><%= message %></div>
+    <% end %>
+    <%= yield %>
+  </main>
+
+  <br/><br/>
+
+  <div id="push"></div>
 </div>
 
 <!-- FOOTER -->
 <footer>
   <div class="container">
-      <div class="row">
+    <div class="row">
 
-        <!-- NAVIGATION -->
-        <div class="col-md-6">
-            <nav>
-               <%= link_to'Home', root_path %> |
-               <%= link_to'About Us', about_us_path %> |
-              <% if logged_in? %>
-                   <%= link_to'Add Dataset', datasets_new_path %> |
-                  <%= link_to 'Your datasets', datasets_path %> |
-                  <%= link_to "Profile", edit_user_path(current_user) %> |
-                  <%= link_to'Log out', logout_url, method: 'delete' %> |
-            <% else %>
-                   <%= link_to 'Register', signup_path, method: :get %> |
-                  <%= link_to 'Log in', login_path %> |
-            <% end %>
-               <%= link_to'Contact', contact_us_path %>
-            </nav>
-            <!-- COPYRIGHT -->
-            <p class="copyright">
-              Copyright © 2014 Team No.3. All rights reserved
-            </p>
-        </div>
-
-        <!-- FIIT LOGO -->
-        <div class="col-md-6">
-            <%= link_to image_tag('stu-fiit-logo.jpg', :size => '134, 55'), "http://www.fiit.stuba.sk/", :class => "fiit"%>
-        </div>
-
+      <!-- NAVIGATION -->
+      <div class="col-md-8">
+        <nav>
+          <%= link_to 'Home', root_path %> |
+          <%= link_to 'About us', about_us_path %> |
+          <% if logged_in? %>
+              <%= link_to 'Add dataset', datasets_new_path %> |
+              <%= link_to 'Your datasets', datasets_path %> |
+              <%= link_to 'Profile', edit_user_path(current_user) %> |
+              <%= link_to 'Log out', logout_url, method: 'delete' %> |
+          <% else %>
+              <%= link_to 'Register', signup_path, method: :get %> |
+              <%= link_to 'Log in', login_path %> |
+          <% end %>
+          <%= link_to 'Contact', contact_us_path %>
+        </nav>
+        <!-- COPYRIGHT -->
+        <p class="copyright">
+          Copyright © 2014-2015 Team No.3. All rights reserved
+        </p>
       </div>
+
+      <!-- FIIT LOGO -->
+      <div class="col-md-4">
+        <%= link_to image_tag('stu-fiit-logo.jpg', :size => '134, 55'), "http://www.fiit.stuba.sk/", :class => "fiit" %>
+      </div>
+
+    </div>
   </div>
 </footer>
 

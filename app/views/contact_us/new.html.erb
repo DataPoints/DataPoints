@@ -9,6 +9,9 @@
 
     <%= form_for @contact_us, :url => { :action => "create" }, :html => { :method => :post } do |f| %>
         <%= render 'shared/error_messages', object: f.object %>
+        <% if flash[:info] %>
+            <img src="http://img2.wikia.nocookie.net/__cb20090531122328/harrypotter/images/a/af/OWL_carrying_a_message.gif" alt="Magic">
+        <% end %>
         <div class="row">
           <div class="col-md-6">
            <%= f.label "Name" %><br>
