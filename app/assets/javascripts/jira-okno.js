@@ -6,6 +6,7 @@ handleJiraOkno = function(){
     var jiraOkno = $("#jira-okno");
     var closeJiraOkno = $("#close-jira-okno");
     var header = $("th", dataTable).not('.stats th');
+    var dataDableTable = $("#data-table-table");
     var ico_index = null;
     var company_index = null;
 
@@ -20,20 +21,31 @@ handleJiraOkno = function(){
     }
 
     <!-- Generating TABLE with labels and empty values-->
-    table = '<table class="table table-striped">';
+    table = '<table class="table table-striped" id="jira-oknko-table">';
     header.each(function (index) {
 
         row = '<tr>';
-        row += '<td class="text-left">';
+        row += '<td class="text-left" style="width: 40%; word-break: break-all">'; //style has to be written in-line, else overridden by bootstrap
         row += '<strong>' + $(this).text() + ':</strong>';
         row += '</td>';
-        row += '<td class="text-left"></td>';
+        row += '<td class="text-left" style="width: 60%; word-break: break-all"></td>'; //style has to be written in-line, else overridden by bootstrap
         row += '</tr>';
         table += row;
     });
 
     table += '</table>';
     $('.body', jiraOkno).append(table);
+
+    //SET MAX HEIGHT
+    jiraOkno.css({
+        'max-height': dataDableTable.height()+'px',
+        'overflow-y': 'auto'
+    });
+
+    $("#jira-okno-table").css({
+        'max-width': jiraOkno.width()+'px',
+        height: '100%'
+    });
 
     // Adding Finstat and Foaf buttons to TABLE if dataset has ICO or Company name
     if (ico_index !== null || company_index !== null) {
@@ -85,13 +97,6 @@ scrollJiraOkno = function(){
     //SET POSITIONS
     var dataTableTop = dataTable.position().top;
     var dataTableBottom = dataTableTop + dataTableTable.height();
-    var jiraOknoHeight = jiraOkno.height();
-    var scrollPosition;
-    var jiraOknoPosition;
-
-    //SET BOUNDRIES
-    var boundriesTop = dataTableTop;
-    var boundriesBottom = dataTableBottom - jiraOknoHeight;
 
     //FIND OUT WHEATHER JIRA OKNO CAN SCROLL
     var canScroll = true;
@@ -99,6 +104,14 @@ scrollJiraOkno = function(){
     //SCROLL JIRA OKNO
     if(canScroll) {
         $(window).scroll(function (event) {
+            var jiraOknoHeight = jiraOkno.height();
+            var scrollPosition;
+            var jiraOknoPosition;
+
+            //SET BOUNDRIES
+            var boundriesTop = dataTableTop;
+            var boundriesBottom = dataTableBottom - jiraOknoHeight;
+
             scrollPosition = $(window).scrollTop();
 
             if (scrollPosition > boundriesTop && scrollPosition < boundriesBottom) {
@@ -113,7 +126,7 @@ scrollJiraOkno = function(){
 
 //INVOKE JIRA OKNO ON DOCUMENT READY
 $(document).ready(handleJiraOkno);
-$(document).on('page:load', handleJiraOkno)
+//$(document).on('page:load', handleJiraOkno)
 
 $(document).ready(scrollJiraOkno);
-$(document).on('page:load', scrollJiraOkno)
+//$(document).on('page:load', scrollJiraOkno)
