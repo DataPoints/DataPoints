@@ -157,23 +157,29 @@ end
 
     # zabezpecuje insert po failnuti unikatnosti :)
     datasetGeos.each do |datasetGeo|
+
+      datasetCoordinateGrouping = Grouping.create(
+          :dataset_id => dataset.id,
+          :coordinate_id => datasetGeo.id,
+          :columnid => column.id
+      )
+
       begin
-        dataset.coordinates << datasetGeo
-      rescue ActiveRecord::RecordInvalid
-        dataset.coordinates.delete datasetGeo
-        @logger.info "Coordinate #{datasetGeo.id}(#{datasetGeo.mesto}) for dataset #{dataset.id} for  already exists"
+        datasetCoordinateGrouping.save
+      rescue ActiveRecord::RecordInvalid => invalid
+        @logger.info invalid.record.errors
+        @logger.info "Coordinate #{datasetGeo.id}(#{datasetGeo.mesto}) for dataset #{dataset.id} already exists"
       end
     end
 
-    datasetGeos.each do |datasetGeo|
-      dataset.groupings.each do |grouping|
-        if(grouping.coordinate_id == datasetGeo.id)
-          grouping.columnid = column.id
-          grouping.save
-        end
-
-      end
-    end
+    # datasetGeos.each do |datasetGeo|
+    #   dataset.groupings.each do |grouping|
+    #     if(grouping.coordinate_id == datasetGeo.id)
+    #       grouping.columnid = column.id
+    #       grouping.save
+    #     end
+    #   end
+    # end
 
   end
 end
