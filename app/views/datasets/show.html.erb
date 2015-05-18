@@ -402,9 +402,9 @@
 
       <div class="col-md-12">
         <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get', class: 'form-inline') do %>
-            <%= label_tag :column_x, 'X' %>
+            <div class="custom_label">X</div>
             <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnX), {class: 'form-control', style: 'width: 200px;'}) %>
-            <%= label_tag :column_y, 'Y' %>
+            <div class="custom_label">Y</div>
             <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnY), {class: 'form-control', style: 'width: 200px;'}) %>
 
             <%= hidden_field_tag :id, @dataset.id %>
@@ -481,7 +481,7 @@
 
   <div class="col-md-12">
     <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get', class: 'form-inline') do %>
-        <%= label_tag :column_h, 'Attribute' %>
+        <div class="custom_label">Attribute</div>
         <%= select_tag(:column_h, options_for_select(@columns.collect { |column| [column.label, column.id] }), {class: 'form-control', style: 'width: 200px;'}) %>
         <%= hidden_field_tag :id, @dataset.id %>
         <%= hidden_field_tag :column_x, @columnX %>
