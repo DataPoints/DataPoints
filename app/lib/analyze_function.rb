@@ -120,6 +120,8 @@ end
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::DEBUG
 
+    @logger.debug "Searching information about location for data from column, #{column.label}, is going to start"
+
     name_of_dataset_data_table = dataset.data_table_name
     data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
 
@@ -146,7 +148,8 @@ end
               currentlyFailedGoogleGEOSearchesInRow += 1
 
               if currentlyFailedGoogleGEOSearchesInRow >= maximumSubsequentGoogleGEOSearchFailures
-                @logger.warn "Maximum number of failed subsequent Google search responses reached; Probably wrong column type ???"
+                @logger.warn "Maximum number of failed subsequent Google search responses reached"
+                @logger.debug "Probably column, #{column.label}, does not consist information about location"
                 return false
               end
           end
@@ -170,6 +173,7 @@ end
         @logger.info invalid.record.errors
         @logger.info "Coordinate #{datasetGeo.id}(#{datasetGeo.mesto}) for dataset #{dataset.id} already exists"
       end
+      @logger.debug "Searching information about location for data from column, #{column.label}, end"
       return true
     end
 

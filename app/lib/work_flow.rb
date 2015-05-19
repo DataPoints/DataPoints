@@ -49,8 +49,8 @@ class WorkFlow
       find_type
       @logger.debug "Data type guess complete"
 
-      init_map
-      @logger.debug "Map data initialization complete"
+      #init_map
+      #@logger.debug "Map data initialization complete"
 
       r_analyze
       @logger.debug "Dataset R analysis complete"
@@ -199,7 +199,6 @@ class WorkFlow
         status = AnalyzeFunction.new.count_lat_long(@dataset,column)
         if status == false
           type = Type.find_by(name: 'N/A')
-          column.type_id == type
           column.save
           @logger.debug "Change type of column from Location to N/A"
         end
