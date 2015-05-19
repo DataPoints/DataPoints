@@ -49,9 +49,6 @@ class WorkFlow
       find_type
       @logger.debug "Data type guess complete"
 
-      #init_map
-      #@logger.debug "Map data initialization complete"
-
       r_analyze
       @logger.debug "Dataset R analysis complete"
 
@@ -190,20 +187,6 @@ class WorkFlow
 
   def r_analyze
     AnalyzeFunction.new.r_analyze_dataset(@dataset)
-  end
-
-  def init_map
-    @dataset.headers.first.columns.each do |column|
-      if column.type_id == 5
-        @logger.debug "Start of finding locations for column: " + column.label
-        status = AnalyzeFunction.new.count_lat_long(@dataset,column)
-        if status == false
-          type = Type.find_by(name: 'N/A')
-          column.save
-          @logger.debug "Change type of column from Location to N/A"
-        end
-      end
-    end
   end
 
   def remove_semicolon
