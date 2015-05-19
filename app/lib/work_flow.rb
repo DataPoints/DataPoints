@@ -195,7 +195,14 @@ class WorkFlow
   def init_map
     @dataset.headers.first.columns.each do |column|
       if column.type_id == 5
-        AnalyzeFunction.new.count_lat_long(@dataset,column)
+        @logger.debug "Start of finding locations for column: " + column.label
+        status = AnalyzeFunction.new.count_lat_long(@dataset,column)
+        if status == false
+          type = Type.find_by(name: 'N/A')
+          column.type_id == type
+          column.save
+          @logger.debug "Change type of column from Location to N/A"
+        end
       end
     end
   end

@@ -18,7 +18,7 @@ class AnalyzeFunction
         if(col.type_id == 5)
           AnalyzeFunction.new.delay.count_lat_long(dataset,col)
         end
-        if(col.type_id==4)
+        if(col.type_id == 4)
           AnalyzeFunction.new.delay.r_analyze_dataset_user(dataset,col)
         end
         col.analyze = false
@@ -147,7 +147,7 @@ end
 
               if currentlyFailedGoogleGEOSearchesInRow >= maximumSubsequentGoogleGEOSearchFailures
                 @logger.warn "Maximum number of failed subsequent Google search responses reached; Probably wrong column type ???"
-                return
+                return false
               end
           end
       else
@@ -170,6 +170,7 @@ end
         @logger.info invalid.record.errors
         @logger.info "Coordinate #{datasetGeo.id}(#{datasetGeo.mesto}) for dataset #{dataset.id} already exists"
       end
+      return true
     end
 
     # datasetGeos.each do |datasetGeo|

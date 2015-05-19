@@ -34,14 +34,14 @@ class NamedEntity
         type = "E-mail"
       elsif value.valid_integer? || value.valid_float?
         type = "Number"
-      elsif !Geocoder.coordinates(value).nil?
-        type = "Location"
       elsif value.valid_date?
         type = "Date"
       elsif value =~ osobaREGEX
         type = "Person"
       else
-        type = "N/A"
+        type = "Location"
+        # Ci ide o lokaciu alebo je v dalsej casti work flowu.
+        # Ak Geocoder nenajde lokaciu pre prvy 5 zaznamov v tabulke tak sa zmeni typ stlpca z location na N/A
       end
 
       type_id = map_type(type)
