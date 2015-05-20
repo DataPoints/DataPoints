@@ -26,7 +26,7 @@ class DatasetsController < ApplicationController
       flash[:info] = 'Dataset is processing...'
       redirect_to datasets_path
     else
-    #flash[:danger] = 'Invalid activation link'
+      #flash[:danger] = 'Invalid activation link'
       render 'new'
     end
   end
@@ -98,8 +98,8 @@ class DatasetsController < ApplicationController
 
     #scrollTo
     if !params[:anchor].nil?
-      @scrollTo = true
       @anchor = params[:anchor]
+      @scrollTo = true
     else
       @scrollTo = false
     end
@@ -146,6 +146,7 @@ class DatasetsController < ApplicationController
       @hData = "['Shanghai', 23.7],
                     ['Lagos', 16.1],
                     ['Instanbul', 14.2]"
+      @columnHID = params[:column_h].to_i
     else
       @hData= change_H(params[:id],params[:column_h])
     end
@@ -267,9 +268,9 @@ class DatasetsController < ApplicationController
       puts 'This is column:'
       puts @xData.inspect
       puts @yData.inspect
-      @drawGraph = true;
+      @drawGraph = true
     else
-      @drawGraph = false;
+      @drawGraph = false
     end
   end
 
@@ -307,12 +308,13 @@ class DatasetsController < ApplicationController
       puts hString
       puts 'Toto je stlpec'
       puts @hData.inspect
+      @scrollTo = true
 
       return @hData
     else
-      flash[:danger] = 'Each value in selected column is uniq.'
-      @scrollTo = false
-      redirect_to :back
+      #flash[:danger] = 'Each value in selected column is uniq.'
+      @hError = 'Each value in selected column is unique. Please, select another one so histogram can be created.'
+      #redirect_to :back
     end
   end
 

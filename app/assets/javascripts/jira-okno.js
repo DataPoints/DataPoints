@@ -1,7 +1,4 @@
-var handleJiraOkno;
-var scrollJiraOkno;
-
-handleJiraOkno = function(){
+var handleJiraOkno = function(){
     var dataTable = $("#data-table");
     var jiraOkno = $("#jira-okno");
     var closeJiraOkno = $("#close-jira-okno");
@@ -34,7 +31,9 @@ handleJiraOkno = function(){
     });
 
     table += '</table>';
-    $('.body', jiraOkno).append(table);
+    if($('#jira-oknko-table').length == 0){
+        $('.body', jiraOkno).append(table);
+    }
 
     //SET MAX HEIGHT
     jiraOkno.css({
@@ -88,7 +87,7 @@ handleJiraOkno = function(){
     });
 }
 
-scrollJiraOkno = function(){
+var scrollJiraOkno = function(){
     //SET DOM
     var dataTable = $("#data-table");
     var dataTableTable = $("#data-table-table");
@@ -126,7 +125,7 @@ scrollJiraOkno = function(){
 
 //INVOKE JIRA OKNO ON DOCUMENT READY
 $(document).ready(handleJiraOkno);
-//$(document).on('page:load', handleJiraOkno)
+$(document).on('page:load', handleJiraOkno)
 
 $(document).ready(scrollJiraOkno);
-//$(document).on('page:load', scrollJiraOkno)
+$(document).on('page:load', scrollJiraOkno)
