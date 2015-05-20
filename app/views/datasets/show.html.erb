@@ -400,7 +400,7 @@
     <div clas="row">
       <a name="change"></a>
 
-      <div class="col-md-12">
+      <div class="col-md-12" id="choose_buttons">
         <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get', class: 'form-inline') do %>
             <div class="custom_label">X</div>
             <%= select_tag(:column_x, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnX), {class: 'form-control', style: 'width: 200px;'}) %>
@@ -408,7 +408,7 @@
             <%= select_tag(:column_y, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnY), {class: 'form-control', style: 'width: 200px;'}) %>
 
             <%= hidden_field_tag :id, @dataset.id %>
-            <%= hidden_field_tag :anchor, 'test_chart' %>
+            <%= hidden_field_tag :anchor, 'choose_buttons' %>
 
             <% if !params[:column_h].nil? %>
                 <%= hidden_field_tag :column_h, params[:column_h] %>
@@ -438,7 +438,7 @@
             <%= hidden_field_tag :column_x, @columnX %>
             <%= hidden_field_tag :column_y, @previousNumericColumn %>
             <%= hidden_field_tag :id, @dataset.id %>
-            <%= hidden_field_tag :anchor, 'test_chart' %>
+            <%= hidden_field_tag :anchor, 'choose_buttons' %>
 
             <% if !params[:column_h].nil? %>
                 <%= hidden_field_tag :column_h, params[:column_h] %>
@@ -456,7 +456,7 @@
             <%= hidden_field_tag :column_x, @columnX %>
             <%= hidden_field_tag :column_y, @nextNumericColumn %>
             <%= hidden_field_tag :id, @dataset.id %>
-            <%= hidden_field_tag :anchor, 'test_chart' %>
+            <%= hidden_field_tag :anchor, 'choose_buttons' %>
 
             <% if !params[:column_h].nil? %>
                 <%= hidden_field_tag :column_h, params[:column_h] %>
@@ -482,7 +482,7 @@
   <div class="col-md-12">
     <%= form_tag({controller: 'datasets', action: 'show'}, method: 'get', class: 'form-inline') do %>
         <div class="custom_label">Attribute</div>
-        <%= select_tag(:column_h, options_for_select(@columns.collect { |column| [column.label, column.id] }), {class: 'form-control', style: 'width: 200px;'}) %>
+        <%= select_tag(:column_h, options_for_select(@columns.collect { |column| [column.label, column.id] }, @columnHID), {class: 'form-control', style: 'width: 200px;'}) %>
         <%= hidden_field_tag :id, @dataset.id %>
         <%= hidden_field_tag :column_x, @columnX %>
         <%= hidden_field_tag :column_y, @columnY %>
@@ -500,11 +500,22 @@
 <br/>
 <br/>
 
+<% if (@hError) %>
+    <div class="col-md-12 alert alert-danger">
+        <%= @hError %>
+    </div>
+    <br />
+    <br />
+<% end %>
+
 <div clas="row">
   <div class="col-md-12">
     <div id='histogram' style=" width: 100%; height: 300px;margin: auto ;"></div>
+    <br />
   </div>
 </div>
+
+Scrollto: <%= @scrollTo %>
 
 <% if(@scrollTo) %>
     <script>
