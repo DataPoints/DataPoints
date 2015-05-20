@@ -274,25 +274,6 @@ class DatasetsController < ApplicationController
     end
   end
 
-  def check_H_scroll()
-    dataset = Dataset.find(id)
-    @columnH=dataset.headers.first.columns.find(columH).label
-
-    name_of_dataset_data_table = dataset.data_table_name
-    data = Class.new(ActiveRecord::Base) { self.table_name = name_of_dataset_data_table }
-
-    data=data.order('"'+@columnH.to_s+'"')
-
-    hString = ""
-
-    hDataraw = data.pluck(@columnH.to_s)
-    if (hDataraw.length() != hDataraw.uniq.length())
-      return true
-    else
-      return false
-    end
-  end
-
   def change_H(id,columH)
 
     dataset = Dataset.find(id)
