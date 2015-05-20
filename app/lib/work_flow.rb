@@ -49,9 +49,6 @@ class WorkFlow
       find_type
       @logger.debug "Data type guess complete"
 
-      init_map
-      @logger.debug "Map data initialization complete"
-
       r_analyze
       @logger.debug "Dataset R analysis complete"
 
@@ -190,14 +187,6 @@ class WorkFlow
 
   def r_analyze
     AnalyzeFunction.new.r_analyze_dataset(@dataset)
-  end
-
-  def init_map
-    @dataset.headers.first.columns.each do |column|
-      if column.type_id == 5
-        AnalyzeFunction.new.count_lat_long(@dataset,column)
-      end
-    end
   end
 
   def remove_semicolon

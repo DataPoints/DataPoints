@@ -43,8 +43,8 @@
               <%= f.label :old_password %><br/>
               <%= f.password_field :old_password %><br/>
 
-              <%= f.label :password %><br/>
-              <%= f.password_field :password %><br/>
+              <%= f.label :password, for: 'password2' %><br/>
+              <%= f.password_field :password, id: 'password2' %><br/>
 
               <%= f.label :password_confirmation %><br/>
               <%= f.password_field :password_confirmation %><br/>
