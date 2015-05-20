@@ -1,10 +1,14 @@
 //SCROLL TO ANCHOR POSITION
-var scrollTo = function( anchor ){
-    target = $( anchor );
+var scrollTo = function( anchor ) {
+    target = $(anchor);
     animationTime = 1000;
 
-    $("html, body").animate({
-            scrollTop: target.offset().top},
-        animationTime
-    )
+    if (target.length > 0) {
+        $("html, body").animate({
+                scrollTop: target.offset().top
+            },
+            animationTime
+        )
+    }
+
 }
