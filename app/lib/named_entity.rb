@@ -2,10 +2,12 @@
 # Created at: 01.12. 2014
 #
 # Description: Zistenie typu (named entity) dat z Columns na zaklade REGEX
+require 'analyze_function.rb'
 
 class NamedEntity
 
   def def_types(dataset_id)
+
     puts dataset_id
     @dataset                    = Dataset.find(dataset_id)
     @headers                    = Header.find_by(dataset_id: @dataset.id)
@@ -17,14 +19,14 @@ class NamedEntity
     cols = @values.map(&:name)
 
     for i in 0..cols.count-1
-      type= get_type(@data.find(1)[cols[i]])
       col = column.find_by(header_id: @headers.id, label: cols[i])
+      type= get_type(@data.find(1)[cols[i]],@dataset,col)
       col.update(type_id: type)
     end
   end
 
   private
-  def get_type(value)
+  def get_type(value,dataset,column)
     begin
       emailREGEX = /b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/;
       osobaREGEX = /(?=\b[a-zA-Z ]*?[aeiouAEIOU][a-zA-Z ]*\b)\b[a-zA-Z ]*\b/
@@ -34,10 +36,10 @@ class NamedEntity
         type = "E-mail"
       elsif value.valid_integer? || value.valid_float?
         type = "Number"
-      elsif !Geocoder.coordinates(value).nil?
-        type = "Location"
       elsif value.valid_date?
         type = "Date"
+      elsif AnalyzeFunction.new.count_lat_long(dataset,column)
+        type = "Location"
       elsif value =~ osobaREGEX
         type = "Person"
       else
