@@ -114,6 +114,7 @@ end
 	return new_class,column_names
  end
 
+
   public
   def count_lat_long(dataset, column)
 
@@ -133,28 +134,28 @@ end
       geoName = data.find(i)[column.label]
       existingGeocordinate = Coordinate.find_by_mesto(geoName) # toto bude velmi neefektivne :-O, select v cykle ftw
       if existingGeocordinate.nil?
-          sleep(0.5)                                           # kvoli prekroceniu limitu za sekundu requestov na google (alex)
-          coordinates = Geocoder.coordinates(geoName)
-          unless coordinates == nil
-            currentlyFailedGoogleGEOSearchesInRow = 0         # reset pocitadla failnutych requestov
+        sleep(0.5)                                           # kvoli prekroceniu limitu za sekundu requestov na google (alex)
+        coordinates = Geocoder.coordinates(geoName)
+        unless coordinates == nil
+          currentlyFailedGoogleGEOSearchesInRow = 0         # reset pocitadla failnutych requestov
 
-            datasetGeos << Coordinate.create(
-                :lat => coordinates[0],
-                :lng => coordinates[1],
-                :mesto => geoName
-            )
-          else
-              @logger.info "Google has not returned coordinates for Geo:  #{geoName}"
-              currentlyFailedGoogleGEOSearchesInRow += 1
+          datasetGeos << Coordinate.create(
+              :lat => coordinates[0],
+              :lng => coordinates[1],
+              :mesto => geoName
+          )
+        else
+          @logger.info "Google has not returned coordinates for Geo:  #{geoName}"
+          currentlyFailedGoogleGEOSearchesInRow += 1
 
-              if currentlyFailedGoogleGEOSearchesInRow >= maximumSubsequentGoogleGEOSearchFailures
-                @logger.warn "Maximum number of failed subsequent Google search responses reached"
-                @logger.debug "Probably column, #{column.label}, does not consist information about location"
-                return false
-              end
+          if currentlyFailedGoogleGEOSearchesInRow >= maximumSubsequentGoogleGEOSearchFailures
+            @logger.warn "Maximum number of failed subsequent Google search responses reached"
+            @logger.debug "Probably column, #{column.label}, does not consist information about location"
+            return
           end
+        end
       else
-          datasetGeos << existingGeocordinate
+        datasetGeos << existingGeocordinate
       end
     end
 
@@ -173,18 +174,7 @@ end
         @logger.info invalid.record.errors
         @logger.info "Coordinate #{datasetGeo.id}(#{datasetGeo.mesto}) for dataset #{dataset.id} already exists"
       end
-      @logger.debug "Searching information about location for data from column, #{column.label}, end"
-      return true
     end
-
-    # datasetGeos.each do |datasetGeo|
-    #   dataset.groupings.each do |grouping|
-    #     if(grouping.coordinate_id == datasetGeo.id)
-    #       grouping.columnid = column.id
-    #       grouping.save
-    #     end
-    #   end
-    # end
-
+    @logger.debug "Searching information about location for data from column, #{column.label}, end"
   end
 end
